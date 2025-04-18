@@ -47,6 +47,17 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/edit-doctor/{doctor}', [AdminController::class, 'editDoctor'])->name('admin.editDoctor');
     Route::put('/update-doctor/{doctor}', [AdminController::class, 'updateDoctor'])->name('admin.updateDoctor');
+
+
+    Route::get('/manage-patients/{admin}', [AdminController::class, 'managePatients'])->name('admin.managePatients');
+
+    Route::get('/create-patient', [AdminController::class, 'createPatient'])->name('admin.createPatient');
+    Route::post('/store-patient', [AdminController::class, 'storePatient'])->name('admin.storePatient');
+
+    Route::get('/edit-patient/{patient}', [AdminController::class, 'editPatient'])->name('admin.editPatient');
+    Route::put('/update-patient/{patient}', [AdminController::class, 'updatePatient'])->name('admin.updatePatient');
+
+    Route::delete('/delete-patient/{patient}', [AdminController::class, 'deletePatient'])->name('admin.deletePatient');
 });
 
 Route::prefix('doctor')->group(function () {

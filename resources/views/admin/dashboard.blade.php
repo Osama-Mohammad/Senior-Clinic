@@ -11,5 +11,5 @@
         </div>
     </div>
     <a href="{{ route('admin.manageDoctors', $admin) }}">Manage Doctors</a>
-    <a href="#">Manage Patients</a>
+    <a href="{{ route('admin.managePatients', $admin) }}">Manage Patients</a>
 </x-layout>
