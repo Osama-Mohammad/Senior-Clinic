@@ -35,10 +35,12 @@ class AuthController extends Controller
         } elseif (Auth::guard('doctor')->attempt($validated)) {
 
             return redirect()->route('doctor.dashboard')->with('success', 'Login successful');
-        } elseif (Auth::guard('secretary')->attempt($validated)) {
-            dd('Secretary login successful');
-            return redirect()->route('secretary.dashboard')->with('success', 'Login successful');
-        } else {
+        }
+        //  elseif (Auth::guard('secretary')->attempt($validated)) {
+        //     dd('Secretary login successful');
+        //     return redirect()->route('secretary.dashboard')->with('success', 'Login successful');
+        // }
+        else {
             return back()->with('error', 'Invalid Credentials');
         }
     }
