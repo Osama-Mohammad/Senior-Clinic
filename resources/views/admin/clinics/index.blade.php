@@ -9,9 +9,9 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Email</th>
+                        <th scope="col">Address</th>
                         <th scope="col">Phone Number</th>
-                        <th scope="col">Specialization</th>
+                        <th scope="col">Description</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
