@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
+use App\Models\Clinic;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,24 +42,29 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/dashboard/{admin}', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
+    /* Admin Manage Doctors */
     Route::get('/manage-doctors/{admin}', [AdminController::class, 'manageDoctors'])->name('admin.manageDoctors');
-
     Route::get('/create-doctor', [AdminController::class, 'createDoctor'])->name('admin.createDoctor');
     Route::post('/store-doctor', [AdminController::class, 'storeDoctor'])->name('admin.storeDoctor');
-
     Route::get('/edit-doctor/{doctor}', [AdminController::class, 'editDoctor'])->name('admin.editDoctor');
     Route::put('/update-doctor/{doctor}', [AdminController::class, 'updateDoctor'])->name('admin.updateDoctor');
+    Route::delete('/delete-doctor/{doctor}', [AdminController::class, 'deleteDoctor'])->name('admin.deleteDoctor');
 
-
+    /* Admin Manage Patients */
     Route::get('/manage-patients/{admin}', [AdminController::class, 'managePatients'])->name('admin.managePatients');
-
     Route::get('/create-patient', [AdminController::class, 'createPatient'])->name('admin.createPatient');
     Route::post('/store-patient', [AdminController::class, 'storePatient'])->name('admin.storePatient');
-
     Route::get('/edit-patient/{patient}', [AdminController::class, 'editPatient'])->name('admin.editPatient');
     Route::put('/update-patient/{patient}', [AdminController::class, 'updatePatient'])->name('admin.updatePatient');
-
     Route::delete('/delete-patient/{patient}', [AdminController::class, 'deletePatient'])->name('admin.deletePatient');
+
+    /* Admin Manage Clinics */
+    Route::get('/manage-clinics/{admin}', [ClinicController::class, 'index'])->name('admin.manageClinics');
+    Route::get('/create-clinic', [ClinicController::class, 'create'])->name('admin.createClinic');
+    Route::post('/store-clinic', [ClinicController::class, 'store'])->name('admin.storeClinic');
+    Route::get('/edit-clinic/{clinic}', [ClinicController::class, 'edit'])->name('admin.editClinic');
+    Route::put('/update-clinic/{clinic}', [ClinicController::class, 'update'])->name('admin.updateClinic');
+    Route::delete('/delete-clinic/{clinic}', [ClinicController::class, 'destroy'])->name('admin.deleteClinic');
 });
 
 Route::prefix('doctor')->group(function () {

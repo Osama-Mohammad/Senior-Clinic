@@ -1,9 +1,9 @@
 <x-layout>
-    <h2>Doctor Management</h2>
+    <h2>clinic Management</h2>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Doctors List</h5>
-            <a href="{{ route('admin.createDoctor') }}">Add a new Doctor</a>
+            <h5 class="card-title">Clinics List</h5>
+            <a href="{{ route('admin.createClinic') }}">Add a new Clinic</a>
             <table class="table">
                 <thead>
                     <tr>
@@ -16,16 +16,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($doctors as $doctor)
+                    @forelse ($clinics as $clinic)
                         <tr>
-                            <td>{{ $doctor->id }}</td>
-                            <td>{{ $doctor->first_name }} {{ $doctor->last_name }}</td>
-                            <td>{{ $doctor->email }}</td>
-                            <td>{{ $doctor->phone_number }}</td>
-                            <td>{{ $doctor->specialization }}</td>
+                            <td>{{ $clinic->id }}</td>
+                            <td>{{ $clinic->name }} </td>
+                            <td>{{ $clinic->address }}</td>
+                            <td>{{ $clinic->phone_number }}</td>
+                            <td>{{ $clinic->description }}</td>
                             <td>
-                                <a href="{{ route('admin.editDoctor', $doctor) }}" class="btn btn-primary">Edit</a>
-                                <form action="{{ route('admin.deleteDoctor', $doctor) }}" method="POST"
+                                <a href="{{ route('admin.editClinic', $clinic) }}" class="btn btn-primary">Edit</a>
+                                <form action="{{ route('admin.deleteClinic', $clinic) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -35,7 +35,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center">No doctors found.</td>
+                            <td colspan="6" class="text-center">No clinics found.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -44,6 +44,6 @@
                 {{ session('success') }}
             @endif
             {{-- Pagination links --}}
-            {{ $doctors->links() }}
+            {{ $clinics->links() }}
         </div>
 </x-layout>

@@ -12,4 +12,5 @@
     </div>
     <a href="{{ route('admin.manageDoctors', $admin) }}">Manage Doctors</a>
     <a href="{{ route('admin.managePatients', $admin) }}">Manage Patients</a>
+    <a href="{{ route('admin.manageClinics', $admin) }}">Manage Clinics</a>
 </x-layout>

@@ -26,19 +26,16 @@ class AuthController extends Controller
         ]);
 
         if (Auth::guard('patient')->attempt($validated)) {
-            // dd('Patient login successful');
-            // patient.dashboard
             return redirect()->route('patient.show', Auth::guard('patient')->user())->with('success', 'Login successful');
         } elseif (Auth::guard('admin')->attempt($validated)) {
-
             return redirect()->route('admin.dashboard', Auth::guard('admin')->user())->with('success', 'Login successful');
         } elseif (Auth::guard('doctor')->attempt($validated)) {
-
             return redirect()->route('doctor.dashboard')->with('success', 'Login successful');
-        } elseif (Auth::guard('secretary')->attempt($validated)) {
-            dd('Secretary login successful');
-            return redirect()->route('secretary.dashboard')->with('success', 'Login successful');
-        } else {
+        }
+        //  elseif (Auth::guard('secretary')->attempt($validated)) {
+        //     return redirect()->route('secretary.dashboard')->with('success', 'Login successful');
+        // }
+        else {
             return back()->with('error', 'Invalid Credentials');
         }
     }

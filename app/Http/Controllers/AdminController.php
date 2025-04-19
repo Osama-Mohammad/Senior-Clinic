@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Patient;
 use Illuminate\Http\Request;
@@ -125,6 +126,13 @@ class AdminController extends Controller
         return redirect()->route('admin.manageDoctors', Auth::guard('admin')->user())->with('success', 'Doctor created successfully');
     }
 
+    public function deleteDoctor(Doctor $doctor)
+    {
+        $doctor->delete();
+        return back()->with('success', 'deleted doctor successfully');
+    }
+
+
 
     public function managePatients()
     {
@@ -206,4 +214,5 @@ class AdminController extends Controller
         $patient->delete();
         return back()->with('success', 'deleted patient successfully');
     }
+
 }
