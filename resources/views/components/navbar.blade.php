@@ -1,0 +1,73 @@
+<header class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-md sticky top-0 z-50" x-data="{ open: false }">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <div class="w-full">
+        <div class="flex items-center justify-between h-16 px-6 md:px-10">
+            <!-- Left: Logo and Greeting -->
+            <div class="flex items-center space-x-4">
+                <div class="bg-white p-1 rounded-full">
+                    <img src="https://cdn-icons-png.flaticon.com/512/387/387561.png" class="w-8 h-8" alt="Logo" />
+                </div>
+                <div class="text-xl font-bold tracking-wide">
+                    Hello, {{ Auth::guard('patient')->user()->first_name ?? 'Guest' }}
+                </div>
+            </div>
+
+            <!-- Right: Desktop Navigation -->
+            <nav class="hidden md:flex space-x-6 text-sm items-center">
+                <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                    <i class="fas fa-info-circle"></i> About Us
+                </a>
+                <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                    <i class="fas fa-hospital"></i> Clinics
+                </a>
+                <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                    <i class="fas fa-user-md"></i> Doctors
+                </a>
+                <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                    <i class="fas fa-robot"></i> AI Test
+                </a>
+                <a href="#" class="flex items-center gap-2 hover:text-red-400 transition">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+
+            <!-- Mobile Toggle -->
+            <div class="md:hidden">
+                <button @click="open = !open" class="text-white focus:outline-none">
+                    <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown -->
+        <div x-show="open" @click.outside="open = false" class="md:hidden px-4 mt-2 space-y-2 text-sm">
+            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+                <i class="fas fa-info-circle"></i> About Us
+            </a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+                <i class="fas fa-hospital"></i> Clinics
+            </a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+                <i class="fas fa-user-md"></i> Doctors
+            </a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+                <i class="fas fa-robot"></i> AI Test
+            </a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-red-600 rounded">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+</header>

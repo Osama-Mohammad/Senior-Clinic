@@ -11,8 +11,13 @@ use App\Models\Clinic;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.login');
 
 Route::prefix('auth')->group(function () {
+
+    
+
+
     Route::get('/login', [AuthController::class, 'loginPage'])->name('auth.loginPage');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
@@ -34,6 +39,20 @@ Route::prefix('patient')->group(function () {
 
     Route::delete('/delete/{patient}', [PatientController::class, 'destroy'])->name('patient.delete');
 });
+
+// ✅ routes/web.php
+Route::prefix('patient')->group(function () {
+    Route::get('/create', [PatientController::class, 'create'])->name('patient.create');
+    Route::post('/store', [PatientController::class, 'store'])->name('patient.store');
+
+    Route::get('/show/{patient}', [PatientController::class, 'show'])->name('patient.show');
+    Route::get('/edit/{patient}', [PatientController::class, 'edit'])->name('patient.edit');
+    Route::put('/update/{patient}', [PatientController::class, 'update'])->name('patient.update');
+    Route::delete('/delete/{patient}', [PatientController::class, 'destroy'])->name('patient.delete');
+});
+
+// If you have other routes like 'about', 'clinics.index', etc., ensure those are defined too.
+
 
 
 Route::prefix('admin')->group(function () {
@@ -76,3 +95,8 @@ Route::prefix('doctor')->group(function () {
 
     Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
 });
+
+
+
+
+
