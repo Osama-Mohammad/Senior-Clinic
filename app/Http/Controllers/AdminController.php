@@ -37,7 +37,7 @@ class AdminController extends Controller
 
     public function create()
     {
-        return view('admin.doctors.create-doctor');
+        return view('admin.create');
     }
 
     public function store(Request $request)
@@ -214,5 +214,4 @@ class AdminController extends Controller
         $patient->delete();
         return back()->with('success', 'deleted patient successfully');
     }
-
 }

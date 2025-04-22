@@ -14,10 +14,6 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.login');
 
 Route::prefix('auth')->group(function () {
-
-    
-
-
     Route::get('/login', [AuthController::class, 'loginPage'])->name('auth.loginPage');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
@@ -95,8 +91,3 @@ Route::prefix('doctor')->group(function () {
 
     Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
 });
-
-
-
-
-
