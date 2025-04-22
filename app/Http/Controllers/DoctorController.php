@@ -21,8 +21,19 @@ class DoctorController extends Controller
     public function edit(Doctor $doctor)
     {
         $doctor = Doctor::findOrFail($doctor->id);
-        $available_days = json_decode($doctor->available_days, true);
-        $available_hours = json_decode($doctor->available_hours, true);
+        // $available_days = json_decode($doctor->available_days, true) ?? [];
+        // $available_hours = json_decode($doctor->available_hours, true)?? [];
+
+        $available_days = is_array($doctor->available_days)
+            ? $doctor->available_days
+            : (json_decode($doctor->available_days ?? '[]', true) ?? []);
+
+
+        $available_hours = is_array($doctor->available_hours)
+            ? $doctor->available_hours
+            : (json_decode($doctor->available_hours ?? '[]', true) ?? []);
+
+
         return view('doctor.edit', compact('doctor', 'available_days', 'available_hours'));
     }
 

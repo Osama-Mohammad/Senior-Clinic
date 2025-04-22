@@ -27,11 +27,11 @@ class Doctor extends Authenticatable
         'password',
         'remember_token',
     ];
-    protected $casts = [
-        'available_days' => 'array',
-        'available_hours' => 'array',
-        'price' => 'decimal:2',
-    ];
+    // protected $casts = [
+    //     'available_days' => 'array',
+    //     'available_hours' => 'array',
+    //     'price' => 'decimal:2',
+    // ];
     protected $attributes = [
         'available_days' => '[]',
         'available_hours' => '[]',

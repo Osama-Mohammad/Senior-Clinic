@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePatientRequest;
 use App\Http\Requests\UpdatePatientRequest;
+use App\Models\Clinic;
+use App\Models\Doctor;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Hash;
 
@@ -60,7 +62,9 @@ class PatientController extends Controller
 
     public function show(Patient $patient)
     {
-        return view('patient.show', compact('patient'));
+        $clinics = Clinic::all();
+        $doctors = Doctor::all();
+        return view('patient.show', compact('patient', 'clinics', 'doctors'));
     }
 
 
