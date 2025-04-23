@@ -14,6 +14,10 @@ class ClinicController extends Controller
     public function index()
     {
         $clinics = Clinic::paginate();
+
+        if (!Auth::guard('admin')->user()) {
+            return view('clinic.index', compact('clinics'));
+        }
         return view('admin.clinics.index', compact('clinics'));
     }
 
@@ -44,7 +48,7 @@ class ClinicController extends Controller
         $clinic->description = $validated['description'];
 
         $clinic->save();
-        
+
         return redirect()->route('admin.manageClinics', Auth::guard('admin')->user())->with('success', 'created clinic successfully');
     }
 

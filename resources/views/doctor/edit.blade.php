@@ -73,7 +73,8 @@
         <label for="available_days">Available Days</label>
         <select name="available_days[]" id="available_days" multiple>
             @foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
-                <option value="{{ $day }}" {{ in_array($day, $available_days ?? []) ? 'selected' : '' }}>
+                <option value="{{ $day }}"
+                    {{ in_array($day, $available_days ?? []) ? 'selected' : '' }}>
                     {{ $day }}
                 </option>
             @endforeach

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email', 150)->unique();
             $table->string('password', 255);
             $table->string('phone_number', 20)->unique()->nullable();
-            $table->string('specialization', 100)->nullable();
+            // $table->string('specialization', 100)->nullable();
             $table->decimal('price', 8, 2)->nullable();
             $table->integer('max_daily_appointments')->nullable();
             $table->json('available_days')->nullable();

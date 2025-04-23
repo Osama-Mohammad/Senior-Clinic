@@ -15,16 +15,31 @@
 
             <!-- Right: Desktop Navigation -->
             <nav class="hidden md:flex space-x-6 text-sm items-center">
-                <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
-                    <i class="fas fa-home"></i> Home
-                </a>
+
+                @if (Auth::guard('admin')->check())
+                    <a href="{{ route('admin.dashboard', Auth::guard('admin')->user()->id) }}"
+                        class="flex items-center gap-2 hover:text-emerald-300 transition">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                @elseif (Auth::guard('patient')->check())
+                    <a href="{{ route('patient.show', Auth::guard('patient')->user()->id) }}"
+                        class="flex items-center gap-2 hover:text-emerald-300 transition">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                @elseif (Auth::guard('doctor')->check())
+                    <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                @endif
+
+
                 <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-info-circle"></i> About Us
                 </a>
-                <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                <a href="{{ route('clinic.index') }}" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-hospital"></i> Clinics
                 </a>
-                <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                <a href="{{ route('doctor.index') }}" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-user-md"></i> Doctors
                 </a>
                 <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">

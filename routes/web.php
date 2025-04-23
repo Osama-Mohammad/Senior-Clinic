@@ -22,7 +22,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
 
-/* things to do for tomorrow add the show for the patient and add the login in logic  */
+
 
 Route::prefix('patient')->group(function () {
     Route::get('/create', [PatientController::class, 'create'])->name('patient.create');
@@ -89,5 +89,11 @@ Route::prefix('doctor')->group(function () {
     Route::get('/edit/{doctor}', [DoctorController::class, 'edit'])->name('doctor.edit');
     Route::put('/update/{doctor}', [DoctorController::class, 'update'])->name('doctor.update');
 
+    Route::get('/index', [DoctorController::class, 'index'])->name('doctor.index');
+
     Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
+});
+
+Route::prefix('clinic')->group(function () {
+    Route::get('/index', [ClinicController::class, 'index'])->name('clinic.index');
 });

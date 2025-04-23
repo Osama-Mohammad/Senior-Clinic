@@ -73,21 +73,17 @@ class AdminController extends Controller
     public function editDoctor(Doctor $doctor)
     {
         $doctor = Doctor::findOrFail($doctor->id);
-        // dd($doctor->available_days);
 
+        // dd(gettype($doctor->available_days)); // This will print: string
 
-        $available_days = is_array($doctor->available_days)
-            ? $doctor->available_days
-            : (json_decode($doctor->available_days ?? '[]', true) ?? []);
+        $available_days = is_string($doctor->available_days)
+            ? json_decode($doctor->available_days, true) ?? []
+            : $doctor->available_days;
 
+        $available_hours = is_string($doctor->available_hours)
+            ? json_decode($doctor->available_hours, true) ?? []
+            : $doctor->available_hours;
 
-        $available_hours = is_array($doctor->available_hours)
-            ? $doctor->available_hours
-            : (json_decode($doctor->available_hours ?? '[]', true) ?? []);
-
-
-        // $available_days = json_decode($doctor->available_days, true) ?? [];
-        // $available_hours = json_decode($doctor->available_hours, true) ?? [];
         return view('admin.doctors.edit-doctor', compact('doctor', 'available_days', 'available_hours'));
     }
 

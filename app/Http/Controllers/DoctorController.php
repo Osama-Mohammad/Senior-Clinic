@@ -11,6 +11,13 @@ class DoctorController extends Controller
 {
     use AuthorizesRequests; // Add this trait
 
+    public function index()
+    {
+        $doctors = Doctor::all();
+        return view('doctor.index', compact('doctors'));
+    }
+
+
     public function create()
     {
         return view('doctor.create');
@@ -21,18 +28,14 @@ class DoctorController extends Controller
     public function edit(Doctor $doctor)
     {
         $doctor = Doctor::findOrFail($doctor->id);
-        // $available_days = json_decode($doctor->available_days, true) ?? [];
-        // $available_hours = json_decode($doctor->available_hours, true)?? [];
 
-        $available_days = is_array($doctor->available_days)
-            ? $doctor->available_days
-            : (json_decode($doctor->available_days ?? '[]', true) ?? []);
+        $available_days = is_string($doctor->available_days)
+            ? json_decode($doctor->available_days, true) ?? []
+            : $doctor->available_days;
 
-
-        $available_hours = is_array($doctor->available_hours)
-            ? $doctor->available_hours
-            : (json_decode($doctor->available_hours ?? '[]', true) ?? []);
-
+        $available_hours = is_string($doctor->available_hours)
+            ? json_decode($doctor->available_hours, true) ?? []
+            : $doctor->available_hours;
 
         return view('doctor.edit', compact('doctor', 'available_days', 'available_hours'));
     }
