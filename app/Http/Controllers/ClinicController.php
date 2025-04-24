@@ -14,11 +14,7 @@ class ClinicController extends Controller
     public function index()
     {
         $clinics = Clinic::paginate();
-
-        if (!Auth::guard('admin')->user()) {
-            return view('clinic.index', compact('clinics'));
-        }
-        return view('admin.clinics.index', compact('clinics'));
+        return view('clinic.index', compact('clinics'));
     }
 
     /**
@@ -26,7 +22,7 @@ class ClinicController extends Controller
      */
     public function create()
     {
-        return view('admin.clinics.create');
+
     }
 
     /**
@@ -34,22 +30,7 @@ class ClinicController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|min:2|max:50',
-            'address' => 'required',
-            'phone_number' => 'required',
-            'description' => 'required'
-        ]);
 
-        $clinic = new Clinic();
-        $clinic->name = $validated['name'];
-        $clinic->address = $validated['address'];
-        $clinic->phone_number = $validated['phone_number'];
-        $clinic->description = $validated['description'];
-
-        $clinic->save();
-
-        return redirect()->route('admin.manageClinics', Auth::guard('admin')->user())->with('success', 'created clinic successfully');
     }
 
     /**
@@ -65,7 +46,7 @@ class ClinicController extends Controller
      */
     public function edit(Clinic $clinic)
     {
-        return view('admin.clinics.edit', compact('clinic'));
+
     }
 
     /**
@@ -73,16 +54,7 @@ class ClinicController extends Controller
      */
     public function update(Request $request, Clinic $clinic)
     {
-        $validated = $request->validate([
-            'name' => 'required|min:2|max:50',
-            'address' => 'required',
-            'phone_number' => 'required|unique:clinics,phone_number,' . $clinic->id,
-            'description' => 'required'
-        ]);
 
-        $clinic->update($validated);
-
-        return redirect()->route('admin.manageClinics', Auth::guard('admin')->user())->with('success', 'updated Clinic Successfully');
     }
 
     /**
@@ -90,7 +62,6 @@ class ClinicController extends Controller
      */
     public function destroy(Clinic $clinic)
     {
-        $clinic->delete();
-        return redirect()->route('admin.manageClinics', Auth::guard('admin')->user())->with('success', 'deleted Clinic Successfully');
+
     }
 }

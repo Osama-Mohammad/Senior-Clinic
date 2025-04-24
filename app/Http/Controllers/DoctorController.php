@@ -11,6 +11,11 @@ class DoctorController extends Controller
 {
     use AuthorizesRequests; // Add this trait
 
+
+
+
+
+
     public function index()
     {
         $doctors = Doctor::all();
