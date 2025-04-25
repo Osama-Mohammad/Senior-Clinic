@@ -1,6 +1,6 @@
 <x-layout>
     <h2>Update Clinic</h2>
-    <form action="{{ route('admin.updateClinic', $clinic) }}" method="POST">
+    <form action="{{ route('admin.updateClinic', $clinic) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -11,11 +11,11 @@
         @enderror
         <br>
 
-        <label for="">Address</label>
-        <input type="text" name="address" id="address" value="{{ $clinic->address }}">
-        @error('address')
-            <div class="alert alert-danger">{{ $message }}
-            </div>
+
+        <label for="">Image</label>
+        <input type="file" name="image" id="image">
+        @error('image')
+            <div class="alert alert-danger">{{ $message }}</div>
         @enderror
         <br>
 

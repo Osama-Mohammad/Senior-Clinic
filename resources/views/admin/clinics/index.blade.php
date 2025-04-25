@@ -9,9 +9,9 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Address</th>
                         <th scope="col">Phone Number</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -20,9 +20,16 @@
                         <tr>
                             <td>{{ $clinic->id }}</td>
                             <td>{{ $clinic->name }} </td>
-                            <td>{{ $clinic->address }}</td>
                             <td>{{ $clinic->phone_number }}</td>
                             <td>{{ $clinic->description }}</td>
+                            <td>
+                                @if ($clinic->image)
+                                <img src="{{ asset('storage/' . $clinic->image) }}" alt="Clinic Image" width="100" class="img-thumbnail">
+
+                                @else
+                                    No Image Found For This Clinic
+                                @endif
+                            </td>
                             <td>
                                 <a href="{{ route('admin.editClinic', $clinic) }}" class="btn btn-primary">Edit</a>
                                 <form action="{{ route('admin.deleteClinic', $clinic) }}" method="POST"

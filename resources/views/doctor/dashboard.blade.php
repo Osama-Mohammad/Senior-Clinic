@@ -12,6 +12,12 @@
     </div>
     <a href="{{ route('doctor.edit', $doctor) }}">Edit Profile</a>
 
+    @if ($doctor->image)
+        <img src="{{ asset('storage/' . $doctor->image) }}" alt="Doctor Image"width="200">
+    @else
+        <p>No Image For This Doctor</p>
+    @endif
+
     @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}

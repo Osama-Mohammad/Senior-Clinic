@@ -1,6 +1,6 @@
 <x-layout>
     <h2>Edit Info Of Doctor : {{ $doctor->first_name }} {{ $doctor->last_name }}</h2>
-    <form action="{{ route('doctor.update', $doctor) }}" method="POST">
+    <form action="{{ route('doctor.update', $doctor) }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         @method('PUT')
@@ -25,20 +25,13 @@
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
         <br>
-        {{--
-        <label for="">Password</label>
-        <input type="password" name="password" id="password">
-        @error('password')
+
+        <label for="">Image</label>
+        <input type="file" name="image" id="image">
+        @error('image')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
         <br>
-
-        <label for="">Confirm Password</label>
-        <input type="password" name="password_confirmation" id="password_confirmation">
-        @error('password_confirmation')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
-        <br> --}}
 
 
         <label for="">Phone Number </label>
@@ -48,12 +41,6 @@
         @enderror
         <br>
 
-        <label for="">Specialization </label>
-        <input type="text" name="specialization" id="specialization" value="{{ $doctor->specialization }}">
-        @error('specialization')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
-        <br>
 
         <label for="">Price</label>
         <input type="text" name="price" id="price" value="{{ $doctor->price }}">
@@ -73,8 +60,7 @@
         <label for="available_days">Available Days</label>
         <select name="available_days[]" id="available_days" multiple>
             @foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
-                <option value="{{ $day }}"
-                    {{ in_array($day, $available_days ?? []) ? 'selected' : '' }}>
+                <option value="{{ $day }}" {{ in_array($day, $available_days ?? []) ? 'selected' : '' }}>
                     {{ $day }}
                 </option>
             @endforeach

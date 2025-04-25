@@ -22,6 +22,7 @@ class Doctor extends Authenticatable
         'max_daily_appointments',
         'available_days',
         'available_hours',
+        'image'
     ];
     protected $hidden = [
         'password',

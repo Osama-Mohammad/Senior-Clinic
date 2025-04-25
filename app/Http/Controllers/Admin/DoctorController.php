@@ -6,6 +6,7 @@ use App\Models\Doctor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class DoctorController extends Controller
 {
@@ -96,12 +97,25 @@ class DoctorController extends Controller
             'email' => 'required|email|unique:doctors,email,' . $doctor->id,
             'password' => 'nullable|string|min:8|confirmed',
             'phone_number' => 'required|string|max:20',
-            'specialization' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2040',
             'price' => 'required|numeric|min:0',
             'max_daily_appointments' => 'required|integer|min:1',
             'available_days' => 'required|array',
             'available_hours' => 'required|array',
         ]);
+
+        $imagePath = null;
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($doctor->image && Storage::disk('public')->exists($doctor->image)) {
+                Storage::disk('public')->delete($doctor->image);
+            }
+
+            $imagePath = $request->file('image')->store('images', 'public');
+            $validated['image'] = $imagePath;
+            // stores to storage/app/public/images and returns the relative path
+        }
 
         $validated['available_days'] = json_encode($validated['available_days']);
         $validated['available_hours'] = json_encode($validated['available_hours']);

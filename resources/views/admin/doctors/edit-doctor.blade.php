@@ -1,6 +1,6 @@
 <x-layout>
     <h2>Edit Info Of Doctor : {{ $doctor->first_name }} {{ $doctor->last_name }}</h2>
-    <form action="{{ route('admin.updateDoctor', $doctor) }}" method="POST">
+    <form action="{{ route('admin.updateDoctor', $doctor) }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         @method('PUT')
@@ -24,21 +24,7 @@
         @error('email')
         @enderror
         <br>
-        {{--
-        <div class="alert alert-danger">{{ $message }}</div>
-        <label for="">Password</label>
-        <input type="password" name="password" id="password">
-        @error('password')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
-        <br>
 
-        <label for="">Confirm Password</label>
-        <input type="password" name="password_confirmation" id="password_confirmation">
-        @error('password_confirmation')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
-        <br> --}}
 
 
         <label for="">Phone Number </label>
@@ -48,9 +34,9 @@
         @enderror
         <br>
 
-        <label for="">Specialization </label>
-        <input type="text" name="specialization" id="specialization" value="{{ $doctor->specialization }}">
-        @error('specialization')
+        <label for="">Image</label>
+        <input type="file" name="image" id="image">
+        @error('image')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
         <br>
@@ -73,8 +59,7 @@
         <label for="available_days">Available Days</label>
         <select name="available_days[]" id="available_days" multiple>
             @foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
-                <option value="{{ $day }}"
-                    {{ in_array($day, $available_days ?? []) ? 'selected' : '' }}>
+                <option value="{{ $day }}" {{ in_array($day, $available_days ?? []) ? 'selected' : '' }}>
                     {{ $day }}
                 </option>
             @endforeach
@@ -83,8 +68,7 @@
         <label for="available_hours">Available Work Hours</label>
         <select name="available_hours[]" id="available_hours" multiple>
             @foreach (['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'] as $hour)
-                <option value="{{ $hour }}"
-                    {{ in_array($hour, $available_hours ?? []) ? 'selected' : '' }}>
+                <option value="{{ $hour }}" {{ in_array($hour, $available_hours ?? []) ? 'selected' : '' }}>
                     {{ $hour }}
                 </option>
             @endforeach

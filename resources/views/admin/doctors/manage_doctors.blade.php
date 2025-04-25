@@ -11,7 +11,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone Number</th>
-                        <th scope="col">Specialization</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -22,7 +22,7 @@
                             <td>{{ $doctor->first_name }} {{ $doctor->last_name }}</td>
                             <td>{{ $doctor->email }}</td>
                             <td>{{ $doctor->phone_number }}</td>
-                            <td>{{ $doctor->specialization }}</td>
+                            <td>{{ $doctor->image }}</td>
                             <td>
                                 <a href="{{ route('admin.editDoctor', $doctor) }}" class="btn btn-primary">Edit</a>
                                 <form action="{{ route('admin.deleteDoctor', $doctor) }}" method="POST"

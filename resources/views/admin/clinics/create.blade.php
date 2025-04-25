@@ -1,6 +1,6 @@
 <x-layout>
     <h2>Create New Clinic</h2>
-    <form action="{{ route('admin.storeClinic') }}" method="POST">
+    <form action="{{ route('admin.storeClinic') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <label for="">Name</label>
@@ -10,12 +10,20 @@
         @enderror
         <br>
 
-        <label for="">Address</label>
+        {{-- <label for="">Address</label>
         <input type="text" name="address" id="address">
         @error('address')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
+        <br> --}}
+
+        <label for="">Image</label>
+        <input type="file" name="image" id="image">
+        @error('image')
+            <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
         <br>
+
 
         <label for="">Phone Number</label>
         <input type="text" name="phone_number" id="phone_number">

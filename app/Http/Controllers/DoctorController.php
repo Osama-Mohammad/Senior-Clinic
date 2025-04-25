@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests; // Add this
 
 class DoctorController extends Controller
@@ -53,18 +54,31 @@ class DoctorController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:doctors,email,' . $doctor->id,
             'phone_number' => 'required|string|max:20',
-            'specialization' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2040',
             'price' => 'required|numeric|min:0',
             'max_daily_appointments' => 'required|integer|min:1',
             'available_days' => 'required|array',
             'available_hours' => 'required|array',
         ]);
 
+        $imagePath = null;
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($doctor->image && Storage::disk('public')->exists($doctor->image)) {
+                Storage::disk('public')->delete($doctor->image);
+            }
+
+            $imagePath = $request->file('image')->store('images', 'public');
+            $validated['image'] = $imagePath;
+            // stores to storage/app/public/images and returns the relative path
+        }
+
         $doctor->first_name = $validated['first_name'];
         $doctor->last_name = $validated['last_name'];
         $doctor->email = $validated['email'];
         $doctor->phone_number = $validated['phone_number'];
-        $doctor->specialization = $validated['specialization'];
+        $doctor->image = $validated['image'] ? $validated['image'] : $doctor->image;
         $doctor->price = $validated['price'];
         $doctor->max_daily_appointments = $validated['max_daily_appointments'];
         $doctor->available_days = json_encode($validated['available_days']);
