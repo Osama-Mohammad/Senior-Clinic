@@ -27,29 +27,31 @@
                         <i class="fas fa-home"></i> Home
                     </a>
                 @elseif (Auth::guard('doctor')->check())
-                    <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                    <a href="#top" class="flex items-center gap-2 hover:text-emerald-300 transition">
                         <i class="fas fa-home"></i> Home
                     </a>
                 @endif
 
 
-                <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                <a href="#about" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-info-circle"></i> About Us
                 </a>
-                <a href="{{ route('clinic.index') }}" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                <a href="#clinics" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-hospital"></i> Clinics
                 </a>
-                <a href="{{ route('doctor.index') }}" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                <a href="#doctors" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-user-md"></i> Doctors
                 </a>
                 <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-robot"></i> AI Test
                 </a>
-                <form action="{{ route('auth.logout') }}" method="POST">
+                <form action="{{ route('auth.logout') }}" method="POST" class="inline">
                     @csrf
-                    <i class="fas fa-sign-out-alt"></i>
-                    <button class="flex items-center gap-2 hover:text-red-400 transition">Logout</button>
+                    <button type="submit" class="flex items-center gap-2 hover:text-red-400 transition">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
                 </form>
+
                 </a>
             </nav>
 
@@ -70,16 +72,16 @@
 
         <!-- Mobile Dropdown -->
         <div x-show="open" @click.outside="open = false" class="md:hidden px-4 mt-2 space-y-2 text-sm">
-            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+            <a href="#top" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
                 <i class="fas fa-home"></i> Home
             </a>
-            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+            <a href="#about" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
                 <i class="fas fa-info-circle"></i> About Us
             </a>
-            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+            <a href="#clinics" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
                 <i class="fas fa-hospital"></i> Clinics
             </a>
-            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+            <a href="#doctors" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
                 <i class="fas fa-user-md"></i> Doctors
             </a>
             <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">

@@ -54,7 +54,7 @@ class DoctorController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:doctors,email,' . $doctor->id,
             'phone_number' => 'required|string|max:20',
-            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2040',
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif',
             'price' => 'required|numeric|min:0',
             'max_daily_appointments' => 'required|integer|min:1',
             'available_days' => 'required|array',
