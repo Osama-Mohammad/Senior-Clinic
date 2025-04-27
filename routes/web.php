@@ -11,6 +11,7 @@ use app\Http\Controllers\Admin\ClinicController;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.login');
 
 Route::prefix('auth')->group(function () {

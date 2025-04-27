@@ -2,7 +2,7 @@
     <x-navbar />
 
     <!-- ✅ Hero Section With Image Carousel Background -->
-    <section
+    <section id="top"
         x-data="{
             current: 0,
             images: [
@@ -117,11 +117,6 @@
 
                     <!-- ✏️ Clinic Name -->
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $clinic->name }}</h3>
-
-                    <!-- 📍 Address -->
-                    <p class="text-sm text-gray-500 mb-1">
-                        <i class="fas fa-map-marker-alt text-teal-500 mr-1"></i> {{ $clinic->address ?? 'No address' }}
-                    </p>
 
                     <!-- ☎️ Phone -->
                     <p class="text-sm text-gray-500 mb-1">

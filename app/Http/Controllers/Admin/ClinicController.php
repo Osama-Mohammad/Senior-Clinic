@@ -35,7 +35,7 @@ class ClinicController extends Controller
         $validated = $request->validate([
             'name' => 'required|min:2|max:50',
             // 'address' => 'required',
-            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2040',
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif',
             'phone_number' => 'required',
             'description' => 'required'
         ]);

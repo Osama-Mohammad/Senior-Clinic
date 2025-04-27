@@ -114,7 +114,7 @@
                 <!-- Submit Button -->
                 <div class="flex justify-center">
                     <button type="submit"
-                        class="w-full md:w-auto px-8 py-3 bg-teal-500 hover:bg-teal-600 text-red font-bold rounded-md shadow-lg transition transform hover:scale-105">
+                        class="w-full md:w-auto px-8 py-3 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-md shadow-lg transition transform hover:scale-105">
                         Update Doctor
                     </button>
                 </div>
