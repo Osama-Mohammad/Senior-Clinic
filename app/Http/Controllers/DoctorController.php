@@ -78,7 +78,7 @@ class DoctorController extends Controller
         $doctor->last_name = $validated['last_name'];
         $doctor->email = $validated['email'];
         $doctor->phone_number = $validated['phone_number'];
-        $doctor->image = $validated['image'] ? $validated['image'] : $doctor->image;
+        // $doctor->image = $validated['image'] ? $validated['image'] : $doctor->image;
         $doctor->price = $validated['price'];
         $doctor->max_daily_appointments = $validated['max_daily_appointments'];
         $doctor->available_days = json_encode($validated['available_days']);

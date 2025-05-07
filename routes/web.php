@@ -6,7 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
-use app\Http\Controllers\Admin\ClinicController;
+use App\Http\Controllers\Admin\ClinicController as AdminCLinicController;
+use App\Http\Controllers\ClinicController;
 
 Route::get('/', function () {
     return view('welcome');
