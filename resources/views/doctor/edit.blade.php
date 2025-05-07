@@ -7,7 +7,7 @@
                 <p class="text-gray-600 text-sm mt-2">Update your profile details below.</p>
             </div>
 
-            <form action="{{ route('doctor.update', $doctor) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form action="{{ route('doctor.update', parameters: $doctor) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 @method('PUT')
 
@@ -84,49 +84,94 @@
                         @enderror
                     </div>
 
-                    <!-- Available Days -->
-                    <div>
-                        <label for="available_days" class="block text-sm font-medium text-gray-700">Available Days</label>
-                        <select name="available_days[]" id="available_days" multiple
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
-                            @foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
-                                <option value="{{ $day }}" {{ in_array($day, $available_days ?? []) ? 'selected' : '' }}>
-                                    {{ $day }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <!-- Weekly Availability -->
+                    <div class="md:col-span-2" x-data="availabilityForm()">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Weekly Availability</label>
 
-                    <!-- Available Hours -->
-                    <div>
-                        <label for="available_hours" class="block text-sm font-medium text-gray-700">Available Hours</label>
-                        <select name="available_hours[]" id="available_hours" multiple
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
-                            @foreach (['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'] as $hour)
-                                <option value="{{ $hour }}" {{ in_array($hour, $available_hours ?? []) ? 'selected' : '' }}>
-                                    {{ $hour }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <template x-for="day in days" :key="day">
+                            <div class="flex items-center space-x-4 mb-2">
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox"
+                                           :value="day"
+                                           @change="toggleDay(day, $event.target.checked)"
+                                           :checked="selected(day)"
+                                           class="rounded border-gray-300 text-teal-600 shadow-sm focus:ring-teal-500">
+                                    <span x-text="day" class="text-sm text-gray-700"></span>
+                                </label>
+                                <div x-show="schedule[day]" x-cloak class="flex items-center space-x-2">
+                                    <label class="text-sm">From:</label>
+                                    <select :name="`availability_schedule[${day}][from]`"
+                                            x-model="schedule[day].from"
+                                            class="rounded-md border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500">
+                                        <option value="">--</option>
+                                        @foreach (['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00'] as $hour)
+                                            <option value="{{ $hour }}">{{ $hour }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    <label class="text-sm ml-2">To:</label>
+                                    <select :name="`availability_schedule[${day}][to]`"
+                                            x-model="schedule[day].to"
+                                            class="rounded-md border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500">
+                                        <option value="">--</option>
+                                        @foreach (['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00'] as $hour)
+                                            <option value="{{ $hour }}">{{ $hour }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+
+                                <div x-show="selected(day)" x-cloak class="flex items-center space-x-1">
+                                    <label class="text-sm">To:</label>
+                                    <select :name="`availability_schedule[${day}][to]`"
+                                            x-model="schedule[day].to"
+                                            class="rounded-md border-gray-300 shadow-sm text-sm focus:ring-teal-500 focus:border-teal-500">
+                                        <option value="">--</option>
+                                        @foreach (['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00'] as $hour)
+                                            <option value="{{ $hour }}">{{ $hour }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </template>
+
+                        <pre x-text="JSON.stringify(schedule, null, 2)" class="text-xs bg-gray-100 p-2 mt-2 rounded"></pre>
                     </div>
                 </div>
 
-                <!-- Submit Button -->
                 <div>
                     <button type="submit"
                         class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-red bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition">
                         Update Doctor
                     </button>
                 </div>
-
             </form>
         </div>
     </div>
 
+    <script>
+        function availabilityForm() {
+            return {
+                days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                schedule: {}, // now just a plain object
+                selected(day) {
+                    return Object.prototype.hasOwnProperty.call(this.schedule, day);
+                },
+                toggleDay(day, checked) {
+                    if (checked) {
+                        this.schedule[day] = { from: '', to: '' };
+                    } else {
+                        delete this.schedule[day];
+                    }
+                }
+            };
+        }
+    </script>
     <style>
         .animate-fade-in {
             animation: fadeIn 0.8s ease-out both;
         }
+        [x-cloak] { display: none !important; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
