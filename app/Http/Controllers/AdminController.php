@@ -9,9 +9,13 @@ use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Can;
+
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AdminController extends Controller
 {
+    use AuthorizesRequests;
 
     public function create()
     {
@@ -39,6 +43,14 @@ class AdminController extends Controller
 
     public function dashboard(Admin $admin)
     {
-        return view('admin.dashboard', compact('admin'));
+        $currentAdmin = Auth::guard('admin')->user();
+
+        if (!$currentAdmin) {
+            return redirect()->route('auth.login')->with('error', 'Please login first');
+        }
+
+        $this->authorize('view',$admin);
+
+        return view('admin.dashboard', ['admin' => $currentAdmin]);
     }
 }

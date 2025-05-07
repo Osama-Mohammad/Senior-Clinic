@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 class DoctorController extends Controller
 {
 

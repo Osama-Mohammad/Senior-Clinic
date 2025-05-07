@@ -89,11 +89,11 @@ return [
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\Admin::class),
+            'model' => App\Models\Admin::class,
         ],
         'doctors' => [
             'driver' => 'eloquent',
-            'model' =>  env('AUTH_MODEL', Doctor::class),
+            'model' => env('AUTH_MODEL', Doctor::class),
         ],
         // 'secretaries' => [
         //     'driver' => 'eloquent',

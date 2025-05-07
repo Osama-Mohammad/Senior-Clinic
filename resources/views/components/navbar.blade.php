@@ -42,7 +42,8 @@
                 <a href="#doctors" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-user-md"></i> Doctors
                 </a>
-                <a href="#" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                <a href="{{ route('patient.Ai.create') }}"
+                    class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-robot"></i> AI Test
                 </a>
                 <form action="{{ route('auth.logout') }}" method="POST" class="inline">
