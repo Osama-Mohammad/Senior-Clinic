@@ -22,6 +22,7 @@ class Doctor extends Authenticatable
         'max_daily_appointments',
         'available_days',
         'available_hours',
+        'availability_schedule', // ✅ add this line
         'image'
     ];
     protected $hidden = [
@@ -31,6 +32,7 @@ class Doctor extends Authenticatable
     protected $casts = [
         'available_days' => 'array',
         'available_hours' => 'array',
+        'availability_schedule' => 'array', // ✅ cast the new column to array
         'price' => 'decimal:2',
     ];
     protected $attributes = [

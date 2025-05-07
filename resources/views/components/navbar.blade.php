@@ -22,7 +22,8 @@
                         <i class="fas fa-home"></i> Home
                     </a>
                 @elseif (Auth::guard('patient')->check())
-                    <a href="{{ route('patient.show', Auth::guard('patient')->user()->id) }}"
+                {{ route('patient.show', Auth::guard('patient')->user()->id) }}
+                    <a href="#top"
                         class="flex items-center gap-2 hover:text-emerald-300 transition">
                         <i class="fas fa-home"></i> Home
                     </a>

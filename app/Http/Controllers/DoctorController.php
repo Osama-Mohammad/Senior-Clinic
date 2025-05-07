@@ -57,38 +57,57 @@ class DoctorController extends Controller
             'image' => 'nullable|image|mimes:png,jpg,jpeg,gif',
             'price' => 'required|numeric|min:0',
             'max_daily_appointments' => 'required|integer|min:1',
-            'available_days' => 'required|array',
-            'available_hours' => 'required|array',
+            'availability_schedule' => 'nullable|array',
         ]);
 
-        $imagePath = null;
+        // Additional manual time validations
+        $availability = $request->input('availability_schedule', []);
 
+        foreach ($availability as $day => $times) {
+            // Skip unchecked days (null or empty array)
+            if (!is_array($times) || (empty($times['from']) && empty($times['to']))) {
+                continue;
+            }
+
+            // Check for missing time values
+            if (empty($times['from']) || empty($times['to'])) {
+                return back()->withErrors([
+                    "availability_schedule.$day.from" => "Both 'From' and 'To' times are required for $day.",
+                ])->withInput();
+            }
+
+            // Check if 'from' is earlier than 'to'
+            if ($times['from'] >= $times['to']) {
+                return back()->withErrors([
+                    "availability_schedule.$day.from" => "The 'From' time must be earlier than the 'To' time for $day.",
+                ])->withInput();
+            }
+        }
+
+        // Handle image upload
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($doctor->image && Storage::disk('public')->exists($doctor->image)) {
                 Storage::disk('public')->delete($doctor->image);
             }
 
-            $imagePath = $request->file('image')->store('images', 'public');
-            $validated['image'] = $imagePath;
-            // stores to storage/app/public/images and returns the relative path
+            $validated['image'] = $request->file('image')->store('images', 'public');
         }
 
-        $doctor->first_name = $validated['first_name'];
-        $doctor->last_name = $validated['last_name'];
-        $doctor->email = $validated['email'];
-        $doctor->phone_number = $validated['phone_number'];
-        // $doctor->image = $validated['image'] ? $validated['image'] : $doctor->image;
-        $doctor->price = $validated['price'];
-        $doctor->max_daily_appointments = $validated['max_daily_appointments'];
-        $doctor->available_days = json_encode($validated['available_days']);
-        $doctor->available_hours = json_encode($validated['available_hours']);
+        // Save updates
+        $doctor->update([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'phone_number' => $validated['phone_number'],
+            'image' => $validated['image'] ?? $doctor->image,
+            'price' => $validated['price'],
+            'max_daily_appointments' => $validated['max_daily_appointments'],
+            'availability_schedule' => $validated['availability_schedule'] ?? [],
+        ]);
 
-
-        $doctor->save();
-
-        // return redirect()->route('admin.manageDoctors', Auth::guard('admin')->user())->with('success', 'Doctor updated successfully');
-        return redirect()->route('doctor.dashboard', Auth::guard('doctor')->user())->with('success', 'Doctor updated successfully');
+        return redirect()
+            ->route('doctor.dashboard', Auth::guard('doctor')->user())
+            ->with('success', 'Doctor updated successfully');
     }
 
     public function dashboard()
