@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Clinic;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class DoctorController extends Controller
@@ -34,7 +35,8 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        return view('admin.doctors.create-doctor');
+        $clinics = Clinic::all();
+        return view('admin.doctors.create-doctor', compact('clinics'));
     }
 
     /**
@@ -45,6 +47,7 @@ class DoctorController extends Controller
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'clinic' => 'required|exists:clinics,id',
             'email' => 'required|email|unique:doctors,email',
             'password' => 'required|string|min:8|confirmed'
         ]);
@@ -52,6 +55,7 @@ class DoctorController extends Controller
         $doctor = new Doctor();
         $doctor->first_name = $validated['first_name'];
         $doctor->last_name = $validated['last_name'];
+        $doctor->clinic_id = $validated['clinic'];
         $doctor->email = $validated['email'];
         $doctor->password = bcrypt($validated['password']);
 

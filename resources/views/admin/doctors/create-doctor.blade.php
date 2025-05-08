@@ -1,5 +1,6 @@
 <x-layout>
-    <div class="min-h-screen bg-gradient-to-r from-cyan-100 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div
+        class="min-h-screen bg-gradient-to-r from-cyan-100 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full bg-white p-8 rounded-2xl shadow-2xl space-y-8 animate-fade-in">
 
             <div class="text-center">
@@ -37,6 +38,20 @@
                     @enderror
                 </div>
 
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Clinic</label>
+                    <select name="clinic" id="clinic"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
+                        @foreach ($clinics as $clinic)
+                            <option value={{ $clinic->id }}>{{ $clinic->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('clinic')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                     <input type="password" name="password" id="password"
@@ -47,7 +62,8 @@
                 </div>
 
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm
+                        Password</label>
                     <input type="password" name="password_confirmation" id="password_confirmation"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                     @error('password_confirmation')
@@ -70,9 +86,17 @@
         .animate-fade-in {
             animation: fadeIn 1s ease-out both;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </x-layout>
