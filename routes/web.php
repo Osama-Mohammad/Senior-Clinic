@@ -33,7 +33,7 @@ Route::prefix('patient')->group(function () {
     Route::get('/show/{patient}', [PatientController::class, 'show'])->name('patient.show');
 
     Route::get('/edit/{patient}', [PatientController::class, 'edit'])->name('patient.edit');
-    Route::put('/update/{patient}', [PatientController::class, 'update'])->name('patient.update');
+    Route::post('/update/{patient}', [PatientController::class, 'update'])->name('patient.update');
 
     Route::delete('/delete/{patient}', [PatientController::class, 'destroy'])->name('patient.delete');
 });

@@ -18,7 +18,8 @@ class Patient extends Authenticatable
         'phone_number',
         'address',
         'date_of_birth',
-        'gender'
+        'gender',
+        'image',
     ];
 
     protected $hidden = [

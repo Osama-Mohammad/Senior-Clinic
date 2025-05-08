@@ -5,9 +5,16 @@
         <div class="flex items-center justify-between h-16 px-6 md:px-10">
             <!-- Left: Logo and Greeting -->
             <div class="flex items-center space-x-4">
-                <div class="bg-white p-1 rounded-full">
-                    <img src="https://cdn-icons-png.flaticon.com/512/387/387561.png" class="w-8 h-8" alt="Logo" />
-                </div>
+                <a href="{{ route('patient.edit', Auth::guard('patient')->user()->id) }}"
+                    class="bg-white p-1 rounded-full hover:opacity-80 transition">
+                    @if (Auth::guard('patient')->user()->image)
+                        <img src="{{ asset('storage/' . Auth::guard('patient')->user()->image) }}"
+                            class="w-10 h-10 object-cover rounded-full" alt="Profile">
+                    @else
+                        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                            class="w-10 h-10 object-cover rounded-full" alt="Default Profile">
+                    @endif
+                </a>
                 <div class="text-xl font-bold tracking-wide">
                     Hello, {{ Auth::guard('patient')->user()->first_name ?? 'Guest' }}
                 </div>
@@ -15,16 +22,13 @@
 
             <!-- Right: Desktop Navigation -->
             <nav class="hidden md:flex space-x-6 text-sm items-center">
-
                 @if (Auth::guard('admin')->check())
                     <a href="{{ route('admin.dashboard', Auth::guard('admin')->user()->id) }}"
                         class="flex items-center gap-2 hover:text-emerald-300 transition">
                         <i class="fas fa-home"></i> Home
                     </a>
                 @elseif (Auth::guard('patient')->check())
-                {{ route('patient.show', Auth::guard('patient')->user()->id) }}
-                    <a href="#top"
-                        class="flex items-center gap-2 hover:text-emerald-300 transition">
+                    <a href="#top" class="flex items-center gap-2 hover:text-emerald-300 transition">
                         <i class="fas fa-home"></i> Home
                     </a>
                 @elseif (Auth::guard('doctor')->check())
@@ -32,7 +36,6 @@
                         <i class="fas fa-home"></i> Home
                     </a>
                 @endif
-
 
                 <a href="#about" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-info-circle"></i> About Us
@@ -47,14 +50,13 @@
                     class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-robot"></i> AI Test
                 </a>
+
                 <form action="{{ route('auth.logout') }}" method="POST" class="inline">
                     @csrf
                     <button type="submit" class="flex items-center gap-2 hover:text-red-400 transition">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </button>
                 </form>
-
-                </a>
             </nav>
 
             <!-- Mobile Toggle -->
@@ -86,12 +88,20 @@
             <a href="#doctors" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
                 <i class="fas fa-user-md"></i> Doctors
             </a>
-            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+            <a href="{{ route('patient.Ai.create') }}"
+                class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
                 <i class="fas fa-robot"></i> AI Test
             </a>
-            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-red-600 rounded">
-                <i class="fas fa-sign-out-alt"></i> Logout
+            <a href="{{ route('patient.edit', Auth::guard('patient')->user()->id) }}"
+                class="flex items-center gap-2 px-4 py-2 hover:bg-teal-700 rounded">
+                <i class="fas fa-user-circle"></i> My Profile
             </a>
+            <form action="{{ route('auth.logout') }}" method="POST" class="block">
+                @csrf
+                <button type="submit" class="flex items-center gap-2 px-4 py-2 hover:bg-red-600 rounded">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
         </div>
     </div>
 </header>
