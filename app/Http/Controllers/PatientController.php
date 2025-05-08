@@ -9,6 +9,8 @@ use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PatientController extends Controller
 {
@@ -76,29 +78,29 @@ class PatientController extends Controller
 
     public function update(Request $request, Patient $patient)
     {
-        if (!$patient) {
-            return redirect()->back()->with('error', 'Patient not found.');
-        }
-
-        $patientId = $patient->id;
-
-        $validated  = $request->validate([
+        $validated = $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
-            'email' => 'required|email|max:150|unique:patients,email,' . $patientId,
-            // 'password' => 'required|string|min:8',
+            'email' => 'required|email|max:150|unique:patients,email,' . $patient->id,
             'phone_number' => 'required|string|max:20',
             'address' => 'required|string|max:255',
             'date_of_birth' => 'required|date',
             'gender' => 'required|string|in:M,F',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Include in validation
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
+        // Handle image if uploaded
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('patient_images', 'public');
+        }
 
         $patient->update($validated);
+        Auth::guard('patient')->login($patient);
 
-        return redirect()->back()->with('success', 'Patient updated successfully.');
+        return redirect()->route('patient.show', $patient->id)->with('success', 'Patient updated successfully.');
     }
+
+
 
     public function destroy(Patient $patient)
     {
