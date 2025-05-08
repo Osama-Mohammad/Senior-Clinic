@@ -1,5 +1,5 @@
 <x-layout>
-    <form action="{{ route('patient.update', $patient) }}" method="POST">
+    <form action="{{ route('patient.update', $patient) }}" method="POST" enctype="multipart/form-data">
         <x-PatientUpdateForm :cities="$cities" :patient="$patient" />
         <button type="submit">Update Patient : {{ $patient->first_name }}</button>
     </form>
