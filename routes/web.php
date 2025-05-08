@@ -8,7 +8,9 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\Admin\ClinicController as AdminCLinicController;
 use App\Http\Controllers\AIController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ClinicController;
+use App\Models\Appointment;
 
 // Public routes
 Route::get('/', function () {
@@ -51,6 +53,13 @@ Route::prefix('patient')->group(function () {
     // Ai Tests
     Route::prefix("AiTest")->group(function () {
         Route::get('/create', [AIController::class, 'create'])->name('patient.Ai.create');
+    });
+
+    /* Appointments */
+    // Route::resource('appointments', AppointmentController::class);
+    Route::prefix('appointment')->group(function () {
+        Route::get('/create/{doctor}', [AppointmentController::class, 'create'])->name('patient.appointment.create');
+        Route::post('/appointment/store', [AppointmentController::class, 'store'])->name('patient.appointment.store');
     });
 });
 

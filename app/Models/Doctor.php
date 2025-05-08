@@ -39,4 +39,9 @@ class Doctor extends Authenticatable
         'available_days' => '[]',
         'available_hours' => '[]',
     ];
+
+    public function clinic()
+    {
+        return $this->belongsTo(Clinic::class);
+    }
 }

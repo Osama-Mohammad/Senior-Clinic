@@ -49,7 +49,7 @@ class AdminController extends Controller
             return redirect()->route('auth.login')->with('error', 'Please login first');
         }
 
-        $this->authorize('view',$admin);
+        $this->authorize('view', $admin);
 
         return view('admin.dashboard', ['admin' => $currentAdmin]);
     }
