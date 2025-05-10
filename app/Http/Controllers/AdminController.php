@@ -37,8 +37,7 @@ class AdminController extends Controller
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
         ]);
-
-        return redirect()->route('admin.dashboard', $admin)->with('success', 'Admin created successfully');
+        return back()->with('success', 'Admin created successfully');
     }
 
     public function dashboard(Admin $admin)

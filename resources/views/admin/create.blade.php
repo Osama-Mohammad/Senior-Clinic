@@ -1,5 +1,6 @@
 <x-layout>
-    <div class="min-h-screen bg-gradient-to-r from-cyan-100 to-blue-100 flex items-center justify-center py-12 px-6 lg:px-8">
+    <div
+        class="min-h-screen bg-gradient-to-r from-cyan-100 to-blue-100 flex items-center justify-center py-12 px-6 lg:px-8">
         <div class="max-w-2xl w-full space-y-8 p-8 bg-white rounded-2xl shadow-2xl animate-fade-in">
 
             <div class="text-center">
@@ -52,7 +53,8 @@
 
                 <!-- Confirm Password -->
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm
+                        Password</label>
                     <input type="password" name="password_confirmation" id="password_confirmation"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                     @error('password_confirmation')
@@ -69,15 +71,28 @@
                 </div>
             </form>
         </div>
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
     </div>
 
     <style>
         .animate-fade-in {
             animation: fadeIn 1s ease-out both;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </x-layout>

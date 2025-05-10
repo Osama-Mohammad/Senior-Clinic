@@ -1,8 +1,10 @@
-<x-layout>
-    <div class="min-h-screen bg-gradient-to-r from-cyan-100 to-blue-100 flex flex-col items-center justify-start py-12 px-6 lg:px-8">
+<x-admin-layout>
+    <div class="min-h-screen bg-gradient-to-r from-cyan-100 to-blue-100 py-12 px-6 lg:px-8">
 
-        <!-- Title -->
-        <div class="max-w-7xl w-full bg-white shadow-2xl rounded-2xl p-10 space-y-8 animate-fade-in">
+        <!-- Container -->
+        <div class="max-w-7xl w-full bg-white shadow-2xl rounded-2xl p-10 space-y-8 animate-fade-in mx-auto">
+
+            <!-- Title and Add New Button -->
             <div class="flex justify-between items-center">
                 <div>
                     <h2 class="text-4xl font-bold text-teal-700 mb-2">Clinic Management</h2>
@@ -79,7 +81,9 @@
             <div class="mt-6">
                 {{ $clinics->links() }}
             </div>
+
         </div>
+
     </div>
 
     <!-- Optional Smooth Animation -->
@@ -92,4 +96,4 @@
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
-</x-layout>
+</x-admin-layout>
