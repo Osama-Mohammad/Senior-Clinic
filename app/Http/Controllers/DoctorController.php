@@ -13,13 +13,24 @@ class DoctorController extends Controller
     use AuthorizesRequests; // Add this trait
 
 
+    /**
+     * Ajax search by doctor name
+     */
+    public function search(Request $request)
+    {
+        $q = $request->get('query', '');
+        $doctors = Doctor::where('first_name', 'like', "%{$q}%")
+            ->orWhere('last_name', 'like', "%{$q}%")
+            ->get();
 
+        return response()->json(['doctors' => $doctors]);
+    }
 
 
 
     public function index()
     {
-        $doctors = Doctor::all();
+        $doctors = Doctor::paginate(6);
         return view('doctor.index', compact('doctors'));
     }
 
