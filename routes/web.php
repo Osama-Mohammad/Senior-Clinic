@@ -3,13 +3,15 @@
 use App\Models\Clinic;
 use App\Models\Doctor;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AIController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\Admin\ClinicController as AdminClinicController;
+use App\Http\Controllers\AIController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\ClinicController;
+use App\Models\Appointment;
 
 // Public routes
 Route::get('/', function () {
@@ -37,6 +39,13 @@ Route::prefix('patient')->group(function () {
     // AI Tests
     Route::prefix('AiTest')->group(function () {
         Route::get('/create', [AIController::class, 'create'])->name('patient.Ai.create');
+    });
+
+    /* Appointments */
+    // Route::resource('appointments', AppointmentController::class);
+    Route::prefix('appointment')->group(function () {
+        Route::get('/create/{doctor}', [AppointmentController::class, 'create'])->name('patient.appointment.create');
+        Route::post('/appointment/store', [AppointmentController::class, 'store'])->name('patient.appointment.store');
     });
 });
 
@@ -96,4 +105,21 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
+});
+
+Route::prefix('doctor')->group(function () {
+    Route::get('/create', [DoctorController::class, 'create'])->name('doctor.create');
+    Route::post('/store', [DoctorController::class, 'store'])->name('doctor.store');
+
+    Route::get('/edit/{doctor}', [DoctorController::class, 'edit'])->name('doctor.edit');
+    Route::put('/update/{doctor}', [DoctorController::class, 'update'])->name('doctor.update');
+
+    Route::get('/index', [DoctorController::class, 'index'])->name('doctor.index');
+
+    Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
+});
+
+Route::prefix('clinic')->group(function () {
+    Route::get('/index', [ClinicController::class, 'index'])->name('clinic.index');
+    Route::get('/show/{clinic}', [ClinicController::class, 'show'])->name('clinic.show');
 });

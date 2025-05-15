@@ -31,4 +31,9 @@ class Doctor extends Authenticatable
         'availability_schedule' => 'array',  // cast JSON <-> array
         'price'                 => 'decimal:2',
     ];
+
+    public function clinic()
+    {
+        return $this->belongsTo(Clinic::class);
+    }
 }

@@ -46,7 +46,8 @@ class ClinicController extends Controller
      */
     public function show(Clinic $clinic)
     {
-        //
+        $clinic = $clinic->load('doctors');
+        return view('clinic.show', compact('clinic'));
     }
 
     /**
