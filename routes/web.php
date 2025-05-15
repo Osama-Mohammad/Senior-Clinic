@@ -1,60 +1,63 @@
 <?php
 
 use App\Models\Clinic;
+use App\Models\Doctor;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AIController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
-use App\Http\Controllers\Admin\ClinicController as AdminCLinicController;
-use App\Http\Controllers\AIController;
-use App\Http\Controllers\ClinicController;
+use App\Http\Controllers\Admin\ClinicController as AdminClinicController;
 
 // Public routes
 Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.login');
 
 Route::prefix('auth')->group(function () {
     Route::get('/login', [AuthController::class, 'loginPage'])->name('auth.loginPage');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-
     Route::get('/register', [AuthController::class, 'registerPage'])->name('auth.register');
-
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
 
 Route::prefix('patient')->group(function () {
     Route::get('/create', [PatientController::class, 'create'])->name('patient.create');
     Route::post('/store', [PatientController::class, 'store'])->name('patient.store');
-
-    Route::get('/show/{patient}', [PatientController::class, 'show'])->name('patient.show');
-
-    Route::get('/edit/{patient}', [PatientController::class, 'edit'])->name('patient.edit');
-    Route::post('/update/{patient}', [PatientController::class, 'update'])->name('patient.update');
-
-    Route::delete('/delete/{patient}', [PatientController::class, 'destroy'])->name('patient.delete');
-});
-
-// ✅ routes/web.php
-Route::prefix('patient')->group(function () {
-    Route::get('/create', [PatientController::class, 'create'])->name('patient.create');
-    Route::post('/store', [PatientController::class, 'store'])->name('patient.store');
-
     Route::get('/show/{patient}', [PatientController::class, 'show'])->name('patient.show');
     Route::get('/edit/{patient}', [PatientController::class, 'edit'])->name('patient.edit');
     Route::put('/update/{patient}', [PatientController::class, 'update'])->name('patient.update');
     Route::delete('/delete/{patient}', [PatientController::class, 'destroy'])->name('patient.delete');
 
-    // Ai Tests
-    Route::prefix("AiTest")->group(function () {
+    // AI Tests
+    Route::prefix('AiTest')->group(function () {
         Route::get('/create', [AIController::class, 'create'])->name('patient.Ai.create');
     });
 });
 
-// If you have other routes like 'about', 'clinics.index', etc., ensure those are defined too.
+// Public Clinic & Doctor index
+Route::prefix('clinic')->group(function () {
+    Route::get('/index', [ClinicController::class, 'index'])->name('clinic.index');
+});
+
+Route::prefix('doctor')->group(function () {
+    Route::get('/index', [DoctorController::class, 'index'])->name('doctor.index');
+    Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
+    Route::get('/create', [DoctorController::class, 'create'])->name('doctor.create');
+    Route::post('/store', [DoctorController::class, 'store'])->name('doctor.store');
+    Route::get('/edit/{doctor}', [DoctorController::class, 'edit'])->name('doctor.edit');
+    Route::put('/update/{doctor}', [DoctorController::class, 'update'])->name('doctor.update');
+});
+
+// ─── Ajax Search Routes ─────────────────────────────────────────────────────────
+// Only search by **name**
+Route::get('/search/clinics',  [ClinicController::class, 'search'])->name('search.clinics');
+Route::get('/search/doctors', [DoctorController::class, 'search'])->name('search.doctors');
 
 // Admin routes with authentication
 Route::prefix('admin')->middleware('auth:admin')->group(function () {
@@ -85,7 +88,7 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::delete('/delete-clinic/{clinic}', [App\Http\Controllers\Admin\ClinicController::class, 'destroy'])->name('admin.deleteClinic');
 
     /* Manage AI Test */
-    Route::get("/manage-AIs/{admin}", [App\Http\Controllers\Admin\AIController::class, 'index'])->name('admin.manageAi');
+    Route::get('/manage-AIs/{admin}', [App\Http\Controllers\Admin\AIController::class, 'index'])->name('admin.manageAi');
     Route::get('/create-AiTest', [App\Http\Controllers\Admin\AIController::class, 'create'])->name('admin.createAi');
 });
 
@@ -93,20 +96,4 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
-});
-
-Route::prefix('doctor')->group(function () {
-    Route::get('/create', [DoctorController::class, 'create'])->name('doctor.create');
-    Route::post('/store', [DoctorController::class, 'store'])->name('doctor.store');
-
-    Route::get('/edit/{doctor}', [DoctorController::class, 'edit'])->name('doctor.edit');
-    Route::put('/update/{doctor}', [DoctorController::class, 'update'])->name('doctor.update');
-
-    Route::get('/index', [DoctorController::class, 'index'])->name('doctor.index');
-
-    Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
-});
-
-Route::prefix('clinic')->group(function () {
-    Route::get('/index', [ClinicController::class, 'index'])->name('clinic.index');
 });

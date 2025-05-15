@@ -53,7 +53,7 @@ class ClinicController extends Controller
         // $clinic->address = $validated['address'];
         $clinic->phone_number = $validated['phone_number'];
         $clinic->description = $validated['description'];
-
+        $clinic->image = $validated['image'] ?? null;
         $clinic->save();
 
         return redirect()->route('admin.manageClinics', Auth::guard('admin')->user())->with('success', 'created clinic successfully');

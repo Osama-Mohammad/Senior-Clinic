@@ -1,4 +1,4 @@
-<x-layout>
+<x-admin-layout>
     <div
         class="min-h-screen bg-gradient-to-r from-cyan-100 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full bg-white p-8 rounded-2xl shadow-2xl space-y-8 animate-fade-in">
@@ -99,4 +99,5 @@
             }
         }
     </style>
-</x-layout>
+</x-admin-layout>
+

@@ -1,6 +1,6 @@
-<x-layout>
-    <div class="min-h-screen bg-gradient-to-r from-teal-100 to-cyan-100 flex flex-col items-center justify-center py-12 px-6 lg:px-8">
-        <div class="max-w-3xl w-full bg-white shadow-2xl rounded-2xl p-10 space-y-8 animate-fade-in">
+<x-admin-layout>
+    <div class="min-h-screen bg-gradient-to-r from-teal-100 to-cyan-100 py-12 px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto bg-white shadow-2xl rounded-2xl p-10 space-y-8 animate-fade-in">
 
             <!-- Title -->
             <div class="text-center">
@@ -60,10 +60,11 @@
                     </button>
                 </div>
             </form>
+
         </div>
     </div>
 
-    <!-- Smooth fade in animation (optional) -->
+    <!-- Smooth fade-in animation (optional) -->
     <style>
         .animate-fade-in {
             animation: fadeIn 1s ease-out both;
@@ -73,4 +74,4 @@
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
-</x-layout>
+</x-admin-layout>

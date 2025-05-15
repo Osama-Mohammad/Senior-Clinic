@@ -64,8 +64,8 @@ class PatientController extends Controller
 
     public function show(Patient $patient)
     {
-        $clinics = Clinic::all();
-        $doctors = Doctor::all();
+        $clinics = Clinic::paginate(3);
+        $doctors = Doctor::paginate(3);
         return view('patient.show', compact('patient', 'clinics', 'doctors'));
     }
 
