@@ -93,4 +93,3 @@
         }
     </style>
 </x-layout>
-    
