@@ -118,4 +118,5 @@ Route::prefix('doctor')->group(function () {
 
 Route::prefix('clinic')->group(function () {
     Route::get('/index', [ClinicController::class, 'index'])->name('clinic.index');
+    Route::get('/show/{clinic}', [ClinicController::class, 'show'])->name('clinic.show');
 });
