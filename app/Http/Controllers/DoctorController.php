@@ -61,58 +61,54 @@ class DoctorController extends Controller
     public function update(Request $request, Doctor $doctor)
     {
         $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:doctors,email,' . $doctor->id,
-            'phone_number' => 'required|string|max:20',
-            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif',
-            'price' => 'required|numeric|min:0',
-            'max_daily_appointments' => 'required|integer|min:1',
-            'availability_schedule' => 'nullable|array',
+            'first_name'                   => 'required|string|max:255',
+            'last_name'                    => 'required|string|max:255',
+            'email'                        => 'required|email|unique:doctors,email,' . $doctor->id,
+            'phone_number'                 => 'required|string|max:20',
+            'image'                        => 'nullable|image|mimes:png,jpg,jpeg,gif',
+            'price'                        => 'required|numeric|min:0',
+            // per‐day rules
+            'availability_schedule'        => 'nullable|array',
+            'availability_schedule.*.from' => 'required_with:availability_schedule.*.to|date_format:H:i',
+            'availability_schedule.*.to'   => 'required_with:availability_schedule.*.from|date_format:H:i|after:availability_schedule.*.from',
+            'availability_schedule.*.max'  => 'required_with:availability_schedule.*.from|integer|min:1',
         ]);
 
-        // Additional manual time validations
-        $availability = $request->input('availability_schedule', []);
-
+        // Manual time checks as before...
+        $availability = $validated['availability_schedule'] ?? [];
         foreach ($availability as $day => $times) {
-            // Skip unchecked days (null or empty array)
-            if (!is_array($times) || (empty($times['from']) && empty($times['to']))) {
+            if (empty($times['from']) && empty($times['to'])) {
                 continue;
             }
-
-            // Check for missing time values
             if (empty($times['from']) || empty($times['to'])) {
-                return back()->withErrors([
-                    "availability_schedule.$day.from" => "Both 'From' and 'To' times are required for $day.",
-                ])->withInput();
+                return back()
+                    ->withErrors(["availability_schedule.$day.from" => "Both 'From' and 'To' times are required for $day."])
+                    ->withInput();
             }
-
-            // Check if 'from' is earlier than 'to'
             if ($times['from'] >= $times['to']) {
-                return back()->withErrors([
-                    "availability_schedule.$day.from" => "The 'From' time must be earlier than the 'To' time for $day.",
-                ])->withInput();
+                return back()
+                    ->withErrors(["availability_schedule.$day.from" => "The 'From' time must be earlier than the 'To' time for $day."])
+                    ->withInput();
             }
         }
 
-        // Handle image upload
+        // Image upload logic...
         if ($request->hasFile('image')) {
             if ($doctor->image && Storage::disk('public')->exists($doctor->image)) {
                 Storage::disk('public')->delete($doctor->image);
             }
-
             $validated['image'] = $request->file('image')->store('images', 'public');
         }
 
-        // Save updates
+        // Persist only the new fields + availability_schedule
         $doctor->update([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'phone_number' => $validated['phone_number'],
-            'image' => $validated['image'] ?? $doctor->image,
-            'price' => $validated['price'],
-            'max_daily_appointments' => $validated['max_daily_appointments'],
+            'first_name'            => $validated['first_name'],
+            'last_name'             => $validated['last_name'],
+            'email'                 => $validated['email'],
+            'phone_number'          => $validated['phone_number'],
+            'image'                 => $validated['image'] ?? $doctor->image,
+            'price'                 => $validated['price'],
+            // 'max_daily_appointments' removed
             'availability_schedule' => $validated['availability_schedule'] ?? [],
         ]);
 
@@ -120,6 +116,7 @@ class DoctorController extends Controller
             ->route('doctor.dashboard', Auth::guard('doctor')->user())
             ->with('success', 'Doctor updated successfully');
     }
+
 
     public function dashboard()
     {

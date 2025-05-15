@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Doctor extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\DoctorFactory> */
     use HasFactory, Notifiable;
 
     protected $fillable = [
@@ -19,24 +18,17 @@ class Doctor extends Authenticatable
         'phone_number',
         'specialization',
         'price',
-        'max_daily_appointments',
-        'available_days',
-        'available_hours',
-        'availability_schedule', // ✅ add this line
-        'image'
+        'availability_schedule', // only the JSON column now
+        'image',
     ];
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
     protected $casts = [
-        'available_days' => 'array',
-        'available_hours' => 'array',
-        'availability_schedule' => 'array', // ✅ cast the new column to array
-        'price' => 'decimal:2',
-    ];
-    protected $attributes = [
-        'available_days' => '[]',
-        'available_hours' => '[]',
+        'availability_schedule' => 'array',  // cast JSON <-> array
+        'price'                 => 'decimal:2',
     ];
 }
