@@ -30,19 +30,20 @@
             @enderror
         </div>
 
-        {{-- <input type="hidden" name="appointment_datetime" id="appointment_datetime"> --}}
+
+        <p>
+        <ul>
+            @foreach ($schedules as $day => $data)
+                <li>
+                    <strong>{{ $day }}</strong>
+                    From {{ $data['from'] }} to {{ $data['to'] }}
+                </li>
+            @endforeach
+        </ul>
+        </p>
 
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Book Appointment</button>
     </form>
 
-    {{-- <script>
-        // Combine date and time before submitting
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const date = document.getElementById('appointment_date').value;
-            const time = document.getElementById('appointment_time').value;
-            if (date && time) {
-                document.getElementById('appointment_datetime').value = date + 'T' + time;
-            }
-        });
-    </script> --}}
+
 </x-layout>

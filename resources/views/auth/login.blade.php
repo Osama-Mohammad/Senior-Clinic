@@ -95,7 +95,9 @@
                         class="text-blue-600 hover:underline transition duration-300">
                         Register
                      </a>
-                     
+                     <br>
+                     {{-- Google Login --}}
+                     <a href="{{ route('auth.google') }}" class="inline-block px-6 py-2 text-white bg-red-600 rounded-lg shadow">Login With Google</a>
 
                     </div>
                 </form>
@@ -106,7 +108,7 @@
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const eyeIcon = document.getElementById('eyeIcon');
-    
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 eyeIcon.innerHTML = `
@@ -127,5 +129,5 @@
             }
         }
     </script>
-    
+
 </x-layout>

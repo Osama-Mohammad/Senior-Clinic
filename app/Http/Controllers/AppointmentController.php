@@ -22,7 +22,8 @@ class AppointmentController extends Controller
     {
         $doctor = $doctor->load('clinic');
         // dd($doctor);
-        return view('Appointment.create', compact('doctor'));
+        $schedules = $doctor['availability_schedule'];
+        return view('Appointment.create', compact('doctor','schedules'));
     }
 
     /**

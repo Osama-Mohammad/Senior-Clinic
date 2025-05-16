@@ -26,6 +26,8 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
     Route::get('/register', [AuthController::class, 'registerPage'])->name('auth.register');
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+    Route::get('/google', [AuthController::class, 'googleLogin'])->name('auth.google');
 });
 
 Route::prefix('patient')->group(function () {
