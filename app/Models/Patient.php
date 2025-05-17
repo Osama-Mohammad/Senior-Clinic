@@ -20,6 +20,7 @@ class Patient extends Authenticatable
         'date_of_birth',
         'gender',
         'image',
+        'google_id',
     ];
 
     protected $hidden = [

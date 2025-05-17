@@ -27,7 +27,13 @@ Route::prefix('auth')->group(function () {
     Route::get('/register', [AuthController::class, 'registerPage'])->name('auth.register');
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
+    // Google OAuth
     Route::get('/google', [AuthController::class, 'googleLogin'])->name('auth.google');
+    Route::get('/google-callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+    // Complete profile after first‐time Google login
+    Route::get('/google/complete', [AuthController::class, 'showGoogleCompleteForm'])->name('auth.google.complete');
+    Route::post('/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('auth.google.complete.submit');
 });
 
 Route::prefix('patient')->group(function () {
