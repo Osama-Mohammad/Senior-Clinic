@@ -23,7 +23,7 @@ class AppointmentController extends Controller
         $doctor = $doctor->load('clinic');
         // dd($doctor);
         $schedules = $doctor['availability_schedule'];
-        return view('Appointment.create', compact('doctor','schedules'));
+        return view('Appointment.create', compact('doctor', 'schedules'));
     }
 
     /**
@@ -49,14 +49,19 @@ class AppointmentController extends Controller
         // Pull the schedule for that day (or null if none)
         $schedule = $doctor->availability_schedule[$key] ?? null;
 
-        $dailyMax = isset($schedule['max']) ? (int)$schedule['max'] : 0;
-
         if (!$schedule || empty($schedule['from']) || empty($schedule['to'])) {
             return back()->withErrors([
                 'appointment_datetime' => "Doctor is not available on " . ucfirst($day) . "."
             ])->withInput();
         }
 
+        // ✅ Get and validate the max allowed per day
+        $dailyMax = isset($schedule['max']) ? (int)$schedule['max'] : 0;
+        if ($dailyMax <= 0) {
+            return back()->withErrors([
+                'appointment_datetime' => "Doctor has no maximum appointments set for " . ucfirst($day) . "."
+            ])->withInput();
+        }
         // Turn those strings into Carbon instances for comparison
         $start = Carbon::parse($appointment->toDateString() . ' ' . $schedule['from']); // 2025-05-15 09:00
         $end   = Carbon::parse($appointment->toDateString() . ' ' . $schedule['to']);   // 2025-05-15 14:00
@@ -70,20 +75,19 @@ class AppointmentController extends Controller
             ])->withInput();
         }
 
-        // Step 1: Count current appointments for that doctor on the selected date
         $appointmentCount = Appointment::where('doctor_id', $doctor->id)
             ->whereDate('appointment_datetime', $appointment->toDateString())
-            ->where('status', 'Booked') // ✅ Only count actually booked appointments
+            ->where('status', 'Booked')
             ->count();
-
-
-
 
         if ($appointmentCount >= $dailyMax) {
             return back()->withErrors([
-                'appointment_datetime' => 'Doctor is fully booked on ' . $appointment->toFormattedDateString() . '.'
+                'appointment_datetime' =>
+                "Doctor is fully booked on " . $appointment->toFormattedDateString()
+                    . " (max {$dailyMax} appointments per day)."
             ])->withInput();
         }
+
 
 
         // If we reach here, it’s valid—proceed to save the appointment...
