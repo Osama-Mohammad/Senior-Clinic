@@ -2,6 +2,7 @@
 
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Models\Secretary;
 
 return [
 
@@ -95,10 +96,10 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', Doctor::class),
         ],
-        // 'secretaries' => [
-        //     'driver' => 'eloquent',
-        //     'model' => Secretary::class,
-        // ],
+        'secretaries' => [
+            'driver' => 'eloquent',
+            'model' =>  env('AUTH_MODEL',  Secretary::class),
+        ],
 
 
         // 'users' => [

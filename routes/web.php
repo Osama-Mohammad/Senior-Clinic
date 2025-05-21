@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ClinicController as AdminClinicController;
 use App\Http\Controllers\AIController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ClinicController;
+use App\Http\Controllers\SecretaryController;
 use App\Models\Appointment;
 
 // Public routes
@@ -32,7 +33,7 @@ Route::prefix('auth')->group(function () {
     Route::get('/google-callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
     // Complete profile after first‐time Google login
-    Route::get('/google/complete', [AuthController::class, 'showGoogleCompleteForm'])->name('auth.google.complete');
+    Route::get('/google/complete', [AuthController::class, 'sh owGoogleCompleteForm'])->name('auth.google.complete');
     Route::post('/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('auth.google.complete.submit');
 });
 
@@ -69,12 +70,18 @@ Route::prefix('doctor')->group(function () {
     Route::post('/store', [DoctorController::class, 'store'])->name('doctor.store');
     Route::get('/edit/{doctor}', [DoctorController::class, 'edit'])->name('doctor.edit');
     Route::put('/update/{doctor}', [DoctorController::class, 'update'])->name('doctor.update');
+
+    Route::prefix('secretary')->group(function () {
+        Route::get('/create', [SecretaryController::class, 'create'])->name('doctor.secretary.create');
+        Route::post('/store', [SecretaryController::class, 'store'])->name('doctor.secretary.store');
+    });
 });
 
 // ─── Ajax Search Routes ─────────────────────────────────────────────────────────
 // Only search by **name**
 Route::get('/search/clinics',  [ClinicController::class, 'search'])->name('search.clinics');
 Route::get('/search/doctors', [DoctorController::class, 'search'])->name('search.doctors');
+Route::get('/search/patients', [App\Http\Controllers\Secretary\PatientController::class, 'search'])->name('search.patients');
 
 // Admin routes with authentication
 Route::prefix('admin')->middleware('auth:admin')->group(function () {
@@ -105,8 +112,8 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::delete('/delete-clinic/{clinic}', [App\Http\Controllers\Admin\ClinicController::class, 'destroy'])->name('admin.deleteClinic');
 
     /* Manage AI Test */
-    Route::get('/manage-AIs/{admin}', [App\Http\Controllers\Admin\AIController::class, 'index'])->name('admin.manageAi');
-    Route::get('/create-AiTest', [App\Http\Controllers\Admin\AIController::class, 'create'])->name('admin.createAi');
+    // Route::get('/manage-AIs/{admin}', [App\Http\Controllers\Admin\AIController::class, 'index'])->name('admin.manageAi');
+    // Route::get('/create-AiTest', [App\Http\Controllers\Admin\AIController::class, 'create'])->name('admin.createAi');
 });
 
 // Public admin registration routes
@@ -130,4 +137,14 @@ Route::prefix('doctor')->group(function () {
 Route::prefix('clinic')->group(function () {
     Route::get('/index', [ClinicController::class, 'index'])->name('clinic.index');
     Route::get('/show/{clinic}', [ClinicController::class, 'show'])->name('clinic.show');
+});
+
+Route::prefix('secretary')->middleware('auth:secretary')->group(function () {
+    Route::get('/dashboard', [SecretaryController::class, 'dashboard'])->name('secretary.dashboard');
+
+    Route::get('/patient/create', [App\Http\Controllers\Secretary\PatientController::class, 'create'])->name('secretary.patient.create');
+    Route::post('/patient/store', [App\Http\Controllers\Secretary\PatientController::class, 'store'])->name('secretary.patient.store');
+
+    Route::get('/patient/{patient}/bookAppointment', [App\Http\Controllers\Secretary\AppointmentController::class, 'create'])->name('secretary.patient.createAppointment');
+    Route::post('/patient/{patient}/bookAppointment', [App\Http\Controllers\Secretary\AppointmentController::class, 'store'])->name('secretary.patient.storeAppointment');
 });

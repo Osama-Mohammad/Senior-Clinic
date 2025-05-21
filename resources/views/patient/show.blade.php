@@ -153,7 +153,7 @@
 
         // cache originals
         const clinicListEl = document.getElementById('clinics-list');
-        const clinicPagEl = document.getElementById('clinics-pagination');
+        const clinicPagEl = document.getElemxaentById('clinics-pagination');
         const originalClinics = clinicListEl.innerHTML;
         const originalClinicsPag = clinicPagEl.innerHTML;
 
