@@ -171,7 +171,8 @@
                     clinicPagEl.innerHTML = originalClinicsPag;
                     return;
                 }
-                if (q.length > 2) {
+                if (q.database/migrations/2025_05_21_070716_create_heart_failure_table.php
+length > 2) {
                     fetch(`${clinicSearchUrl}?query=${encodeURIComponent(q)}`)
                         .then(r => r.json())
                         .then(({
