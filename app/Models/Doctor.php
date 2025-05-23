@@ -41,4 +41,8 @@ class Doctor extends Authenticatable
     {
         return $this->hasMany(Secretary::class);
     }
+    public function patients()
+    {
+        return $this->belongsToMany(Patient::class, 'appointments', 'doctor_id', 'patient_id')->distinct();
+    }
 }

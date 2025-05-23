@@ -33,6 +33,11 @@
                     Add Secretary
                 </a>
 
+                <a href="{{ route('doctor.ai.test.form') }}"
+                    class="inline-block bg-indigo-500 hover:bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg shadow transition">
+                    🧠 Run AI Test
+                </a>
+
                 <form action="{{ route('auth.logout') }}" method="POST" class="inline-block">
                     @csrf
                     <button type="submit"

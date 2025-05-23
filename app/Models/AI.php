@@ -4,14 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AI extends Model
+class Ai extends Model
 {
-    protected $fillable = ['patients_id', 'disease_name', 'description', 'submitted_attributes', 'result', 'percentage_probability', 'image'];
-    protected $casts = [
-        'submitted_attributes' => 'array'
+    protected $table = 'heart_failure';
+
+    protected $fillable = [
+        'ai_model_id',
+        'patient_id',
+        'doctor_id',
+        'submitted_attributes',
+        'result',
+        'percentage_probability',
     ];
-    // $ai->submitted_attributes = ['symptom1' => true, 'symptom2' => false]; Laravel will handle the JSON encoding and decoding for you.
 
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
 
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
+    }
 
+    public function aiModel()
+    {
+        return $this->belongsTo(AiModel::class);
+    }
 }

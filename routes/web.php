@@ -122,7 +122,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
 });
 
-Route::prefix('doctor')->group(function () {
+Route::prefix('doctor')->middleware(['auth:doctor'])->group(function () {
     Route::get('/create', [DoctorController::class, 'create'])->name('doctor.create');
     Route::post('/store', [DoctorController::class, 'store'])->name('doctor.store');
 
@@ -130,8 +130,13 @@ Route::prefix('doctor')->group(function () {
     Route::put('/update/{doctor}', [DoctorController::class, 'update'])->name('doctor.update');
 
     Route::get('/index', [DoctorController::class, 'index'])->name('doctor.index');
-
     Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
+
+    // ✅ AI Test Form Route (only accessible by authenticated doctors)
+    Route::get('/ai-test', [AiController::class, 'showForm'])->name('doctor.ai.test.form');
+    Route::post('/ai-test', [AiController::class, 'submitForm'])->name('doctor.ai.test.submit'); // ✅ MISSING LINE FIXED
+    Route::get('/ai-result/{id}', [AiController::class, 'showResult'])->name('doctor.ai.test.result');
+
 });
 
 Route::prefix('clinic')->group(function () {

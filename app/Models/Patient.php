@@ -27,4 +27,8 @@ class Patient extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class, 'appointments', 'patient_id', 'doctor_id')->distinct();
+    }
 }
