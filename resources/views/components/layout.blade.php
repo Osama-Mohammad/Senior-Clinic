@@ -17,25 +17,23 @@
 
     <!-- Alpine cloak style -->
     <style>
-        [x-cloak] { display: none !important; }
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
-
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    {{-- <script src="https://unpkg.com/alpinejs" defer></script> --}}
 </head>
 
-    <body x-data="{ show: false }" x-init="show = true" class="overflow-x-hidden" id="top" class="scroll-smooth">
-        <!-- Transition Wrapper -->
-        <div
-            x-show="show"
-            x-transition:enter="transition ease-out duration-500"
-            x-transition:enter-start="opacity-0 translate-y-4"
-            x-transition:enter-end="opacity-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-300"
-            x-transition:leave-start="opacity-100 translate-y-0"
-            x-transition:leave-end="opacity-0 -translate-y-4"
-        >
-            {{ $slot }}
-        </div>
-        
-    </body>
+<body x-data="{ show: false }" x-init="show = true" class="overflow-x-hidden" id="top" class="scroll-smooth">
+    <!-- Transition Wrapper -->
+    <div x-show="show" x-transition:enter="transition ease-out duration-500"
+        x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-4">
+        {{ $slot }}
+    </div>
+
+</body>
 
 </html>

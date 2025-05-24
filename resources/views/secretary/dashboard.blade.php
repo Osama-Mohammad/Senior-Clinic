@@ -4,14 +4,20 @@
         <div class="max-w-7xl mx-auto mb-10 flex justify-between items-center">
             <h1 class="text-3xl font-bold text-teal-800">Patient Management</h1>
             <a href="{{ route('secretary.patient.create') }}"
-               class="bg-gradient-to-r from-teal-500 to-teal-700 text-white px-6 py-2 rounded-xl shadow-md hover:shadow-xl hover:scale-105 transform transition-all duration-200 font-medium">
+                class="bg-gradient-to-r from-teal-500 to-teal-700 text-white px-6 py-2 rounded-xl shadow-md hover:shadow-xl hover:scale-105 transform transition-all duration-200 font-medium">
                 + New Patient
+            </a>
+
+            <a href="{{ route('secretary.appointments.index') }}"
+                class="bg-gradient-to-r from-teal-500 to-teal-700 text-white px-6 py-2 rounded-xl shadow-md hover:shadow-xl hover:scale-105 transform transition-all duration-200 font-medium">
+                Manage Appointments
             </a>
         </div>
 
         {{-- Flash Message --}}
         @if (session('success'))
-            <div class="max-w-3xl mx-auto mb-6 p-4 bg-green-100 border border-green-300 text-green-800 rounded-xl shadow">
+            <div
+                class="max-w-3xl mx-auto mb-6 p-4 bg-green-100 border border-green-300 text-green-800 rounded-xl shadow">
                 {{ session('success') }}
             </div>
         @endif
@@ -20,14 +26,15 @@
         <div class="max-w-xl mx-auto mb-10 relative">
             <input type="text" id="patient-search"
                 class="w-full pl-12 pr-5 py-3 rounded-full bg-white border-2 border-teal-300 shadow focus:ring-2 focus:ring-teal-500 focus:outline-none text-gray-700 placeholder:text-gray-400"
-                placeholder="🔍 Search patients by name…" autocomplete="off" />
+                placeholder=" Search patients by name…" autocomplete="off" />
             <span class="absolute left-5 top-3 text-xl text-teal-500">🔍</span>
         </div>
 
         {{-- Patients List --}}
         <div id="patients-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             @foreach ($patients as $patient)
-                <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all p-6 flex flex-col border border-teal-100">
+                <div
+                    class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all p-6 flex flex-col border border-teal-100">
                     @if ($patient->image)
                         <img src="{{ asset('storage/' . $patient->image) }}"
                             class="w-full h-48 object-cover rounded-xl mb-4 border border-gray-200">
@@ -60,7 +67,7 @@
         const originalPatients = patientListEl.innerHTML;
         const originalPatientsPag = patientPagEl ? patientPagEl.innerHTML : '';
 
-        document.getElementById('patient-search').addEventListener('input', function () {
+        document.getElementById('patient-search').addEventListener('input', function() {
             const q = this.value.trim();
             if (q === '') {
                 patientListEl.innerHTML = originalPatients;

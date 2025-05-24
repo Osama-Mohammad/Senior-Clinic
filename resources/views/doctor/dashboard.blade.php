@@ -27,10 +27,22 @@
                     class="inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-3 rounded-lg shadow transition">
                     Edit Profile
                 </a>
-
+{{--
                 <a href="{{ route('doctor.secretary.create') }}"
                     class="inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-3 rounded-lg shadow transition">
                     Add Secretary
+                </a> --}}
+
+                <a href="{{ route('doctor.secretary.index') }}"
+                    class="inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-3 rounded-lg shadow transition">
+                    Manage Secretaries
+                </a>
+
+
+
+                <a href="{{ route('doctor.appointments.index') }}"
+                    class="inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-3 rounded-lg shadow transition">
+                    View Appointments
                 </a>
 
                 <a href="{{ route('doctor.ai.test.form') }}"

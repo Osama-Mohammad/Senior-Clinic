@@ -53,8 +53,12 @@ Route::prefix('patient')->group(function () {
     /* Appointments */
     // Route::resource('appointments', AppointmentController::class);
     Route::prefix('appointment')->group(function () {
+        Route::get('/index', [App\Http\Controllers\Patient\AppointmentController::class, 'index'])->name('patient.appointment.index');
         Route::get('/create/{doctor}', [AppointmentController::class, 'create'])->name('patient.appointment.create');
         Route::post('/appointment/store', [AppointmentController::class, 'store'])->name('patient.appointment.store');
+
+        Route::get('/appointments/search', [App\Http\Controllers\Patient\AppointmentController::class, 'search'])->name('patient.appointments.search');
+        Route::patch('/{appointment}/update-status', [App\Http\Controllers\Patient\AppointmentController::class, 'updateStatus'])->name('patient.appointments.updateStatus');
     });
 });
 
@@ -72,8 +76,12 @@ Route::prefix('doctor')->group(function () {
     Route::put('/update/{doctor}', [DoctorController::class, 'update'])->name('doctor.update');
 
     Route::prefix('secretary')->group(function () {
-        Route::get('/create', [SecretaryController::class, 'create'])->name('doctor.secretary.create');
-        Route::post('/store', [SecretaryController::class, 'store'])->name('doctor.secretary.store');
+        Route::get('/index', [App\Http\Controllers\Doctor\SecretaryController::class, 'index'])->name('doctor.secretary.index');
+
+        Route::get('/create', [App\Http\Controllers\Doctor\SecretaryController::class, 'create'])->name('doctor.secretary.create');
+        Route::post('/store', [App\Http\Controllers\Doctor\SecretaryController::class, 'store'])->name('doctor.secretary.store');
+
+        Route::delete('/{secretary}/delete', [App\Http\Controllers\Doctor\SecretaryController::class,'destroy'])->name('doctor.secretary.delete');
     });
 });
 
@@ -82,6 +90,8 @@ Route::prefix('doctor')->group(function () {
 Route::get('/search/clinics',  [ClinicController::class, 'search'])->name('search.clinics');
 Route::get('/search/doctors', [DoctorController::class, 'search'])->name('search.doctors');
 Route::get('/search/patients', [App\Http\Controllers\Secretary\PatientController::class, 'search'])->name('search.patients');
+
+
 
 // Admin routes with authentication
 Route::prefix('admin')->middleware('auth:admin')->group(function () {
@@ -132,11 +142,19 @@ Route::prefix('doctor')->middleware(['auth:doctor'])->group(function () {
     Route::get('/index', [DoctorController::class, 'index'])->name('doctor.index');
     Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
 
+    Route::prefix('appointment')->group(function () {
+        Route::get('/index', [App\Http\Controllers\Doctor\AppointmentController::class, 'index'])->name('doctor.appointments.index');
+        Route::get('/appointments/search', [App\Http\Controllers\Doctor\AppointmentController::class, 'search'])->name('doctor.appointments.search');
+    });
+
+    Route::prefix('patient')->group(function () {
+        Route::get('/{patient}/show', [App\Http\Controllers\Doctor\PatientController::class, 'show'])->name('doctor.patient.show');
+    });
+
     // ✅ AI Test Form Route (only accessible by authenticated doctors)
     Route::get('/ai-test', [AiController::class, 'showForm'])->name('doctor.ai.test.form');
     Route::post('/ai-test', [AiController::class, 'submitForm'])->name('doctor.ai.test.submit'); // ✅ MISSING LINE FIXED
     Route::get('/ai-result/{id}', [AiController::class, 'showResult'])->name('doctor.ai.test.result');
-
 });
 
 Route::prefix('clinic')->group(function () {
@@ -152,4 +170,10 @@ Route::prefix('secretary')->middleware('auth:secretary')->group(function () {
 
     Route::get('/patient/{patient}/bookAppointment', [App\Http\Controllers\Secretary\AppointmentController::class, 'create'])->name('secretary.patient.createAppointment');
     Route::post('/patient/{patient}/bookAppointment', [App\Http\Controllers\Secretary\AppointmentController::class, 'store'])->name('secretary.patient.storeAppointment');
+
+    Route::prefix('appointment')->group(function () {
+        Route::get('/index', [App\Http\Controllers\Secretary\AppointmentController::class, 'index'])->name('secretary.appointments.index');
+        Route::get('/appointments/search', [App\Http\Controllers\Secretary\AppointmentController::class, 'search'])->name('secretary.appointments.search');
+        Route::patch('/{appointment}/update-status', [App\Http\Controllers\Secretary\AppointmentController::class, 'updateStatus'])->name('secretary.appointments.updateStatus');
+    });
 });

@@ -30,16 +30,22 @@
                 @elseif (Auth::guard('patient')->check())
                     <a href="#top" class="flex items-center gap-2 hover:text-emerald-300 transition">
                         <i class="fas fa-home"></i> Home
-                    </a>
-                @elseif (Auth::guard('doctor')->check())
-                    <a href="#top" class="flex items-center gap-2 hover:text-emerald-300 transition">
-                        <i class="fas fa-home"></i> Home
-                    </a>
+
+                        <a href="{{ route('patient.appointment.index') }}" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                            <i class="fas fa-home"></i> My Appointments
+                        </a>
+                    @elseif (Auth::guard('doctor')->check())
+                        <a href="#top" class="flex items-center gap-2 hover:text-emerald-300 transition">
+                            <i class="fas fa-home"></i> Home
+                        </a>
                 @endif
 
                 <a href="#about" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-info-circle"></i> About Us
                 </a>
+
+
+
                 <a href="#clinics" class="flex items-center gap-2 hover:text-emerald-300 transition">
                     <i class="fas fa-hospital"></i> Clinics
                 </a>

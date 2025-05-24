@@ -13,7 +13,7 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {}
+
 
     /**
      * Show the form for creating a new resource.
@@ -100,6 +100,10 @@ class AppointmentController extends Controller
         ]);
         return redirect()->route('patient.show', Auth::guard('patient')->user()->id)->with('success Booked Successfully');
     }
+
+   
+
+
 
     /**
      * Display the specified resource.

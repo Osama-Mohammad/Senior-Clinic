@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Auth;
 class AppointmentController extends Controller
 {
 
+    public function index()
+    {
+        $secretary = Auth::guard('secretary')->user();
+        $appointments = Appointment::where('doctor_id', $secretary->doctor_id)->get();
+        $appointments = $appointments->load('doctor', 'patient');
+        return view('secretary.appointment.index', compact('appointments', 'secretary'));
+    }
+
     public function create(Patient $patient)
     {
 
@@ -91,5 +99,65 @@ class AppointmentController extends Controller
             'patient_id' =>  $patient->id
         ]);
         return redirect()->route('secretary.dashboard')->with('success', ' Booked Successfully');
+    }
+    public function search(Request $request)
+    {
+        $secretary = Auth::guard('secretary')->user();
+        $doctorId = $secretary->doctor->id;
+
+        $query = Appointment::with('patient', 'doctor')
+            ->where('doctor_id', $doctorId); // Always filter by doctor
+
+        // Only filter by status if it's not empty/null
+        if (!empty($request->status)) {
+            $query->where('status', $request->status);
+        }
+
+        $appointments = $query->get()->map(function ($a) {
+            return [
+                'id' => $a->id,
+                'patient_id' => $a->patient->id, // <-- Add this
+                'patient_name' => $a->patient->first_name . ' ' . $a->patient->last_name,
+                'appointment_datetime' => $a->appointment_datetime,
+                'status' => $a->status,
+            ];
+        });
+
+        return response()->json($appointments);
+    }
+
+    public function updateStatus(Request $request, Appointment $appointment)
+    {
+        $request->validate([
+            'status' => 'required|in:Booked,Cancel Requested,Canceled,Completed',
+        ]);
+
+        // Check if status change is to "Canceled"
+        if ($request->status === 'Canceled') {
+            $now = now();
+            $appointmentDate = $appointment->appointment_datetime;
+
+            if ($now->lt($appointmentDate) && $now->diffInHours($appointmentDate) < 48) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Cancellation is only allowed at least 2 days (48 hours) before the appointment.'
+                ], 422);
+            }
+
+            // Require cancellation to be at least 2 full days before the appointment
+            // $diffInDays = $now->diffInDays($appointmentDate, false);
+            // if ($diffInDays < 2) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'error' => 'Cancellation is only allowed at least 2 days before the appointment.'
+            //     ], 422); // Unprocessable Entity
+            // }
+        }
+
+        $appointment->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json(['success' => true, 'status' => $appointment->status]);
     }
 }
