@@ -8,6 +8,18 @@
             </a>
         </div>
 
+        @if (session('success'))
+            <div class="mb-6 bg-green-100 border border-green-300 text-green-800 text-sm px-6 py-4 rounded-lg shadow">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="mb-6 bg-red-100 border border-red-300 text-red-800 text-sm px-6 py-4 rounded-lg shadow">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="bg-white rounded-xl shadow-lg overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-blue-100 text-blue-800 text-left text-sm font-semibold uppercase tracking-wider">

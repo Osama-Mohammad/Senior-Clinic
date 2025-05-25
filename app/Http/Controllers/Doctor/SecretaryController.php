@@ -48,7 +48,7 @@ class SecretaryController extends Controller
 
         $secretary->save();
 
-        return redirect()->route('doctor.secretary.index')->with('success', 'Created Secretary' . $secretary->first_name . ' successfully');
+        return redirect()->route('doctor.secretary.index')->with('success', 'Created Secretary ' . $secretary->first_name . ' successfully');
     }
     public function destroy(Secretary $secretary)
     {
