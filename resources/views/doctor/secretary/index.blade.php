@@ -1,4 +1,6 @@
-<x-layout>
+@extends('layouts.doctor-layout')
+
+@section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-blue-900">Manage Secretaries</h1>
@@ -61,4 +63,4 @@
             </table>
         </div>
     </div>
-</x-layout>
+@endsection

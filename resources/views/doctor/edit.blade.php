@@ -1,4 +1,6 @@
-<x-layout>
+@extends('layouts.doctor-layout')
+
+@section('content')
     <div class="min-h-screen bg-gradient-to-r from-cyan-50 to-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl w-full bg-white p-8 rounded-2xl shadow-2xl space-y-8 animate-fade-in">
 
@@ -146,4 +148,4 @@
         [x-cloak] { display: none !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
-</x-layout>
+@endsection
