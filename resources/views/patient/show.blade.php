@@ -247,7 +247,7 @@ length > 2) {
             }
         });
 
-        function fetchPageAndReplace(url, listSelector, pagSelector) {
+        function fetchPageAndReplace(url, listSelector, pagSelector) {z
             fetch(url)
                 .then(res => res.text())
                 .then(html => {

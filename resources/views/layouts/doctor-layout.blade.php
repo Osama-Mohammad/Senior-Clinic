@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Doctor Dashboard</title>
@@ -13,6 +14,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gradient-to-br from-cyan-100 via-blue-50 to-white min-h-screen">
 
     <div class="flex min-h-screen">
@@ -38,24 +40,28 @@
                 <!-- Navigation -->
                 <nav class="flex flex-col space-y-3 text-sm font-medium">
                     <a href="{{ route('doctor.edit', Auth::guard('doctor')->user()) }}"
-                       class="transition duration-300 bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-lg text-center shadow">
+                        class="transition duration-300 bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-lg text-center shadow">
                         📝 Edit Profile
                     </a>
 
                     <a href="{{ route('doctor.secretary.index') }}"
-                       class="transition duration-300 bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-lg text-center shadow">
+                        class="transition duration-300 bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-lg text-center shadow">
                         🧑‍💼 Manage Secretaries
                     </a>
 
                     <a href="{{ route('doctor.appointments.index') }}"
-                       class="transition duration-300 bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-lg text-center shadow">
+                        class="transition duration-300 bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-lg text-center shadow">
                         📅 View Appointments
                     </a>
 
-                    <a href="{{ route('doctor.ai.test.form') }}"
-                       class="transition duration-300 bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg text-center shadow">
-                        🧠 Run AI Test
-                    </a>
+                    @if (Auth::guard('doctor')->user()->clinic->name == 'SmileCare Dental')
+                        <a href="{{ route('doctor.ai.test.form') }}"
+                            class="transition duration-300 bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg text-center shadow">
+                            🧠 Run AI Test
+                        </a>
+                        @else
+                        <p>Not Allowed</p>
+                    @endif
                 </nav>
             </div>
 
@@ -76,4 +82,5 @@
     </div>
 
 </body>
+
 </html>
