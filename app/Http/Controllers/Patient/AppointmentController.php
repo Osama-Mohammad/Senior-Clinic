@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Patient;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Notifications\Patient\AppointmentCancelNotification;
 use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
@@ -72,6 +73,8 @@ class AppointmentController extends Controller
             'status' => $request->status
         ]);
 
+        $appointment->load('doctor', 'patient');
+        $appointment->patient->notify(new AppointmentCancelNotification($appointment));
         return response()->json(['success' => true, 'status' => $appointment->status]);
     }
 }

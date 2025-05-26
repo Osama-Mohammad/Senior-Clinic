@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Doctor;
 use App\Models\Appointment;
+use App\Notifications\Patient\AppointmentBookedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -91,17 +92,20 @@ class AppointmentController extends Controller
 
 
         // If we reach here, it’s valid—proceed to save the appointment...
-        Appointment::create([
+        $appointment =  Appointment::create([
             'doctor_id'            => $doctor->id,
             'clinic_id'            => $validated['clinic_id'],
             'appointment_datetime' => $appointment,
             'status' => 'Booked',
             'patient_id' => Auth::guard('patient')->user()->id
         ]);
+
+        $appointment = Appointment::with(['doctor', 'patient'])->findOrFail($appointment->id);
+        $appointment->patient->notify(new AppointmentBookedNotification($appointment));
         return redirect()->route('patient.show', Auth::guard('patient')->user()->id)->with('success Booked Successfully');
     }
 
-   
+
 
 
 

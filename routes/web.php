@@ -1,18 +1,20 @@
 <?php
 
+use App\Mail\TestMail;
 use App\Models\Clinic;
 use App\Models\Doctor;
+use App\Models\Appointment;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AIController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
-use App\Http\Controllers\Admin\ClinicController as AdminClinicController;
-use App\Http\Controllers\AIController;
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\SecretaryController;
-use App\Models\Appointment;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\Admin\ClinicController as AdminClinicController;
 
 // Public routes
 Route::get('/', function () {
@@ -81,7 +83,7 @@ Route::prefix('doctor')->group(function () {
         Route::get('/create', [App\Http\Controllers\Doctor\SecretaryController::class, 'create'])->name('doctor.secretary.create');
         Route::post('/store', [App\Http\Controllers\Doctor\SecretaryController::class, 'store'])->name('doctor.secretary.store');
 
-        Route::delete('/{secretary}/delete', [App\Http\Controllers\Doctor\SecretaryController::class,'destroy'])->name('doctor.secretary.delete');
+        Route::delete('/{secretary}/delete', [App\Http\Controllers\Doctor\SecretaryController::class, 'destroy'])->name('doctor.secretary.delete');
     });
 });
 
@@ -176,4 +178,12 @@ Route::prefix('secretary')->middleware('auth:secretary')->group(function () {
         Route::get('/appointments/search', [App\Http\Controllers\Secretary\AppointmentController::class, 'search'])->name('secretary.appointments.search');
         Route::patch('/{appointment}/update-status', [App\Http\Controllers\Secretary\AppointmentController::class, 'updateStatus'])->name('secretary.appointments.updateStatus');
     });
+});
+
+
+
+/* Email Testing */
+Route::get('/send-email', function () {
+    Mail::to('test@example.com')->send(new TestMail());
+    return 'Email sent! Check Ethereal.';
 });
