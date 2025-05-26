@@ -43,7 +43,7 @@
                         {{ $patient->first_name }} {{ $patient->last_name }}
                     </h3>
                     <p class="text-sm text-white inline-block bg-teal-500 px-3 py-1 rounded-full w-fit">
-                        {{ $patient->specialization ?? 'General' }}
+                        {{ $patient->email ?? 'No Email Found' }}
                     </p>
                     <a href="{{ route('secretary.patient.createAppointment', $patient) }}"
                         class="mt-5 inline-block text-center bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold text-sm px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all">

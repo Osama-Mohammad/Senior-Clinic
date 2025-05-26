@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AIController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SlotController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\DoctorController;
@@ -93,6 +94,7 @@ Route::get('/search/clinics',  [ClinicController::class, 'search'])->name('searc
 Route::get('/search/doctors', [DoctorController::class, 'search'])->name('search.doctors');
 Route::get('/search/patients', [App\Http\Controllers\Secretary\PatientController::class, 'search'])->name('search.patients');
 
+Route::get('/api/available-slots', [SlotController::class, 'getAvailableSlots']);
 
 
 // Admin routes with authentication
@@ -123,9 +125,6 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::put('/update-clinic/{clinic}', [App\Http\Controllers\Admin\ClinicController::class, 'update'])->name('admin.updateClinic');
     Route::delete('/delete-clinic/{clinic}', [App\Http\Controllers\Admin\ClinicController::class, 'destroy'])->name('admin.deleteClinic');
 
-    /* Manage AI Test */
-    // Route::get('/manage-AIs/{admin}', [App\Http\Controllers\Admin\AIController::class, 'index'])->name('admin.manageAi');
-    // Route::get('/create-AiTest', [App\Http\Controllers\Admin\AIController::class, 'create'])->name('admin.createAi');
 });
 
 // Public admin registration routes
@@ -179,7 +178,6 @@ Route::prefix('secretary')->middleware('auth:secretary')->group(function () {
         Route::patch('/{appointment}/update-status', [App\Http\Controllers\Secretary\AppointmentController::class, 'updateStatus'])->name('secretary.appointments.updateStatus');
     });
 });
-
 
 
 /* Email Testing */

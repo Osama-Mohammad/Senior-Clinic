@@ -12,7 +12,6 @@
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-400">
                 <option value="">All</option>
                 <option value="Booked">Booked</option>
-                <option value="Cancel Requested">Cancel Requested</option>
                 <option value="Canceled">Canceled</option>
                 <option value="Completed">Completed</option>
             </select>
