@@ -1,4 +1,6 @@
-<x-layout>
+@extends('layouts.doctor-layout')
+
+@section('content')
     <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
         <h2 class="text-2xl font-bold mb-6">Add New Secretary</h2>
 
@@ -58,4 +60,4 @@
             </div>
         </form>
     </div>
-</x-layout>
+@endsection

@@ -1,4 +1,6 @@
-<x-layout>
+@extends('layouts.doctor-layout')
+
+@section('content')
     <div class="min-h-screen bg-gradient-to-r from-blue-50 to-cyan-50 flex items-center justify-center py-12 px-6">
         <div class="w-full max-w-2xl bg-white p-8 rounded-2xl shadow-2xl space-y-6 animate-fade-in">
 
@@ -50,4 +52,4 @@
             </form>
         </div>
     </div>
-</x-layout>
+@endsection
