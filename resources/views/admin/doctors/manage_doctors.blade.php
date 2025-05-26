@@ -26,6 +26,7 @@
                             <th class="px-6 py-3 text-left font-semibold uppercase tracking-wider">Email</th>
                             <th class="px-6 py-3 text-left font-semibold uppercase tracking-wider">Phone</th>
                             <th class="px-6 py-3 text-left font-semibold uppercase tracking-wider">Image</th>
+                            <th class="px-6 py-3 text-left font-semibold uppercase tracking-wider">Clinic</th>
                             <th class="px-6 py-3 text-center font-semibold uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
@@ -43,6 +44,9 @@
                                         <span class="text-gray-400">No Image</span>
                                     @endif
                                 </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+    {{ $doctor->clinic->name ?? '—' }}
+</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center space-x-2">
                                     <a href="{{ route('admin.editDoctor', $doctor) }}"
                                         class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-xs font-semibold transition">
