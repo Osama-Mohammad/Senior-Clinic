@@ -6,26 +6,49 @@
 
             <h2 class="text-2xl font-bold text-center text-teal-700">🧠 Run AI Heart Failure Test</h2>
 
+            {{-- ✅ Success flash --}}
             @if (session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                    {{ session('success') }}
+                    ✅ {{ session('success') }}
                 </div>
             @endif
 
+            {{-- ❌ Error flash --}}
+            @if (session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    ❌ {{ session('error') }}
+                </div>
+            @endif
+
+            {{-- ⚠️ Validation Errors --}}
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>⚠️ {{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            {{-- ✅ AI Test Form --}}
             <form action="{{ route('doctor.ai.test.submit') }}" method="POST" class="space-y-4">
                 @csrf
 
+                {{-- Select Patient --}}
                 <div>
                     <label class="block text-sm font-medium">Select Patient:</label>
                     <select name="patient_id" required class="w-full rounded border-gray-300">
                         <option value="">-- Choose Patient --</option>
                         @foreach ($patients as $patient)
-                            <option value="{{ $patient->id }}">{{ $patient->first_name }} {{ $patient->last_name }}</option>
+                            <option value="{{ $patient->id }}">
+                                {{ $patient->first_name }} {{ $patient->last_name }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
 
-                <!-- Inputs: Numeric -->
+                {{-- Numeric Inputs --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <x-ai.number-input label="Age (normalized)" name="norm_age" />
                     <x-ai.number-input label="Creatinine Phosphokinase (normalized)" name="norm_creatinine_phosphokinase" />
@@ -36,13 +59,14 @@
                     <x-ai.number-input label="Time (normalized)" name="norm_time" />
                 </div>
 
-                <!-- Inputs: Binary -->
+                {{-- Binary Inputs --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <x-ai.binary-select label="Anaemia" name="anaemia" />
                     <x-ai.binary-select label="Diabetes" name="diabetes" />
                     <x-ai.binary-select label="High Blood Pressure" name="high_blood_pressure" />
                 </div>
 
+                {{-- Submit Button --}}
                 <div class="text-center pt-4">
                     <button type="submit"
                         class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow">
