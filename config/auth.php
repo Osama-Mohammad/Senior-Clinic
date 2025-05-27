@@ -101,7 +101,7 @@ return [
             'model' =>  env('AUTH_MODEL',  Secretary::class),
         ],
 
-
+        
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
