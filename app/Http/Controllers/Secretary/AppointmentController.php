@@ -8,6 +8,8 @@ use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
+use App\Notifications\Secretary\AppointmentBookedNotification;
+use App\Notifications\Secretary\AppointmentCancelNotification;
 use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
@@ -76,13 +78,16 @@ class AppointmentController extends Controller
             ])->withInput();
         }
 
-        Appointment::create([
+        $appointment = Appointment::create([
             'doctor_id' => $doctor->id,
             'clinic_id' => $validated['clinic_id'],
             'appointment_datetime' => $appointment,
             'status' => 'Booked',
             'patient_id' => $patient->id
         ]);
+
+        $patient = $appointment->patient;
+        $patient->notify(new AppointmentBookedNotification($appointment));
 
         return redirect()->route('secretary.dashboard')->with('success', 'Appointment booked successfully.');
     }
@@ -131,14 +136,15 @@ class AppointmentController extends Controller
                 ], 422);
             }
 
-            // Require cancellation to be at least 2 full days before the appointment
-            // $diffInDays = $now->diffInDays($appointmentDate, false);
-            // if ($diffInDays < 2) {
-            //     return response()->json([
-            //         'success' => false,
-            //         'error' => 'Cancellation is only allowed at least 2 days before the appointment.'
-            //     ], 422); // Unprocessable Entity
-            // }
+            try {
+                $patient = $appointment->patient;
+                $patient->notify(new AppointmentCancelNotification($appointment));
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Failed to send cancellation email: ' . $e->getMessage()
+                ], 500);
+            }
         }
 
         $appointment->update([
