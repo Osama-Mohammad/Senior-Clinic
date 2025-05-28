@@ -145,7 +145,7 @@ Route::prefix('doctor')->middleware(['auth:doctor'])->group(function () {
     Route::get('/ai-test', [AiController::class, 'showForm'])->name('doctor.ai.test.form');
     Route::post('/ai-test', [AiController::class, 'submitForm'])->name('doctor.ai.test.submit'); // ✅ MISSING LINE FIXED
     Route::get('/ai-result/{id}', [AiController::class, 'showResult'])->name('doctor.ai.test.result');
-    
+
     Route::prefix('appointment')->group(function () {
         Route::get('/index', [App\Http\Controllers\Doctor\AppointmentController::class, 'index'])->name('doctor.appointments.index');
         Route::get('/appointments/search', [App\Http\Controllers\Doctor\AppointmentController::class, 'search'])->name('doctor.appointments.search');

@@ -7,9 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Notifications\Patient\AppointmentCancelNotification;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
+    /**
+     * Display the appointment view.
+     */
     public function index()
     {
         $patient = Auth::guard('patient')->user();
@@ -18,13 +22,16 @@ class AppointmentController extends Controller
         return view('patient.appointment.index', compact('appointments', 'patient'));
     }
 
+    /**
+     * Return appointments as JSON (used by AlpineJS).
+     */
     public function search(Request $request)
     {
         $patient = Auth::guard('patient')->user();
-        $query = Appointment::with('patient', 'doctor')
-            ->where('patient_id', $patient->id); // Always filter by patient
 
-        // Only filter by status if it's not empty/null
+        $query = Appointment::with('doctor')
+            ->where('patient_id', $patient->id);
+
         if (!empty($request->status)) {
             $query->where('status', $request->status);
         }
@@ -33,7 +40,7 @@ class AppointmentController extends Controller
             return [
                 'id' => $a->id,
                 'doctor_name' => $a->doctor->first_name . ' ' . $a->doctor->last_name,
-                'appointment_datetime' => $a->appointment_datetime,
+                'appointment_datetime' => Carbon::parse($a->appointment_datetime)->format('F j, Y - h:i A'),
                 'status' => $a->status,
             ];
         });
@@ -41,13 +48,16 @@ class AppointmentController extends Controller
         return response()->json($appointments);
     }
 
+    /**
+     * Update the appointment status (e.g., cancel).
+     */
     public function updateStatus(Request $request, Appointment $appointment)
     {
         $request->validate([
             'status' => 'required|in:Booked,Cancel Requested,Canceled,Completed',
         ]);
 
-        // Check if status change is to "Canceled"
+        // Restrict late cancellations
         if ($request->status === 'Canceled') {
             $now = now();
             $appointmentDate = $appointment->appointment_datetime;
@@ -58,23 +68,16 @@ class AppointmentController extends Controller
                     'error' => 'Cancellation is only allowed at least 2 days (48 hours) before the appointment.'
                 ], 422);
             }
-
-            // Require cancellation to be at least 2 full days before the appointment
-            // $diffInDays = $now->diffInDays($appointmentDate, false);
-            // if ($diffInDays < 2) {
-            //     return response()->json([
-            //         'success' => false,
-            //         'error' => 'Cancellation is only allowed at least 2 days before the appointment.'
-            //     ], 422); // Unprocessable Entity
-            // }
         }
 
         $appointment->update([
             'status' => $request->status
         ]);
 
+        // Notify patient
         $appointment->load('doctor', 'patient');
         $appointment->patient->notify(new AppointmentCancelNotification($appointment));
+
         return response()->json(['success' => true, 'status' => $appointment->status]);
     }
 }
