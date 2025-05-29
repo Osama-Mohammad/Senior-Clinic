@@ -1,6 +1,6 @@
 <x-layout>
-    <div class="max-w-2xl mx-auto mt-12 bg-white shadow-md rounded-xl p-8 space-y-6"
-         x-data="appointmentForm()" x-init="init()">
+    <div class="max-w-2xl mx-auto mt-12 bg-white shadow-md rounded-xl p-8 space-y-6" x-data="appointmentForm()"
+        x-init="init()">
 
         <h2 class="text-3xl font-bold text-teal-700 text-center">Book Your Appointment</h2>
 
@@ -54,10 +54,16 @@
             <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                 <p class="text-sm font-medium text-gray-700 mb-2">Doctor Availability:</p>
                 <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1">
-                    @foreach ($schedules as $day => $data)
-                        <li><strong>{{ $day }}:</strong> From {{ $data['from'] }} to {{ $data['to'] }}</li>
+                    @foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
+                        @if (!empty($schedules[$day]['from']) && !empty($schedules[$day]['to']))
+                            <li><strong>{{ $day }}:</strong> From {{ $schedules[$day]['from'] }} to
+                                {{ $schedules[$day]['to'] }}</li>
+                        @else
+                            <li><strong>{{ $day }}:</strong> <span class="text-red-500">Not Available</span>
+                            </li>
+                        @endif
                     @endforeach
-                </ul>
+                    </ul>
             </div>
 
             <!-- Submit -->
