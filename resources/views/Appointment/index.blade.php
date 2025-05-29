@@ -27,6 +27,7 @@
                             <th class="px-6 py-3 text-left">Patient</th>
                             <th class="px-6 py-3 text-left">Date</th>
                             <th class="px-6 py-3 text-left">Status</th>
+                            <th class="px-6 py-3 text-left">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-gray-700">
@@ -48,6 +49,14 @@
                                         }"
                                         x-text="appointment.status">
                                     </span>
+                                </td>
+                                <td>
+                                    @if ($appointment->status === 'completed')
+                                        <a href="{{ route('appointments.logs.create', $appointment) }}"
+                                            class="inline-block px-3 py-1 bg-teal-600 text-white rounded">
+                                            Add Notes
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         </template>

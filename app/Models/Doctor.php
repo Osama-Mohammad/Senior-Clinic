@@ -50,4 +50,9 @@ class Doctor extends Authenticatable
     {
         return $this->hasMany(Appointment::class);
     }
+
+    public function patientLogs()
+    {
+        return $this->hasMany(PatientLog::class);
+    }
 }

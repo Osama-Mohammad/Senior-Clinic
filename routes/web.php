@@ -14,6 +14,7 @@ use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\SecretaryController;
+use App\Http\Controllers\PatientLogController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Admin\ClinicController as AdminClinicController;
 
@@ -148,6 +149,11 @@ Route::prefix('doctor')->middleware(['auth:doctor'])->group(function () {
     Route::prefix('appointment')->group(function () {
         Route::get('/index', [App\Http\Controllers\Doctor\AppointmentController::class, 'index'])->name('doctor.appointments.index');
         Route::get('/appointments/search', [App\Http\Controllers\Doctor\AppointmentController::class, 'search'])->name('doctor.appointments.search');
+
+        Route::get('/{appointment}/log', [PatientLogController::class, 'create'])
+            ->name('appointments.logs.create');
+        Route::post('/{appointment}/log', [PatientLogController::class, 'store'])
+            ->name('appointments.logs.store');
     });
 
     Route::prefix('patient')->group(function () {
