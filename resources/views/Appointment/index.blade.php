@@ -50,13 +50,18 @@
                                         x-text="appointment.status">
                                     </span>
                                 </td>
-                                <td>
-                                    @if ($appointment->status === 'completed')
-                                        <a href="{{ route('appointments.logs.create', $appointment) }}"
-                                            class="inline-block px-3 py-1 bg-teal-600 text-white rounded">
-                                            Add Notes
+                                <!-- Action Column -->
+                                <td class="px-6 py-4 text-center">
+                                    <template x-if="appointment.status === 'Completed'">
+                                        <a :href="`{{ route('appointments.logs.create', ['appointment' => ':id']) }}`.replace(
+                                            ':id', appointment.id)"
+                                            class="text-blue-600 hover:underline">
+                                            Make Log
                                         </a>
-                                    @endif
+                                    </template>
+                                    <template x-if="appointment.status !== 'Completed'">
+                                        <span class="text-gray-500">No Action</span>
+                                    </template>
                                 </td>
                             </tr>
                         </template>

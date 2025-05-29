@@ -80,4 +80,10 @@ class AppointmentController extends Controller
 
         return response()->json(['success' => true, 'status' => $appointment->status]);
     }
+
+    public function show(Appointment $appointment)
+    {
+        $appointment->load('patient', 'doctor', 'log');
+        return view('patient.appointment.show', compact('appointment'));
+    }
 }

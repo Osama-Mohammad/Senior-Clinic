@@ -7,8 +7,7 @@
                 'bg-green-500': toastType === 'success',
                 'bg-red-500': toastType === 'error'
             }"
-            class="fixed top-5 right-5 text-white px-6 py-3 rounded-lg shadow-lg z-50"
-            x-text="toastMessage">
+            class="fixed top-5 right-5 text-white px-6 py-3 rounded-lg shadow-lg z-50" x-text="toastMessage">
         </div>
 
         <!-- ✅ Page Title -->
@@ -34,7 +33,8 @@
                             <tr class="hover:bg-blue-50 transition duration-200 ease-in-out">
                                 <td class="px-6 py-4 font-medium text-blue-800" x-text="appointment.id"></td>
                                 <td class="px-6 py-4 font-medium" x-text="appointment.doctor_name"></td>
-                                <td class="px-6 py-4 text-sm text-gray-600" x-text="appointment.appointment_datetime"></td>
+                                <td class="px-6 py-4 text-sm text-gray-600" x-text="appointment.appointment_datetime">
+                                </td>
                                 <td class="px-6 py-4">
                                     <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full shadow-sm"
                                         :class="{
@@ -46,13 +46,20 @@
                                         x-text="appointment.status">
                                     </span>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <button
-                                        x-show="appointment.status === 'Booked'"
+                                <td class="px-6 py-4 space-x-2">
+                                    {{-- Cancel button --}}
+                                    <button x-show="appointment.status === 'Booked'"
                                         @click="cancelAppointment(appointment)"
                                         class="text-red-600 hover:text-red-800 text-sm font-semibold underline underline-offset-2">
                                         Cancel
                                     </button>
+
+                                    {{-- View History link --}}
+                                    <a x-show="appointment.status === 'Completed'"
+                                        :href="`{{ url('patient/appointment') }}/${appointment.id}/show`"
+                                        class="text-blue-600 hover:text-blue-800 text-sm font-semibold underline underline-offset-2">
+                                        View History
+                                    </a>
                                 </td>
                             </tr>
                         </template>
@@ -62,12 +69,14 @@
 
             <!-- 🕳️ Empty State -->
             <template x-if="appointments.length === 0">
-                <div class="text-center px-6 py-10 text-gray-500 italic">No appointments found.</div>
+                <div class="text-center px-6 py-10 text-gray-500 italic">
+                    No appointments found.
+                </div>
             </template>
         </div>
     </div>
 
-    <!-- ✅ Scripts -->
+    <!-- ✅ Scripts (axios + Alpine) -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
 
@@ -87,41 +96,26 @@
                 fetchAppointments() {
                     axios.get('{{ route('patient.appointments.search') }}')
                         .then(res => {
-                            this.appointments = res.data.map(a => ({
-                                ...a,
-                                doctor_name: a.doctor_name
-                            }));
+                            this.appointments = res.data;
                         });
                 },
 
                 cancelAppointment(appointment) {
-                    const confirmed = confirm("Are you sure you want to cancel this appointment?");
-                    if (!confirmed) return;
-
+                    if (!confirm("Are you sure you want to cancel this appointment?")) return;
                     axios.patch(`/patient/appointment/${appointment.id}/update-status`, {
-                        status: 'Canceled'
-                    }).then(res => {
-                        appointment.status = res.data.status;
-                        this.toastType = 'success';
-                        this.toastMessage = 'Appointment canceled successfully.';
-                        this.showToastMessage();
-                    }).catch(error => {
-                        this.toastType = 'error';
-                        this.toastMessage = error.response?.data?.error || 'Failed to cancel appointment.';
-                        this.showToastMessage();
-                    });
-                },
-
-                formatDate(datetime) {
-                    const options = {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true
-                    };
-                    return new Date(datetime).toLocaleString('en-US', options);
+                            status: 'Canceled'
+                        })
+                        .then(res => {
+                            appointment.status = res.data.status;
+                            this.toastType = 'success';
+                            this.toastMessage = 'Appointment canceled successfully.';
+                            this.showToastMessage();
+                        })
+                        .catch(err => {
+                            this.toastType = 'error';
+                            this.toastMessage = err.response?.data?.error || 'Failed to cancel appointment.';
+                            this.showToastMessage();
+                        });
                 },
 
                 showToastMessage() {

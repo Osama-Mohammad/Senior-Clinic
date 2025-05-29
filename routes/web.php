@@ -62,6 +62,8 @@ Route::prefix('patient')->group(function () {
 
         Route::get('/appointments/search', [App\Http\Controllers\Patient\AppointmentController::class, 'search'])->name('patient.appointments.search');
         Route::patch('/{appointment}/update-status', [App\Http\Controllers\Patient\AppointmentController::class, 'updateStatus'])->name('patient.appointments.updateStatus');
+
+        Route::get('/{appointment}/show',[App\Http\Controllers\Patient\AppointmentController::class,'show'])->name('patient.appointment.show');
     });
 });
 

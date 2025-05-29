@@ -10,8 +10,8 @@ class PatientLogController extends Controller
 {
     public function create(Appointment $appointment)
     {
-        abort_if($appointment->status !== 'completed', 403);
-        return view('appointments.logs.create', compact('appointment'));
+        abort_if($appointment->status !== 'Completed', 403);
+        return view('Appointment.logs.create', compact('appointment'));
     }
 
     public function store(Request $request, Appointment $appointment)
@@ -24,7 +24,7 @@ class PatientLogController extends Controller
         $files = [];
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $files[] = $file->store('patient_logs');
+                $files[] = $file->store('patient_logs', 'public');
             }
         }
 
