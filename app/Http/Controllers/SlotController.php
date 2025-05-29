@@ -21,6 +21,23 @@ class SlotController extends Controller
             return response()->json([]);
         }
 
+        // Count booked appointments for the day
+        $bookedCount = Appointment::where('doctor_id', $doctor->id)
+            ->whereDate('appointment_datetime', $date)
+            ->where('status', 'Booked')
+            ->count();
+
+        $max = (!empty($schedule['max']) && is_numeric($schedule['max'])) ? (int)$schedule['max'] : 0;
+
+        // Return early if fully booked
+        if ($max > 0 && $bookedCount >= $max) {
+            return response()->json([
+                'slots' => [],
+                'fully_booked' => true
+            ]);
+        }
+
+        // Build slot list
         $start = Carbon::parse("$date {$schedule['from']}");
         $end = Carbon::parse("$date {$schedule['to']}");
 
@@ -38,6 +55,39 @@ class SlotController extends Controller
             }
         }
 
-        return response()->json($slots);
+        return response()->json([
+            'slots' => $slots,
+            'fully_booked' => false
+        ]);
     }
+    public function getFullyBookedDates(Request $request)
+{
+    $doctor = Doctor::findOrFail($request->doctor_id);
+    $dates = [];
+
+    // Check next 30 days
+    for ($i = 0; $i < 30; $i++) {
+        $date = now()->addDays($i)->format('Y-m-d');
+        $dayName = ucfirst(Carbon::parse($date)->format('l'));
+        $schedule = $doctor->availability_schedule[$dayName] ?? null;
+
+        if (!$schedule || empty($schedule['from']) || empty($schedule['to'])) {
+            continue; // skip days with no schedule
+        }
+
+        $max = (!empty($schedule['max']) && is_numeric($schedule['max'])) ? (int)$schedule['max'] : 0;
+
+        $bookedCount = Appointment::where('doctor_id', $doctor->id)
+            ->whereDate('appointment_datetime', $date)
+            ->where('status', 'Booked')
+            ->count();
+
+        if ($max > 0 && $bookedCount >= $max) {
+            $dates[] = $date;
+        }
+    }
+
+    return response()->json($dates);
+}
+
 }

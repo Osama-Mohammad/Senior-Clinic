@@ -1,4 +1,5 @@
 <x-layout>
+    <x-navbar />
     <div class="max-w-6xl mx-auto mt-10 px-4" x-data="appointmentManager()" x-init="init()">
 
         <!-- ✅ Toast Notification -->

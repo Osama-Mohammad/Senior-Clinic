@@ -97,6 +97,8 @@ Route::get('/search/doctors', [DoctorController::class, 'search'])->name('search
 Route::get('/search/patients', [App\Http\Controllers\Secretary\PatientController::class, 'search'])->name('search.patients');
 
 Route::get('/api/available-slots', [SlotController::class, 'getAvailableSlots']);
+//add it here
+Route::get('/fully-booked-dates', [\App\Http\Controllers\SlotController::class, 'getFullyBookedDates']);
 
 
 // Admin routes with authentication
