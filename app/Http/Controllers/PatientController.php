@@ -64,8 +64,12 @@ class PatientController extends Controller
 
     public function show(Patient $patient)
     {
-        $clinics = Clinic::paginate(3);
-        $doctors = Doctor::paginate(3);
+        // now clinics listens on ?clinics_page=…
+        $clinics = Clinic::paginate(3, ['*'], 'clinics_page');
+
+        // doctors listens on ?doctors_page=…
+        $doctors = Doctor::paginate(3, ['*'], 'doctors_page');
+
         return view('patient.show', compact('patient', 'clinics', 'doctors'));
     }
 

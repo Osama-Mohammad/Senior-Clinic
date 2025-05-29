@@ -1,3 +1,4 @@
+{{-- resources/views/patient/show.blade.php --}}
 <x-layout>
     <x-navbar />
 
@@ -47,101 +48,103 @@
         </div>
     </section>
 
-<!-- ✅ About Us Section -->
-<section id="about" class="bg-white py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <!-- Text -->
-        <div class="space-y-6">
-            <h2 class="text-4xl font-extrabold text-teal-700">About Us</h2>
-            <p class="text-gray-700 text-lg leading-relaxed">
-                At <span class="font-semibold text-teal-600">Senior Clinic</span>, we are committed to providing world-class
-                medical care with a personal touch. Our experts combine compassion and innovation to deliver the highest standards of health services.
-            </p>
-            <p class="text-gray-500 text-base">
-                From AI-driven diagnostics to personalized treatment, every aspect of our clinic is built with your wellness in mind.
-                Discover modern healthcare, designed around your needs.
-            </p>
+    <!-- ✅ About Us Section -->
+    <section id="about" class="bg-white py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <!-- Text -->
+            <div class="space-y-6">
+                <h2 class="text-4xl font-extrabold text-teal-700">About Us</h2>
+                <p class="text-gray-700 text-lg leading-relaxed">
+                    At <span class="font-semibold text-teal-600">Senior Clinic</span>, we are committed to providing world-class
+                    medical care with a personal touch. Our experts combine compassion and innovation to deliver the highest standards of health services.
+                </p>
+                <p class="text-gray-500 text-base">
+                    From AI-driven diagnostics to personalized treatment, every aspect of our clinic is built with your wellness in mind.
+                    Discover modern healthcare, designed around your needs.
+                </p>
+            </div>
+            <!-- Image -->
+            <div class="relative group">
+                <img src="{{ asset('photos/home.jpg') }}" alt="Healthcare Team"
+                    class="w-full h-96 rounded-2xl object-cover shadow-2xl ring-1 ring-teal-100 group-hover:scale-105 transition duration-500 ease-in-out">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+            </div>
         </div>
+    </section>
 
-        <!-- Image -->
-        <div class="relative group">
-            <img src="{{ asset('photos/home.jpg') }}" alt="Healthcare Team"
-                class="w-full h-96 rounded-2xl object-cover shadow-2xl ring-1 ring-teal-100 group-hover:scale-105 transition duration-500 ease-in-out">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+    <!-- 🏥 Clinics Section -->
+    <section id="clinics" class="bg-gray-50 py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-extrabold text-teal-700 text-center mb-12">Explore Our Clinics</h2>
+
+            <div class="mb-8 max-w-2xl mx-auto">
+                <input type="text" id="clinic-search"
+                    class="w-full px-5 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                    placeholder="🔍 Search clinics by name…" autocomplete="off" />
+            </div>
+
+            <div id="clinics-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                @foreach ($clinics as $clinic)
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
+                        @if ($clinic->image)
+                            <img src="{{ asset('storage/' . $clinic->image) }}"
+                                class="w-full h-48 object-cover rounded-md mb-4">
+                        @endif
+                        <h3 class="text-xl font-semibold text-gray-800">{{ $clinic->name }}</h3>
+                        <p class="text-sm text-gray-600 mt-1 flex-grow">{{ Str::limit($clinic->description, 100) }}</p>
+                        <a href="{{ route('clinic.show', $clinic) }}"
+                            class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition text-center">
+                            View Doctors
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+
+            <div id="clinics-pagination" class="mt-10 text-center">
+                {{ $clinics
+                    ->appends(request()->except('clinics_page'))
+                    ->links() }}
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- 🏥 Clinics Section -->
-<section id="clinics" class="bg-gray-50 py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-4xl font-extrabold text-teal-700 text-center mb-12">Explore Our Clinics</h2>
+    <!-- 🩺 Doctors Section -->
+    <section id="doctors" class="bg-white py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-extrabold text-teal-700 text-center mb-12">Meet Our Doctors</h2>
 
-        <div class="mb-8 max-w-2xl mx-auto">
-            <input type="text" id="clinic-search"
-                   class="w-full px-5 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
-                   placeholder="🔍 Search clinics by name…" autocomplete="off" />
+            <div class="mb-8 max-w-2xl mx-auto">
+                <input type="text" id="doctor-search"
+                    class="w-full px-5 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                    placeholder="🔍 Search doctors by name…" autocomplete="off" />
+            </div>
+
+            <div id="doctors-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                @foreach ($doctors as $doctor)
+                    <div class="bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
+                        @if ($doctor->image)
+                            <img src="{{ asset('storage/' . $doctor->image) }}"
+                                class="w-full h-48 object-cover rounded-md mb-4">
+                        @endif
+                        <h3 class="text-xl font-semibold text-gray-800">
+                            Dr. {{ $doctor->first_name }} {{ $doctor->last_name }}
+                        </h3>
+                        <p class="text-sm text-teal-600 mt-1">{{ $doctor->specialization }}</p>
+                        <a href="{{ route('patient.appointment.create', $doctor) }}"
+                            class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition text-center">
+                            Book Appointment
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+
+            <div id="doctors-pagination" class="mt-10 text-center">
+                {{ $doctors
+                    ->appends(request()->except('doctors_page'))
+                    ->links() }}
+            </div>
         </div>
-
-        <div id="clinics-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            @foreach ($clinics as $clinic)
-                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
-                    @if ($clinic->image)
-                        <img src="{{ asset('storage/' . $clinic->image) }}"
-                            class="w-full h-48 object-cover rounded-md mb-4">
-                    @endif
-                    <h3 class="text-xl font-semibold text-gray-800">{{ $clinic->name }}</h3>
-                    <p class="text-sm text-gray-600 mt-1 flex-grow">{{ Str::limit($clinic->description, 100) }}</p>
-                    <a href="{{ route('clinic.show', $clinic) }}"
-                       class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition text-center">
-                        View Doctors
-                    </a>
-                </div>
-            @endforeach
-        </div>
-
-        <div id="clinics-pagination" class="mt-10 text-center">
-            {{ $clinics->links() }}
-        </div>
-    </div>
-</section>
-
-<!-- 🩺 Doctors Section -->
-<section id="doctors" class="bg-white py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-4xl font-extrabold text-teal-700 text-center mb-12">Meet Our Doctors</h2>
-
-        <div class="mb-8 max-w-2xl mx-auto">
-            <input type="text" id="doctor-search"
-                   class="w-full px-5 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
-                   placeholder="🔍 Search doctors by name…" autocomplete="off" />
-        </div>
-
-        <div id="doctors-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            @foreach ($doctors as $doctor)
-                <div class="bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
-                    @if ($doctor->image)
-                        <img src="{{ asset('storage/' . $doctor->image) }}"
-                            class="w-full h-48 object-cover rounded-md mb-4">
-                    @endif
-                    <h3 class="text-xl font-semibold text-gray-800">
-                        Dr. {{ $doctor->first_name }} {{ $doctor->last_name }}
-                    </h3>
-                    <p class="text-sm text-teal-600 mt-1">{{ $doctor->specialization }}</p>
-                    <a href="{{ route('patient.appointment.create', $doctor) }}"
-                       class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition text-center">
-                        Book Appointment
-                    </a>
-                </div>
-            @endforeach
-        </div>
-
-        <div id="doctors-pagination" class="mt-10 text-center">
-            {{ $doctors->links() }}
-        </div>
-    </div>
-</section>
-
+    </section>
 
     <x-footer />
 
@@ -153,7 +156,7 @@
 
         // cache originals
         const clinicListEl = document.getElementById('clinics-list');
-        const clinicPagEl = document.getElemxaentById('clinics-pagination');
+        const clinicPagEl = document.getElementById('clinics-pagination');
         const originalClinics = clinicListEl.innerHTML;
         const originalClinicsPag = clinicPagEl.innerHTML;
 
@@ -171,13 +174,10 @@
                     clinicPagEl.innerHTML = originalClinicsPag;
                     return;
                 }
-                if (q.database/migrations/2025_05_21_070716_create_heart_failure_table.php
-length > 2) {
+                if (q.length > 2) {
                     fetch(`${clinicSearchUrl}?query=${encodeURIComponent(q)}`)
                         .then(r => r.json())
-                        .then(({
-                            clinics
-                        }) => {
+                        .then(({ clinics }) => {
                             clinicListEl.innerHTML = '';
                             clinics.forEach(c => {
                                 clinicListEl.innerHTML += `
@@ -210,9 +210,7 @@ length > 2) {
                 if (q.length > 2) {
                     fetch(`${doctorSearchUrl}?query=${encodeURIComponent(q)}`)
                         .then(r => r.json())
-                        .then(({
-                            doctors
-                        }) => {
+                        .then(({ doctors }) => {
                             doctorListEl.innerHTML = '';
                             doctors.forEach(d => {
                                 doctorListEl.innerHTML += `
@@ -247,7 +245,7 @@ length > 2) {
             }
         });
 
-        function fetchPageAndReplace(url, listSelector, pagSelector) {z
+        function fetchPageAndReplace(url, listSelector, pagSelector) {
             fetch(url)
                 .then(res => res.text())
                 .then(html => {

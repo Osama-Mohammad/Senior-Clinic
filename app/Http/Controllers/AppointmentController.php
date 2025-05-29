@@ -80,7 +80,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::with(['doctor', 'patient'])->findOrFail($appointment->id);
         $appointment->patient->notify(new AppointmentBookedNotification($appointment));
 
-        return redirect()->route('patient.show', Auth::guard('patient')->user()->id)->with('success', 'Booked Successfully');
+        return redirect()->route('patient.appointment.index')->with('success', 'Booked Successfully');
     }
 
 

@@ -54,7 +54,6 @@ Route::prefix('patient')->group(function () {
     });
 
     /* Appointments */
-    // Route::resource('appointments', AppointmentController::class);
     Route::prefix('appointment')->group(function () {
         Route::get('/index', [App\Http\Controllers\Patient\AppointmentController::class, 'index'])->name('patient.appointment.index');
         Route::get('/create/{doctor}', [AppointmentController::class, 'create'])->name('patient.appointment.create');
