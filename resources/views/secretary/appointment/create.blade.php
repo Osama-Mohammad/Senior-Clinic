@@ -1,6 +1,5 @@
 <x-layout>
-    <div class="max-w-2xl mx-auto mt-12 bg-white shadow-md rounded-xl p-8 space-y-6" x-data="appointmentForm()"
-        x-init="init()">
+    <div class="max-w-2xl mx-auto mt-12 bg-white shadow-md rounded-xl p-8 space-y-6" x-data="appointmentForm()" x-init="init()">
 
         <h2 class="text-3xl font-bold text-teal-700 text-center">Book Your Appointment</h2>
 
@@ -26,7 +25,12 @@
             <!-- Appointment Date -->
             <div>
                 <label class="block text-sm font-medium text-gray-700">Select Date:</label>
-                <input type="date" name="appointment_date" x-model="selectedDate" @change="fetchSlots"
+                <input type="date"
+                    name="appointment_date"
+                    x-model="selectedDate"
+                    :min="minDate"
+                    :max="maxDate"
+                    @change="fetchSlots"
                     class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50">
                 @error('appointment_date')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -36,7 +40,8 @@
             <!-- Time Slot -->
             <div>
                 <label class="block text-sm font-medium text-gray-700">Select Time Slot:</label>
-                <select name="appointment_time" x-model="selectedTime"
+                <select name="appointment_time"
+                    x-model="selectedTime"
                     class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50">
                     <template x-for="slot in availableSlots" :key="slot">
                         <option :value="slot" x-text="slot"></option>
@@ -54,8 +59,12 @@
             <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                 <p class="text-sm font-medium text-gray-700 mb-2">Doctor Availability:</p>
                 <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1">
-                    @foreach ($schedules as $day => $data)
-                        <li><strong>{{ $day }}:</strong> From {{ $data['from'] }} to {{ $data['to'] }}</li>
+                    @foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
+                        @if (!empty($schedules[$day]['from']) && !empty($schedules[$day]['to']))
+                            <li><strong>{{ $day }}:</strong> From {{ $schedules[$day]['from'] }} to {{ $schedules[$day]['to'] }}</li>
+                        @else
+                            <li><strong>{{ $day }}:</strong> <span class="text-red-500">Not Available</span></li>
+                        @endif
                     @endforeach
                 </ul>
             </div>
@@ -76,19 +85,49 @@
                 selectedDate: '',
                 selectedTime: '',
                 availableSlots: [],
+                disabledDates: [],
+                minDate: new Date().toISOString().split('T')[0],
+                maxDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+
                 init() {
-                    // You can auto-select today's date or other logic
+                    fetch(`/api/fully-booked-dates?doctor_id={{ $doctor->id }}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            this.disabledDates = data;
+                        });
                 },
+
                 fetchSlots() {
                     if (!this.selectedDate) return;
+
+                    if (this.disabledDates.includes(this.selectedDate)) {
+                        alert("Doctor is fully booked for this day.");
+                        this.selectedDate = '';
+                        this.selectedTime = '';
+                        this.availableSlots = [];
+                        return;
+                    }
+
                     fetch(`/api/available-slots?doctor_id={{ $doctor->id }}&date=${this.selectedDate}`)
                         .then(res => res.json())
                         .then(data => {
-                            this.availableSlots = data;
+                            if (data.fully_booked) {
+                                alert("Doctor is fully booked for this day. Please choose another date.");
+                                this.availableSlots = [];
+                                this.selectedTime = '';
+                                return;
+                            }
+                            this.availableSlots = data.slots;
                             this.selectedTime = '';
+                        })
+                        .catch(error => {
+                            console.error("Error fetching slots:", error);
+                            alert("Something went wrong while loading available slots.");
                         });
                 }
             }
         }
     </script>
+
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </x-layout>
