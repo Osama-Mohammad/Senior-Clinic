@@ -48,16 +48,11 @@
         </div>
     </section>
 
-<<<<<<< HEAD
     <!-- ✅ About Us Section -->
-=======
-    <!-- ✅ Who We Are Section -->
->>>>>>> 4fa0ae089bba161d7c600489386d5b86024b080f
     <section id="about" class="bg-white py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <!-- Text -->
             <div class="space-y-6">
-<<<<<<< HEAD
                 <h2 class="text-4xl font-extrabold text-teal-700">About Us</h2>
                 <p class="text-gray-700 text-lg leading-relaxed">
                     At <span class="font-semibold text-teal-600">Senior Clinic</span>, we are committed to providing world-class
@@ -68,23 +63,6 @@
                     Discover modern healthcare, designed around your needs.
                 </p>
             </div>
-=======
-                <h2 class="text-4xl font-extrabold text-teal-700">Who We Are</h2>
-                <p class="text-gray-700 text-lg leading-relaxed">
-                    Welcome to <span class="font-semibold text-teal-600">MEDIBOOK AI</span>, where cutting-edge
-                    technology meets compassionate care.
-                    Our mission is to revolutionize the way healthcare is delivered in Lebanon — combining expertise,
-                    empathy, and innovation to serve you better.
-                </p>
-                <p class="text-gray-600 text-base">
-                    From AI-powered diagnostics to seamless appointment scheduling, we ensure every patient experience
-                    is efficient, personalized, and stress-free.
-                    With a network of skilled doctors and modern clinics, we're redefining what it means to feel truly
-                    cared for.
-                </p>
-            </div>
-
->>>>>>> 4fa0ae089bba161d7c600489386d5b86024b080f
             <!-- Image -->
             <div class="relative group">
                 <img src="{{ asset('photos/home.jpg') }}" alt="Healthcare Team"
@@ -107,12 +85,7 @@
 
             <div id="clinics-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                 @foreach ($clinics as $clinic)
-<<<<<<< HEAD
                     <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
-=======
-                    <div
-                        class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
->>>>>>> 4fa0ae089bba161d7c600489386d5b86024b080f
                         @if ($clinic->image)
                             <img src="{{ asset('storage/' . $clinic->image) }}"
                                 class="w-full h-48 object-cover rounded-md mb-4">
@@ -128,13 +101,9 @@
             </div>
 
             <div id="clinics-pagination" class="mt-10 text-center">
-<<<<<<< HEAD
                 {{ $clinics
                     ->appends(request()->except('clinics_page'))
                     ->links() }}
-=======
-                {{ $clinics->links() }}
->>>>>>> 4fa0ae089bba161d7c600489386d5b86024b080f
             </div>
         </div>
     </section>
@@ -152,12 +121,7 @@
 
             <div id="doctors-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                 @foreach ($doctors as $doctor)
-<<<<<<< HEAD
                     <div class="bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
-=======
-                    <div
-                        class="bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
->>>>>>> 4fa0ae089bba161d7c600489386d5b86024b080f
                         @if ($doctor->image)
                             <img src="{{ asset('storage/' . $doctor->image) }}"
                                 class="w-full h-48 object-cover rounded-md mb-4">
@@ -175,20 +139,12 @@
             </div>
 
             <div id="doctors-pagination" class="mt-10 text-center">
-<<<<<<< HEAD
                 {{ $doctors
                     ->appends(request()->except('doctors_page'))
                     ->links() }}
             </div>
         </div>
     </section>
-=======
-                {{ $doctors->links() }}
-            </div>
-        </div>
-    </section>
-
->>>>>>> 4fa0ae089bba161d7c600489386d5b86024b080f
 
     <x-footer />
 
@@ -218,11 +174,7 @@
                     clinicPagEl.innerHTML = originalClinicsPag;
                     return;
                 }
-<<<<<<< HEAD
                 if (q.length > 2) {
-=======
-                if (q.database / migrations / 2025_05_21_070716_ create_heart_failure_table.php length > 2) {
->>>>>>> 4fa0ae089bba161d7c600489386d5b86024b080f
                     fetch(`${clinicSearchUrl}?query=${encodeURIComponent(q)}`)
                         .then(r => r.json())
                         .then(({ clinics }) => {
@@ -281,25 +233,19 @@
 
         // AJAX pagination for both sections
         document.addEventListener('click', function(e) {
-            const clinicLink = e.target.closest('#clinics-pagination a');
-            const doctorLink = e.target.closest('#doctors-pagination a');
-
-            if (clinicLink) {
+            let link = e.target.closest('#clinics-pagination a');
+            if (link) {
                 e.preventDefault();
-                fetchPageAndReplace(clinicLink.href, '#clinics-list', '#clinics-pagination');
+                fetchPageAndReplace(link.href, '#clinics-list', '#clinics-pagination');
             }
-
-            if (doctorLink && !clinicLink) { // prevent double-trigger if nested
+            link = e.target.closest('#doctors-pagination a');
+            if (link) {
                 e.preventDefault();
-                fetchPageAndReplace(doctorLink.href, '#doctors-list', '#doctors-pagination');
+                fetchPageAndReplace(link.href, '#doctors-list', '#doctors-pagination');
             }
         });
 
         function fetchPageAndReplace(url, listSelector, pagSelector) {
-<<<<<<< HEAD
-=======
-            z
->>>>>>> 4fa0ae089bba161d7c600489386d5b86024b080f
             fetch(url)
                 .then(res => res.text())
                 .then(html => {
