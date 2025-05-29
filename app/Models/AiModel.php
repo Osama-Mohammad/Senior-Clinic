@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AiModel extends Model
 {
+        protected $table = 'ai_models';
     protected $fillable = ['name', 'description', 'image'];
     public function predictions()
     {

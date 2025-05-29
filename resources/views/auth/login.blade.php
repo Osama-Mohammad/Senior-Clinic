@@ -5,7 +5,7 @@
         <!-- Left Side: Image with gradient overlay -->
         <div class="relative w-full md:w-1/2 h-64 md:h-full">
             <img src="{{ asset('photos/login_background.jpg') }}" alt="Login Background"
-                 class="w-full h-full object-cover" />
+                class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent"></div>
         </div>
 
@@ -29,52 +29,58 @@
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                 viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round"
-                                 d="M16 12H8m8 0H8m8 0H8m2-6h4a2 2 0 012 2v12a2 2 0 01-2 2h-4a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16 12H8m8 0H8m8 0H8m2-6h4a2 2 0 012 2v12a2 2 0 01-2 2h-4a2 2 0 01-2-2V8a2 2 0 012-2z" />
+                            </svg>
                         </span>
                         <input type="text" name="email" id="email" placeholder="Email"
-                               class="pl-10 w-full px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            class="pl-10 w-full px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         @error('email')
                             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Password -->
-<div class="relative">
-    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-        <!-- Lock Icon -->
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-             viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round"
-             d="M12 11c1.104 0 2-.896 2-2V7a2 2 0 00-4 0v2c0 1.104.896 2 2 2z"/><path stroke-linecap="round" stroke-linejoin="round"
-             d="M17 11V7a5 5 0 00-10 0v4m2 4h6a2 2 0 012 2v2a2 2 0 01-2 2H9a2 2 0 01-2-2v-2a2 2 0 012-2z"/></svg>
-    </span>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <!-- Lock Icon -->
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 11c1.104 0 2-.896 2-2V7a2 2 0 00-4 0v2c0 1.104.896 2 2 2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17 11V7a5 5 0 00-10 0v4m2 4h6a2 2 0 012 2v2a2 2 0 01-2 2H9a2 2 0 01-2-2v-2a2 2 0 012-2z" />
+                            </svg>
+                        </span>
 
-        <!-- Password Input -->
-        <input type="password" name="password" id="password"
-            class="pl-10 pr-10 w-full px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Password">
+                        <!-- Password Input -->
+                        <input type="password" name="password" id="password"
+                            class="pl-10 pr-10 w-full px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Password">
 
-        <!-- Eye Icon -->
-        <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePassword()">
-            <svg id="eyeIcon" class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-        </span>
+                        <!-- Eye Icon -->
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                            onclick="togglePassword()">
+                            <svg id="eyeIcon" class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </span>
 
-        @error('password')
-            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-        @enderror
-    </div>
+                        @error('password')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
 
                     <!-- Submit -->
                     <div>
                         <button type="submit"
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300">
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300">
                             Login
                         </button>
                     </div>
@@ -91,13 +97,19 @@
                     <div class="text-sm text-gray-800 text-center">
                         Don’t have an account?
                         <a href="{{ route('patient.create') }}"
-                        @click.prevent="show = false; setTimeout(() => window.location.href='{{ route('patient.create') }}', 300)"
-                        class="text-blue-600 hover:underline transition duration-300">
-                        Register
-                     </a>
-                     <br>
-                     {{-- Google Login --}}
-                     <a href="{{ route('auth.google') }}" class="inline-block px-6 py-2 text-white bg-red-600 rounded-lg shadow">Login With Google</a>
+                            @click.prevent="show = false; setTimeout(() => window.location.href='{{ route('patient.create') }}', 300)"
+                            class="text-blue-600 hover:underline transition duration-300">
+                            Register
+                        </a>
+                        <br>
+                        {{-- Google Login --}}
+                        <a href="{{ route('auth.google') }}"
+                            class="inline-flex items-center justify-center px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:shadow-md transition text-gray-700 font-medium hover:bg-gray-100">
+                            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo"
+                                class="w-5 h-5 mr-3">
+                            Login with Google
+                        </a>
+
 
                     </div>
                 </form>

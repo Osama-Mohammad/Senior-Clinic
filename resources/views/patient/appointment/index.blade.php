@@ -1,7 +1,7 @@
 <x-layout>
     <div class="max-w-6xl mx-auto mt-10 px-4" x-data="appointmentManager()" x-init="init()">
 
-        <!-- Toast Notification -->
+        <!-- ✅ Toast Notification -->
         <div x-show="showToast" x-transition
             :class="{
                 'bg-green-500': toastType === 'success',
@@ -11,8 +11,12 @@
             x-text="toastMessage">
         </div>
 
-        <h2 class="text-2xl font-bold text-blue-800 mb-6 text-center">Welcome {{ $patient->first_name }}</h2>
+        <!-- ✅ Page Title -->
+        <h2 class="text-2xl font-bold text-blue-800 mb-6 text-center">
+            Welcome {{ $patient->first_name }}
+        </h2>
 
+        <!-- ✅ Appointment Table -->
         <div class="overflow-x-auto rounded-xl shadow-lg bg-white">
             <template x-if="appointments.length > 0">
                 <table class="min-w-full divide-y divide-blue-200">
@@ -27,12 +31,12 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-gray-700">
                         <template x-for="appointment in appointments" :key="appointment.id">
-                            <tr class="hover:bg-blue-50 transition">
-                                <td class="px-6 py-4" x-text="appointment.id"></td>
-                                <td class="px-6 py-4" x-text="appointment.doctor_name"></td>
-                                <td class="px-6 py-4" x-text="appointment.appointment_datetime"></td>
+                            <tr class="hover:bg-blue-50 transition duration-200 ease-in-out">
+                                <td class="px-6 py-4 font-medium text-blue-800" x-text="appointment.id"></td>
+                                <td class="px-6 py-4 font-medium" x-text="appointment.doctor_name"></td>
+                                <td class="px-6 py-4 text-sm text-gray-600" x-text="appointment.appointment_datetime"></td>
                                 <td class="px-6 py-4">
-                                    <span class="inline-block px-2 py-1 text-xs font-medium rounded-full"
+                                    <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full shadow-sm"
                                         :class="{
                                             'bg-green-100 text-green-700': appointment.status === 'Completed',
                                             'bg-yellow-100 text-yellow-800': appointment.status === 'Booked',
@@ -46,7 +50,7 @@
                                     <button
                                         x-show="appointment.status === 'Booked'"
                                         @click="cancelAppointment(appointment)"
-                                        class="text-red-600 hover:underline text-sm font-medium">
+                                        class="text-red-600 hover:text-red-800 text-sm font-semibold underline underline-offset-2">
                                         Cancel
                                     </button>
                                 </td>
@@ -56,14 +60,14 @@
                 </table>
             </template>
 
-            <!-- Empty State -->
+            <!-- 🕳️ Empty State -->
             <template x-if="appointments.length === 0">
                 <div class="text-center px-6 py-10 text-gray-500 italic">No appointments found.</div>
             </template>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- ✅ Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
 
@@ -85,7 +89,7 @@
                         .then(res => {
                             this.appointments = res.data.map(a => ({
                                 ...a,
-                                doctor_name: a.doctor_name // will be added in backend fix
+                                doctor_name: a.doctor_name
                             }));
                         });
                 },
@@ -103,13 +107,21 @@
                         this.showToastMessage();
                     }).catch(error => {
                         this.toastType = 'error';
-                        if (error.response?.status === 422) {
-                            this.toastMessage = error.response.data.error || 'Cannot cancel.';
-                        } else {
-                            this.toastMessage = 'Failed to cancel appointment.';
-                        }
+                        this.toastMessage = error.response?.data?.error || 'Failed to cancel appointment.';
                         this.showToastMessage();
                     });
+                },
+
+                formatDate(datetime) {
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    };
+                    return new Date(datetime).toLocaleString('en-US', options);
                 },
 
                 showToastMessage() {

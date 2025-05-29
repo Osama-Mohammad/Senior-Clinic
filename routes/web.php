@@ -123,7 +123,6 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/edit-clinic/{clinic}', [App\Http\Controllers\Admin\ClinicController::class, 'edit'])->name('admin.editClinic');
     Route::put('/update-clinic/{clinic}', [App\Http\Controllers\Admin\ClinicController::class, 'update'])->name('admin.updateClinic');
     Route::delete('/delete-clinic/{clinic}', [App\Http\Controllers\Admin\ClinicController::class, 'destroy'])->name('admin.deleteClinic');
-
 });
 
 // Public admin registration routes
@@ -141,6 +140,10 @@ Route::prefix('doctor')->middleware(['auth:doctor'])->group(function () {
 
     Route::get('/index', [DoctorController::class, 'index'])->name('doctor.index');
     Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
+    // ✅ AI Test Form Route (only accessible by authenticated doctors)
+    Route::get('/ai-test', [AiController::class, 'showForm'])->name('doctor.ai.test.form');
+    Route::post('/ai-test', [AiController::class, 'submitForm'])->name('doctor.ai.test.submit'); // ✅ MISSING LINE FIXED
+    Route::get('/ai-result/{id}', [AiController::class, 'showResult'])->name('doctor.ai.test.result');
 
     Route::prefix('appointment')->group(function () {
         Route::get('/index', [App\Http\Controllers\Doctor\AppointmentController::class, 'index'])->name('doctor.appointments.index');
@@ -150,11 +153,6 @@ Route::prefix('doctor')->middleware(['auth:doctor'])->group(function () {
     Route::prefix('patient')->group(function () {
         Route::get('/{patient}/show', [App\Http\Controllers\Doctor\PatientController::class, 'show'])->name('doctor.patient.show');
     });
-
-    // ✅ AI Test Form Route (only accessible by authenticated doctors)
-    Route::get('/ai-test', [AiController::class, 'showForm'])->name('doctor.ai.test.form');
-    Route::post('/ai-test', [AiController::class, 'submitForm'])->name('doctor.ai.test.submit'); // ✅ MISSING LINE FIXED
-    Route::get('/ai-result/{id}', [AiController::class, 'showResult'])->name('doctor.ai.test.result');
 });
 
 Route::prefix('clinic')->group(function () {
