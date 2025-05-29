@@ -50,14 +50,18 @@
 
                 {{-- Numeric Inputs --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <x-ai.number-input label="Age (normalized)" name="norm_age" />
-                    <x-ai.number-input label="Creatinine Phosphokinase (normalized)" name="norm_creatinine_phosphokinase" />
-                    <x-ai.number-input label="Ejection Fraction (normalized)" name="norm_ejection_fraction" />
-                    <x-ai.number-input label="Platelets (normalized)" name="norm_platelets" />
-                    <x-ai.number-input label="Serum Creatinine (normalized)" name="norm_serum_creatinine" />
-                    <x-ai.number-input label="Serum Sodium (normalized)" name="norm_serum_sodium" />
-                    <x-ai.number-input label="Time (normalized)" name="norm_time" />
+                    <x-ai.number-input label="Age (normalized) — divide by 95" name="norm_age" />
+                    <x-ai.number-input label="Creatinine Phosphokinase (normalized) — divide by 7861"
+                        name="norm_creatinine_phosphokinase" />
+                    <x-ai.number-input label="Ejection Fraction (normalized) — divide by 80"
+                        name="norm_ejection_fraction" />
+                    <x-ai.number-input label="Platelets (normalized) — divide by 850000" name="norm_platelets" />
+                    <x-ai.number-input label="Serum Creatinine (normalized) — divide by 9.4" name="norm_serum_creatinine" />
+                    <x-ai.number-input label="Serum Sodium (normalized) — divide by 148" name="norm_serum_sodium" />
+                    <x-ai.number-input label="Time (normalized) — divide by 285" name="norm_time" />
                 </div>
+
+
 
                 {{-- Binary Inputs --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
