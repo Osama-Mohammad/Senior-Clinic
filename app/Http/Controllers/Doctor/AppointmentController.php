@@ -14,7 +14,7 @@ class AppointmentController extends Controller
         $doctorId = Auth::guard('doctor')->id();
 
         $query = Appointment::with('patient', 'doctor')
-            ->where('doctor_id', $doctorId); // Always filter by doctor
+            ->where('doctor_id', $doctorId)->latest(); // Always filter by doctor
 
         // Only filter by status if it's not empty/null
         if (!empty($request->status)) {

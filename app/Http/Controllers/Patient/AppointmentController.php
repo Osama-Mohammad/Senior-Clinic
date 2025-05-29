@@ -17,8 +17,7 @@ class AppointmentController extends Controller
     public function index()
     {
         $patient = Auth::guard('patient')->user();
-        $appointments = Appointment::where('patient_id', $patient->id)->get();
-        $appointments = $appointments->load('doctor');
+        $appointments = Appointment::where('patient_id', $patient->id)->latest()->get()->load('doctor');
         return view('patient.appointment.index', compact('appointments', 'patient'));
     }
 
@@ -30,7 +29,7 @@ class AppointmentController extends Controller
         $patient = Auth::guard('patient')->user();
 
         $query = Appointment::with('doctor')
-            ->where('patient_id', $patient->id);
+            ->where('patient_id', $patient->id)->latest();
 
         if (!empty($request->status)) {
             $query->where('status', $request->status);
@@ -79,5 +78,11 @@ class AppointmentController extends Controller
         $appointment->patient->notify(new AppointmentCancelNotification($appointment));
 
         return response()->json(['success' => true, 'status' => $appointment->status]);
+    }
+
+    public function show(Appointment $appointment)
+    {
+        $appointment->load('patient', 'doctor', 'log');
+        return view('patient.appointment.show', compact('appointment'));
     }
 }

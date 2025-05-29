@@ -33,6 +33,29 @@
             </div>
         </div>
 
+        <h2 class="text-xl font-bold mb-4">Patient History</h2>
+
+        @foreach ($patient->logs as $log)
+            <div class="border rounded p-4 mb-4">
+                <p class="text-sm text-gray-500">
+                    {{ $log->created_at->format('d M Y – H:i') }}
+                    by Dr. {{ $log->doctor->first_name }}
+                </p>
+
+                <p class="mt-2">{{ $log->description }}</p>
+
+                @if ($log->attachments)
+                    <p class="mt-2 font-semibold">Attachments:</p>
+                    <ul class="list-disc ml-5">
+                        @foreach ($log->attachments as $path)
+                            <li><a href="{{ Storage::url($path) }}" target="_blank">{{ basename($path) }}</a></li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+        @endforeach
+
+
         <!-- Back Button -->
         <div class="mt-8 text-center">
             <a href="{{ route('doctor.appointments.index') }}"

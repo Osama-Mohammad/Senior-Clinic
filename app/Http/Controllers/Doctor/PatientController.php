@@ -10,6 +10,7 @@ class PatientController extends Controller
 {
     public function show(Patient $patient)
     {
+        $patient->load('logs.doctor', 'logs.appointment');
         return view('doctor.patient.show', compact('patient'));
     }
 }

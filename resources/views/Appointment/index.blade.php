@@ -27,6 +27,7 @@
                             <th class="px-6 py-3 text-left">Patient</th>
                             <th class="px-6 py-3 text-left">Date</th>
                             <th class="px-6 py-3 text-left">Status</th>
+                            <th class="px-6 py-3 text-left">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-gray-700">
@@ -48,6 +49,19 @@
                                         }"
                                         x-text="appointment.status">
                                     </span>
+                                </td>
+                                <!-- Action Column -->
+                                <td class="px-6 py-4 text-center">
+                                    <template x-if="appointment.status === 'Completed'">
+                                        <a :href="`{{ route('appointments.logs.create', ['appointment' => ':id']) }}`.replace(
+                                            ':id', appointment.id)"
+                                            class="text-blue-600 hover:underline">
+                                            Make Log
+                                        </a>
+                                    </template>
+                                    <template x-if="appointment.status !== 'Completed'">
+                                        <span class="text-gray-500">No Action</span>
+                                    </template>
                                 </td>
                             </tr>
                         </template>
