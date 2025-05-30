@@ -87,6 +87,21 @@ class DoctorController extends Controller
             'availability_schedule.*.to'   => 'nullable|date_format:H:i|after:availability_schedule.*.from',
             'availability_schedule.*.max'  => 'nullable|integer|min:1',
         ]);
+        
+        foreach ($validated['availability_schedule'] as $day => $entry) {
+            $from = \Carbon\Carbon::createFromFormat('H:i', $entry['from']);
+            $to = \Carbon\Carbon::createFromFormat('H:i', $entry['to']);
+
+            $availableMinutes = $to->diffInMinutes($from);
+            $maxPossible = intdiv($availableMinutes, 30); // one appointment every 30 min
+
+            if ($entry['max'] > $maxPossible) {
+                return back()->withErrors([
+                    "availability_schedule.$day.max" => "Max appointments for $day exceeds available time. You can have max $maxPossible slots of 30 min."
+                ])->withInput();
+            }
+        }
+
 
         // ✅ Step 3: Handle image upload
         if ($request->hasFile('image')) {
