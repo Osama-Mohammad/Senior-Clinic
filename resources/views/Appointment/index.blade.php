@@ -5,7 +5,15 @@
     <div class="max-w-6xl mx-auto mt-10 px-4" x-data="appointmentFilter()" x-init="init()">
         <h2 class="text-2xl font-bold text-blue-800 mb-6 text-center">Doctor Appointments</h2>
 
-        <!-- Filter Dropdown -->
+        <!-- Patient Search -->
+        <div class="mb-4 max-w-sm mx-auto">
+            <label for="search" class="block mb-1 text-sm font-medium text-gray-700">Search by Patient</label>
+            <input type="text" id="search" x-model="searchQuery" placeholder="Enter patient name"
+                @input="filterAppointments"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-400" />
+        </div>
+
+        <!-- Status Filter Dropdown -->
         <div class="mb-6 max-w-sm mx-auto">
             <label for="status" class="block mb-1 text-sm font-medium text-gray-700">Filter by Status</label>
             <select id="status" x-model="selectedStatus" @change="filterAppointments"
@@ -39,7 +47,7 @@
                                         class="text-blue-600 hover:underline" x-text="appointment.patient_name">
                                     </a>
                                 </td>
-                                <td class="px-6 py-4" x-text="appointment.appointment_datetime"></td>
+                                <td class="px-6 py-4" x-text="formatDate(appointment.appointment_datetime)"></td>
                                 <td class="px-6 py-4">
                                     <span class="inline-block px-3 py-1 rounded-full text-sm font-medium"
                                         :class="{
@@ -50,7 +58,6 @@
                                         x-text="appointment.status">
                                     </span>
                                 </td>
-                                <!-- Action Column -->
                                 <td class="px-6 py-4 text-center">
                                     <template x-if="appointment.status === 'Completed'">
                                         <a :href="`{{ route('appointments.logs.create', ['appointment' => ':id']) }}`.replace(
@@ -85,23 +92,52 @@
         function appointmentFilter() {
             return {
                 selectedStatus: '',
+                searchQuery: '',
                 appointments: [],
+                rawAppointments: [],
+
                 fetchAppointments() {
-                    console.log("Fetching with status:", this.selectedStatus);
                     axios.get('{{ route('doctor.appointments.search') }}', {
                         params: {
                             status: this.selectedStatus
                         }
                     }).then(response => {
-                        this.appointments = response.data;
+                        this.rawAppointments = response.data;
+
+                        // ✅ DEBUG HERE
+                        console.log("✅ Raw appointments:", this.rawAppointments);
+
+                        this.filterAppointments();
                     }).catch(error => {
                         console.error('Error fetching appointments:', error);
                         this.appointments = [];
                     });
                 },
+
+
                 filterAppointments() {
-                    this.fetchAppointments();
+                    const q = this.searchQuery.toLowerCase();
+                    this.appointments = this.rawAppointments.filter(app =>
+                        (!this.selectedStatus || app.status === this.selectedStatus) &&
+                        (!q || app.patient_name.toLowerCase().includes(q))
+                    );
                 },
+
+                formatDate(datetime) {
+                    const date = new Date(datetime);
+                    if (isNaN(date)) return "Invalid Date";
+
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    };
+                    return date.toLocaleString('en-US', options).replace(',', ' –');
+                },
+
                 init() {
                     this.fetchAppointments();
                 }

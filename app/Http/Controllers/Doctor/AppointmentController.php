@@ -11,12 +11,11 @@ class AppointmentController extends Controller
 {
     public function search(Request $request)
     {
-        $doctorId = Auth::guard('doctor')->id();
+        $doctor = Auth::guard('doctor')->user();
 
-        $query = Appointment::with('patient', 'doctor')
-            ->where('doctor_id', $doctorId)->latest(); // Always filter by doctor
+        $query = Appointment::with('patient')
+            ->where('doctor_id', $doctor->id);
 
-        // Only filter by status if it's not empty/null
         if (!empty($request->status)) {
             $query->where('status', $request->status);
         }
@@ -24,7 +23,7 @@ class AppointmentController extends Controller
         $appointments = $query->get()->map(function ($a) {
             return [
                 'id' => $a->id,
-                'patient_id' => $a->patient->id, // <-- Add this
+                'patient_id' => $a->patient_id,
                 'patient_name' => $a->patient->first_name . ' ' . $a->patient->last_name,
                 'appointment_datetime' => $a->appointment_datetime,
                 'status' => $a->status,
@@ -33,6 +32,7 @@ class AppointmentController extends Controller
 
         return response()->json($appointments);
     }
+
 
     public function index()
     {
