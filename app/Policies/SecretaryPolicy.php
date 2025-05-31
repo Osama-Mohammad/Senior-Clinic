@@ -2,12 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Secretary;
 use App\Models\User;
-use App\Models\Admin;
-use App\Models\Doctor;
 use Illuminate\Auth\Access\Response;
 
-class DoctorPolicy
+class SecretaryPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -20,9 +19,9 @@ class DoctorPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(Doctor $actor, Doctor $doctor): bool
+    public function view(Secretary $actor, Secretary $secretary): bool
     {
-        return $actor->id === $doctor->id;
+        return $actor->id === $secretary->id;
     }
 
     /**
@@ -36,24 +35,15 @@ class DoctorPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(mixed $user, Doctor $doctor): bool
+    public function update(User $user, Secretary $secretary): bool
     {
-        // If the user is an admin (assuming you have an Admin model)
-        if ($user instanceof Admin) {
-            return true;
-        }
-
-        // If the user is a doctor, they can only update their own profile
-        if ($user instanceof Doctor && $user->id === $doctor->id) {
-            return true;
-        }
         return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Doctor $doctor): bool
+    public function delete(User $user, Secretary $secretary): bool
     {
         return false;
     }
@@ -61,7 +51,7 @@ class DoctorPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Doctor $doctor): bool
+    public function restore(User $user, Secretary $secretary): bool
     {
         return false;
     }
@@ -69,7 +59,7 @@ class DoctorPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Doctor $doctor): bool
+    public function forceDelete(User $user, Secretary $secretary): bool
     {
         return false;
     }

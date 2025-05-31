@@ -7,9 +7,12 @@ use App\Models\Secretary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SecretaryController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -88,8 +91,9 @@ class SecretaryController extends Controller
     }
 
 
-    public function dashboard()
+    public function dashboard(Secretary $secretary)
     {
+        $this->authorize('view', $secretary);
         $patients = Patient::paginate(10);
         return view('secretary.dashboard', compact('patients'));
     }

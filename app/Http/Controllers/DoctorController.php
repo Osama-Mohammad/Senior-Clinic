@@ -87,7 +87,7 @@ class DoctorController extends Controller
             'availability_schedule.*.to'   => 'nullable|date_format:H:i|after:availability_schedule.*.from',
             'availability_schedule.*.max'  => 'nullable|integer|min:1',
         ]);
-        
+
         foreach ($validated['availability_schedule'] as $day => $entry) {
             $from = \Carbon\Carbon::createFromFormat('H:i', $entry['from']);
             $to = \Carbon\Carbon::createFromFormat('H:i', $entry['to']);
@@ -127,9 +127,9 @@ class DoctorController extends Controller
             ->with('success', 'Doctor updated successfully');
     }
 
-    public function dashboard()
+    public function dashboard(Doctor $doctor)
     {
-        $doctor = Auth::guard('doctor')->user();
+        $this->authorize('view', $doctor);
         return view('doctor.dashboard', compact('doctor'));
     }
 }
