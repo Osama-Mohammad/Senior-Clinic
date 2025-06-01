@@ -8,15 +8,19 @@ use App\Models\Appointment;
 use App\Notifications\Patient\AppointmentCancelNotification;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AppointmentController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display the appointment view.
      */
     public function index()
     {
         $patient = Auth::guard('patient')->user();
+        $this->authorize('view', $patient);
         $appointments = Appointment::where('patient_id', $patient->id)->latest()->get()->load('doctor');
         return view('patient.appointment.index', compact('appointments', 'patient'));
     }

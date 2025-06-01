@@ -6,6 +6,7 @@ use App\Models\Clinic;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Storage;
@@ -13,9 +14,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class DoctorController extends Controller
 {
-
-    public function manageDoctors()
+    use AuthorizesRequests;
+    public function manageDoctors(Admin $admin)
     {
+        $this->authorize('view', $admin);
         $doctors = Doctor::paginate();
         return view('admin.doctors.manage_doctors', compact('doctors'));
     }

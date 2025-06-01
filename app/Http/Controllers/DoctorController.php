@@ -71,7 +71,7 @@ class DoctorController extends Controller
 
         $request->merge(['availability_schedule' => $cleanedSchedule]);
 
-        // ✅ Step 2: Validate using Validator (not validate()) for more control
+        // ✅ Step 2: Validate using Validator
         $validator = Validator::make($request->all(), [
             'first_name'            => 'required|string|max:255',
             'last_name'             => 'required|string|max:255',
@@ -126,9 +126,9 @@ class DoctorController extends Controller
             ->with('success', 'Doctor updated successfully');
     }
 
-    public function dashboard()
+    public function dashboard(Doctor $doctor)
     {
-        $doctor = Auth::guard('doctor')->user();
+        $this->authorize('view', $doctor);
         return view('doctor.dashboard', compact('doctor'));
     }
 }

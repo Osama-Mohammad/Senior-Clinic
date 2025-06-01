@@ -11,9 +11,11 @@ use App\Models\Patient;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PatientController extends Controller
 {
+    use AuthorizesRequests;
     public $cities = [
         "Beirut",         // Capital and largest city
         "Tripoli",        // Second-largest city, in the north
@@ -64,6 +66,8 @@ class PatientController extends Controller
 
     public function show(Patient $patient)
     {
+        $this->authorize('view', $patient);
+
         // now clinics listens on ?clinics_page=…
         $clinics = Clinic::paginate(3, ['*'], 'clinics_page');
 

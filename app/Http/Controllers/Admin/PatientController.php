@@ -5,11 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PatientController extends Controller
 {
+    use AuthorizesRequests;
+
     public $cities = [
         "Beirut",         // Capital and largest city
         "Tripoli",        // Second-largest city, in the north
@@ -33,8 +37,9 @@ class PatientController extends Controller
         "Marjayoun"       // Southern town with historical significance
     ];
 
-    public function managePatients()
+    public function managePatients(Admin $admin)
     {
+        $this->authorize('view', $admin);
         $patients = Patient::paginate();
         return view('admin.patients.index', compact('patients'));
     }

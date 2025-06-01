@@ -101,6 +101,7 @@ class AppointmentController extends Controller
             ->where('doctor_id', $doctorId)->latest(); // Always filter by doctor
 
         // Only filter by status if it's not empty/null
+        
         if (!empty($request->status)) {
             $query->where('status', $request->status);
         }
