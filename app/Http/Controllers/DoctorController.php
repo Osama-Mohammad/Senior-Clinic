@@ -7,14 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class DoctorController extends Controller
 {
     use AuthorizesRequests;
 
-    /**
-     * Ajax search by doctor name
-     */
     public function search(Request $request)
     {
         $q = $request->get('query', '');
@@ -53,7 +52,7 @@ class DoctorController extends Controller
 
     public function update(Request $request, Doctor $doctor)
     {
-        // ✅ Step 1: Clean up the availability_schedule before validation
+        // ✅ Step 1: Clean availability_schedule input
         $rawSchedule = $request->input('availability_schedule', []);
         $cleanedSchedule = [];
 
@@ -70,56 +69,56 @@ class DoctorController extends Controller
             }
         }
 
-        // Overwrite request input before validation
         $request->merge(['availability_schedule' => $cleanedSchedule]);
 
-        // ✅ Step 2: Validate input
-        $validated = $request->validate([
-            'first_name'                   => 'required|string|max:255',
-            'last_name'                    => 'required|string|max:255',
-            'email'                        => 'required|email|unique:doctors,email,' . $doctor->id,
-            'phone_number'                 => 'required|string|max:20',
-            'image'                        => 'nullable|image|mimes:png,jpg,jpeg,gif',
-            'price'                        => 'required|numeric|min:0',
-
-            'availability_schedule'        => 'nullable|array',
-            'availability_schedule.*.from' => 'nullable|date_format:H:i',
-            'availability_schedule.*.to'   => 'nullable|date_format:H:i|after:availability_schedule.*.from',
-            'availability_schedule.*.max'  => 'nullable|integer|min:1',
+        // ✅ Step 2: Validate using Validator (not validate()) for more control
+        $validator = Validator::make($request->all(), [
+            'first_name'            => 'required|string|max:255',
+            'last_name'             => 'required|string|max:255',
+            'email'                 => 'required|email|unique:doctors,email,' . $doctor->id,
+            'phone_number'          => 'required|string|max:20',
+            'image'                 => 'nullable|image|mimes:png,jpg,jpeg,gif',
+            'price'                 => 'required|numeric|min:0',
+            'availability_schedule' => 'nullable|array',
         ]);
-        
-        foreach ($validated['availability_schedule'] as $day => $entry) {
-            $from = \Carbon\Carbon::createFromFormat('H:i', $entry['from']);
-            $to = \Carbon\Carbon::createFromFormat('H:i', $entry['to']);
+
+        foreach ($cleanedSchedule as $day => $entry) {
+            $from = Carbon::createFromFormat('H:i', $entry['from']);
+            $to = Carbon::createFromFormat('H:i', $entry['to']);
+
+            if ($from->gte($to)) {
+                $validator->errors()->add("availability_schedule.$day.to", "The end time must be after the start time.");
+            }
 
             $availableMinutes = $to->diffInMinutes($from);
-            $maxPossible = intdiv($availableMinutes, 30); // one appointment every 30 min
+            $maxPossible = intdiv($availableMinutes, 30);
 
             if ($entry['max'] > $maxPossible) {
-                return back()->withErrors([
-                    "availability_schedule.$day.max" => "Max appointments for $day exceeds available time. You can have max $maxPossible slots of 30 min."
-                ])->withInput();
+                $validator->errors()->add("availability_schedule.$day.max", "Max appointments for $day exceeds available time. Max allowed: $maxPossible.");
             }
         }
 
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
         // ✅ Step 3: Handle image upload
         if ($request->hasFile('image')) {
             if ($doctor->image && Storage::disk('public')->exists($doctor->image)) {
                 Storage::disk('public')->delete($doctor->image);
             }
-            $validated['image'] = $request->file('image')->store('images', 'public');
+            $imagePath = $request->file('image')->store('images', 'public');
         }
 
-        // ✅ Step 4: Save doctor update
+        // ✅ Step 4: Save the doctor update
         $doctor->update([
-            'first_name'            => $validated['first_name'],
-            'last_name'             => $validated['last_name'],
-            'email'                 => $validated['email'],
-            'phone_number'          => $validated['phone_number'],
-            'image'                 => $validated['image'] ?? $doctor->image,
-            'price'                 => $validated['price'],
-            'availability_schedule' => $validated['availability_schedule'] ?? [],
+            'first_name'            => $request->first_name,
+            'last_name'             => $request->last_name,
+            'email'                 => $request->email,
+            'phone_number'          => $request->phone_number,
+            'image'                 => $imagePath ?? $doctor->image,
+            'price'                 => $request->price,
+            'availability_schedule' => $cleanedSchedule,
         ]);
 
         return redirect()

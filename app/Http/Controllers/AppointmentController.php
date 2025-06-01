@@ -66,6 +66,42 @@ class AppointmentController extends Controller
         if ($count >= $dailyMax) {
             return back()->withErrors(['appointment_time' => "Doctor is fully booked on " . $appointment->toFormattedDateString()])->withInput();
         }
+        // Extra Custom Validations
+
+        $patient = Auth::guard('patient')->user();
+
+        // 1️⃣ Prevent booking the same doctor on the same day
+        $sameDoctor = Appointment::where('patient_id', $patient->id)
+            ->where('doctor_id', $validated['doctor_id'])
+            ->whereDate('appointment_datetime', $appointment->format('Y-m-d'))
+            ->where('status', '!=', 'Canceled')
+            ->exists();
+
+        if ($sameDoctor) {
+            return back()->withErrors([
+                'appointment_time' => 'You already have an appointment with this doctor on the same day.'
+            ])->withInput();
+        }
+
+        // 2️⃣ Prevent overlapping appointments with any doctor
+        $overlapping = Appointment::where('patient_id', $patient->id)
+            ->where('status', '!=', 'Canceled')
+            ->whereDate('appointment_datetime', $appointment->format('Y-m-d'))
+            ->get()
+            ->filter(function ($a) use ($appointment) {
+                $start = Carbon::parse($a->appointment_datetime);
+                $end = $start->copy()->addMinutes(30);
+                $newStart = $appointment;
+                $newEnd = $appointment->copy()->addMinutes(30);
+                return $newStart < $end && $newEnd > $start;
+            })
+            ->isNotEmpty();
+
+        if ($overlapping) {
+            return back()->withErrors([
+                'appointment_time' => 'This appointment overlaps with another one you have on the same day.'
+            ])->withInput();
+        }
 
         // Save
         $appointment = Appointment::create([
