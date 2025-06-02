@@ -48,26 +48,24 @@
                     </select>
                 </div>
 
-                {{-- Numeric Inputs --}}
+                {{-- ✅ Raw Numeric Inputs --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <x-ai.number-input label="Age (normalized) — divide by 95" name="norm_age" />
-                    <x-ai.number-input label="Creatinine Phosphokinase (normalized) — divide by 7861"
-                        name="norm_creatinine_phosphokinase" />
-                    <x-ai.number-input label="Ejection Fraction (normalized) — divide by 80"
-                        name="norm_ejection_fraction" />
-                    <x-ai.number-input label="Platelets (normalized) — divide by 850000" name="norm_platelets" />
-                    <x-ai.number-input label="Serum Creatinine (normalized) — divide by 9.4" name="norm_serum_creatinine" />
-                    <x-ai.number-input label="Serum Sodium (normalized) — divide by 148" name="norm_serum_sodium" />
-                    <x-ai.number-input label="Time (normalized) — divide by 285" name="norm_time" />
+                    <x-ai.number-input label="Age" name="age" />
+                    <x-ai.number-input label="Creatinine Phosphokinase" name="creatinine_phosphokinase" />
+                    <x-ai.number-input label="Ejection Fraction" name="ejection_fraction" />
+                    <x-ai.number-input label="Platelets" name="platelets" />
+                    <x-ai.number-input label="Serum Creatinine" name="serum_creatinine" />
+                    <x-ai.number-input label="Serum Sodium" name="serum_sodium" />
+                    <x-ai.number-input label="Time" name="time" />
                 </div>
-
-
 
                 {{-- Binary Inputs --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <x-ai.binary-select label="Anaemia" name="anaemia" />
                     <x-ai.binary-select label="Diabetes" name="diabetes" />
                     <x-ai.binary-select label="High Blood Pressure" name="high_blood_pressure" />
+                    <x-ai.binary-select label="Sex (0 = Female, 1 = Male)" name="sex" />
+                    <x-ai.binary-select label="Smoking" name="smoking" />
                 </div>
 
                 {{-- Submit Button --}}

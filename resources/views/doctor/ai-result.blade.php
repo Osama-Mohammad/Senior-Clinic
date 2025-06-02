@@ -19,9 +19,16 @@
                 <p><strong>Probability:</strong> {{ $record->percentage_probability }}%</p>
             </div>
 
+            {{-- 🔢 Raw (original) submitted data --}}
             <div>
-                <h4 class="font-semibold mt-4">Submitted Data:</h4>
-                <pre class="bg-gray-50 p-3 rounded text-sm overflow-x-auto">{{ json_encode(json_decode($record->submitted_attributes), JSON_PRETTY_PRINT) }}</pre>
+                <h4 class="font-semibold mt-4 text-gray-800">Submitted Data (Original Inputs):</h4>
+                <pre class="bg-gray-50 p-3 rounded text-sm overflow-x-auto">{{ json_encode($raw, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+            </div>
+
+            {{-- 🧪 Normalized data used for prediction --}}
+            <div>
+                <h4 class="font-semibold mt-4 text-gray-800">Normalized Data (Sent to AI Model):</h4>
+                <pre class="bg-gray-50 p-3 rounded text-sm overflow-x-auto">{{ json_encode($normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
             </div>
 
             <div class="text-center pt-4">
