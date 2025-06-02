@@ -98,9 +98,11 @@ class DoctorController extends Controller
             }
         }
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
+        // ✅ Fix: ensure manually added errors are respected
+        // 🧠 After looping through each day's logic:
+      if ($validator->fails() || count($validator->errors()->all()) > 0) {
+    return back()->withErrors($validator)->withInput();
+}
 
         // ✅ Step 3: Handle image upload
         if ($request->hasFile('image')) {
@@ -122,13 +124,14 @@ class DoctorController extends Controller
         ]);
 
         return redirect()
-            ->route('doctor.dashboard', Auth::guard('doctor')->user())
+            ->route('doctor.dashboard')
             ->with('success', 'Doctor updated successfully');
     }
 
-    public function dashboard(Doctor $doctor)
+
+    public function dashboard()
     {
-        $this->authorize('view', $doctor);
+        $doctor = auth('doctor')->user();
         return view('doctor.dashboard', compact('doctor'));
     }
 }
