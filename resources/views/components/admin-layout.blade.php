@@ -8,6 +8,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js']) <!-- Correct usage -->
     <!-- AlpineJS for dynamic interactions -->
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+
 </head>
 
 <body class="min-h-screen flex">

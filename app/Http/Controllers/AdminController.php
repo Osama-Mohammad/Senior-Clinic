@@ -6,11 +6,13 @@ use App\Models\Admin;
 use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Models\Secretary;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Can;
 
+use Illuminate\Validation\Rules\Can;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AdminController extends Controller
@@ -48,9 +50,23 @@ class AdminController extends Controller
         if (!$currentAdmin) {
             return redirect()->route('auth.login')->with('error', 'Please login first');
         }
-
         $this->authorize('view', $admin);
 
-        return view('admin.dashboard', ['admin' => $currentAdmin]);
+        // Instead of loading every record (Patient::all()), just grab the counts:
+        $stats = [
+            'patients'    => Patient::count(),
+            'secretaries' => Secretary::count(),
+            'doctors'     => Doctor::count(),
+            'appointments' => Appointment::count(),
+            // (You can add more aggregates here: e.g. 'todayAppointments' => Appointment::whereDate('created_at', today())->count(), etc.)
+        ];
+
+        // 2) Calculate status‐specific counts (adjust status strings if needed)
+        $stats['booked']    = Appointment::where('status', 'Booked')->count();
+        $stats['canceled']  = Appointment::where('status', 'Canceled')->count();
+        $stats['completed'] = Appointment::where('status', 'Completed')->count();
+
+        // Pass the $stats array (and the $admin) to the view
+        return view('admin.dashboard', compact('admin', 'stats'));
     }
 }
