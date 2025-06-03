@@ -168,6 +168,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/edit-clinic/{clinic}', [App\Http\Controllers\Admin\ClinicController::class, 'edit'])->name('admin.editClinic');
         Route::put('/update-clinic/{clinic}', [App\Http\Controllers\Admin\ClinicController::class, 'update'])->name('admin.updateClinic');
         Route::delete('/delete-clinic/{clinic}', [App\Http\Controllers\Admin\ClinicController::class, 'destroy'])->name('admin.deleteClinic');
+
+        /* Manage secretaries */
+        Route::get('/manage-secretaries/{admin}', [App\Http\Controllers\Admin\SecretaryController::class, 'index'])->name('admin.manage-secretary');
+        Route::delete('/delete-secretary/{secretary}',[App\Http\Controllers\Admin\SecretaryController::class,"destroy"])->name('admin.deleteSecretary');
     });
 });
 

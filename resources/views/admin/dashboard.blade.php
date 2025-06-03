@@ -26,6 +26,11 @@
                 <i class="fas fa-hospital fa-2x mb-2"></i>
                 Manage Clinics
             </a>
+
+            <a href="{{ route('admin.manage-secretary', $admin) }}" class="flex flex-col items-center bg-purple-100 hover:bg-purple-200 text-purple-700 font-semibold p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300">
+                <i class="fas fa-hospital fa-2x mb-2"></i>
+                Manage Secretaries
+            </a>
         </div>
 
     </div>
