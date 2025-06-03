@@ -13,8 +13,13 @@
         <a href="{{ route('admin.managePatients', $admin ?? auth()->user()) }}" class="hover:bg-teal-600 p-3 rounded-md transition">Manage Patients</a>
         <a href="{{ route('admin.manageClinics', $admin ?? auth()->user()) }}" class="hover:bg-teal-600 p-3 rounded-md transition">Manage Clinics</a>
         <a href="{{ route('admin.manage-secretary', $admin ?? auth()->user()) }}" class="hover:bg-teal-600 p-3 rounded-md transition">Manage Secretaries</a>
+
     </nav>
 
+    @auth
+
+    
+    @endguest
     <!-- Logout -->
     <form action="{{ route('auth.logout') }}" method="POST" class="mt-auto">
         @csrf
