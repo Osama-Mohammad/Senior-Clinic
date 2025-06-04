@@ -58,10 +58,9 @@ class AdminController extends Controller
             'secretaries' => Secretary::count(),
             'doctors'     => Doctor::count(),
             'appointments' => Appointment::count(),
-            // (You can add more aggregates here: e.g. 'todayAppointments' => Appointment::whereDate('created_at', today())->count(), etc.)
-        ];
+         ];
 
-        // 2) Calculate status‐specific counts (adjust status strings if needed)
+
         $stats['booked']    = Appointment::where('status', 'Booked')->count();
         $stats['canceled']  = Appointment::where('status', 'Canceled')->count();
         $stats['completed'] = Appointment::where('status', 'Completed')->count();

@@ -4,6 +4,7 @@ use App\Mail\TestMail;
 use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Appointment;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AIController;
@@ -20,7 +21,24 @@ use App\Http\Controllers\Admin\ClinicController as AdminClinicController;
 
 // Public routes
 Route::get('/', function () {
-    return view('welcome');
+
+    if (Auth::guard('patient')->check()) {
+        return redirect()->route('patient.appointment.index');
+    }
+    if (Auth::guard('doctor')->check()) {
+        return redirect()->route('doctor.dashboard');
+    }
+    if (Auth::guard('admin')->check()) {
+        return redirect()->route('admin.dashboard', Auth::guard('admin')->user());
+    }
+    if (Auth::guard('secretary')->check()) {
+        return redirect()->route('secretary.dashboard', Auth::guard('secretary')->user());
+    }
+
+    $clinics = Clinic::paginate(3, ['*'], 'clinics_page');
+    $doctors = Doctor::paginate(3, ['*'], 'doctors_page');
+
+    return view('guest.index', compact('doctors', 'clinics'));
 });
 
 
@@ -171,7 +189,7 @@ Route::prefix('admin')->group(function () {
 
         /* Manage secretaries */
         Route::get('/manage-secretaries/{admin}', [App\Http\Controllers\Admin\SecretaryController::class, 'index'])->name('admin.manage-secretary');
-        Route::delete('/delete-secretary/{secretary}',[App\Http\Controllers\Admin\SecretaryController::class,"destroy"])->name('admin.deleteSecretary');
+        Route::delete('/delete-secretary/{secretary}', [App\Http\Controllers\Admin\SecretaryController::class, "destroy"])->name('admin.deleteSecretary');
     });
 });
 
