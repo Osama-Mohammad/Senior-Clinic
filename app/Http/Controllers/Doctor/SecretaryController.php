@@ -58,4 +58,22 @@ class SecretaryController extends Controller
         $secretary->delete();
         return back()->with('success', 'Delete Secretary Successfully');
     }
+    public function edit(Secretary $secretary)
+    {
+        return view('doctor.secretary.edit', compact('secretary'));
+    }
+
+    public function update(Request $request, Secretary $secretary)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:secretaries,email,' . $secretary->id,
+            'phone_number' => 'nullable|string|max:20',
+        ]);
+
+        $secretary->update($validated);
+
+        return redirect()->route('doctor.secretary.index')->with('success', 'Secretary updated successfully.');
+    }
 }

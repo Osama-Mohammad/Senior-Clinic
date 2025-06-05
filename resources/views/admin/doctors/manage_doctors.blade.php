@@ -15,6 +15,17 @@
                     + Add New Doctor
                 </a>
             </div>
+            <!-- Search Bar -->
+            <form method="GET" action="{{ route('admin.manageDoctors', Auth::guard('admin')->user()) }}"
+                class="mb-4 flex justify-end">
+                <input type="text" name="search" placeholder="Search by name..." value="{{ request('search') }}"
+                    class="w-64 px-4 py-2 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-400">
+                <button type="submit"
+                    class="bg-teal-600 text-white px-4 py-2 rounded-r-md hover:bg-teal-700 transition">
+                    Search
+                </button>
+            </form>
+
 
             <!-- Doctors Table -->
             <div class="overflow-x-auto">
@@ -34,25 +45,28 @@
                         @forelse ($doctors as $doctor)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $doctor->id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $doctor->first_name }} {{ $doctor->last_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $doctor->first_name }}
+                                    {{ $doctor->last_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $doctor->email }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $doctor->phone_number ?? '-' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if ($doctor->image)
-                                        <img src="{{ asset('storage/' . $doctor->image) }}" alt="Doctor Image" class="w-12 h-12 rounded-full object-cover">
+                                        <img src="{{ asset('storage/' . $doctor->image) }}" alt="Doctor Image"
+                                            class="w-12 h-12 rounded-full object-cover">
                                     @else
                                         <span class="text-gray-400">No Image</span>
                                     @endif
                                 </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-    {{ $doctor->clinic->name ?? '—' }}
-</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ $doctor->clinic->name ?? '—' }}
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center space-x-2">
                                     <a href="{{ route('admin.editDoctor', $doctor) }}"
                                         class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-xs font-semibold transition">
                                         Edit
                                     </a>
-                                    <form action="{{ route('admin.deleteDoctor', $doctor) }}" method="POST" class="inline-block">
+                                    <form action="{{ route('admin.deleteDoctor', $doctor) }}" method="POST"
+                                        class="inline-block">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
@@ -92,9 +106,17 @@
         .animate-fade-in {
             animation: fadeIn 1s ease-out both;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
-</x-layout>
+    </x-layout>

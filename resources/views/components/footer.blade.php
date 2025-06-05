@@ -24,7 +24,11 @@
         <!-- 🔗 Quick Links -->
         <div class="space-y-2">
             <h3 class="text-lg font-semibold text-teal-700 mb-2">Quick Links</h3>
+            <a href="#top" aria-label="Go to Home section">
+
             <a href="#top" class="block hover:text-teal-600 transition"><i class="fas fa-angle-right mr-2"></i>Home</a>
+            <a href="#top" aria-label="Go to Home section">
+
             <a href="#about" class="block hover:text-teal-600 transition"><i class="fas fa-angle-right mr-2"></i>About Us</a>
             <a href="#clinics" class="block hover:text-teal-600 transition"><i class="fas fa-angle-right mr-2"></i>Clinics</a>
             <a href="#doctors" class="block hover:text-teal-600 transition"><i class="fas fa-angle-right mr-2"></i>Doctors</a>
