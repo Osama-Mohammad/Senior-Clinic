@@ -75,7 +75,7 @@ class AuthController extends Controller
         Auth::guard('patient')->logout();
         Auth::guard('admin')->logout();
         Auth::guard('doctor')->logout();
-        // Auth::guard('secretary')->logout();
+        Auth::guard('secretary')->logout();
 
         return redirect()->route('auth.loginPage')->with('success', 'Logout successful');
     }

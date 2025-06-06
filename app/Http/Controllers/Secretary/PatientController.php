@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Secretary;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class PatientController extends Controller
@@ -43,7 +44,7 @@ class PatientController extends Controller
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
             'email' => 'required|email|max:150|unique:patients,email,|unique:doctors,email|unique:admins,email',
-            'phone_number' => 'required|string|max:20',
+            'phone_number' => 'required|string|max:20|unique:patients,phone_number|unique:doctors,phone_number',
             'address' => 'required|string|max:255',
             'date_of_birth' => 'required|date',
             'gender' => 'required|string|in:M,F',
@@ -63,7 +64,7 @@ class PatientController extends Controller
 
         $patient->save();
 
-        return redirect()->route('secretary.dashboard')->with('success', 'Patient created successfully.');
+        return redirect()->route('secretary.dashboard', Auth::guard('secretary')->user())->with('success', 'Patient created successfully.');
     }
 
     public function search(Request $request)

@@ -12,6 +12,14 @@
                 class="bg-gradient-to-r from-teal-500 to-teal-700 text-white px-6 py-2 rounded-xl shadow-md hover:shadow-xl hover:scale-105 transform transition-all duration-200 font-medium">
                 Manage Appointments
             </a>
+
+
+            <form action="{{ route('auth.logout') }}" method="POST">
+                @csrf
+                <Button type="submit"
+                    class="bg-gradient-to-r from-teal-500 to-teal-700 text-white px-6 py-2 rounded-xl shadow-md hover:shadow-xl hover:scale-105 transform transition-all duration-200 font-medium">Log
+                    Out</Button>
+            </form>
         </div>
 
         {{-- Flash Message --}}
