@@ -15,12 +15,25 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class DoctorController extends Controller
 {
     use AuthorizesRequests;
-    public function manageDoctors(Admin $admin)
+    public function manageDoctors(Admin $admin, Request $request)
     {
         $this->authorize('view', $admin);
-        $doctors = Doctor::paginate();
+
+        $query = Doctor::with('clinic');
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%");
+            });
+        }
+
+        $doctors = $query->paginate(10);
+
         return view('admin.doctors.manage_doctors', compact('doctors'));
     }
+
 
 
     /**
@@ -140,5 +153,19 @@ class DoctorController extends Controller
     {
         $doctor->delete();
         return back()->with('success', 'deleted doctor successfully');
+    }
+    public function ajaxSearch(Request $request)
+    {
+        $search = $request->input('query');
+
+        $doctors = Doctor::with('clinic')
+            ->where('first_name', 'like', "%{$search}%")
+            ->orWhere('last_name', 'like', "%{$search}%")
+            ->limit(20)
+            ->get();
+
+        return response()->json([
+            'html' => view('admin.doctors.partials.doctor_rows', compact('doctors'))->render()
+        ]);
     }
 }

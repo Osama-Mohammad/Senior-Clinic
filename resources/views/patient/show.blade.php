@@ -12,7 +12,7 @@
         init() {
             setInterval(() => this.current = (this.current + 1) % this.images.length, 3000)
         }
-    }" class="relative w-full h-[90vh] min-h-[500px] overflow-hidden">
+    }" class="relative w-full h-[90vh] min-h-[500px] overflow-hidden pt-16">
         <img :src="images[current]" alt="Doctors Team"
             class="absolute inset-0 w-full h-full object-cover object-top z-0 transition duration-500 ease-in-out">
         <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent z-10"></div>
@@ -87,7 +87,7 @@
         </div>
     </section>
 
-    <!-- 🩺 Doctors Section -->
+    <!-- 🯪 Doctors Section -->
     <section id="doctors" class="bg-white py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-4xl font-extrabold text-teal-700 text-center mb-12">Meet Our Doctors</h2>
@@ -114,4 +114,3 @@
 
     <x-footer />
 </x-layout>
- 

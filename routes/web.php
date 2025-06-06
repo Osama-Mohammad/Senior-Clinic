@@ -18,7 +18,6 @@ use App\Http\Controllers\SecretaryController;
 use App\Http\Controllers\PatientLogController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Admin\ClinicController as AdminClinicController;
-
 // Public routes
 Route::get('/', function () {
 
@@ -55,7 +54,7 @@ Route::prefix('auth')->group(function () {
     Route::get('/google-callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
     // Complete profile after first‐time Google login
-    Route::get('/google/complete', [AuthController::class, 'sh owGoogleCompleteForm'])->name('auth.google.complete');
+    Route::get('/google/complete', [AuthController::class, 'showGoogleCompleteForm'])->name('auth.google.complete');
     Route::post('/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('auth.google.complete.submit');
 });
 
@@ -106,6 +105,10 @@ Route::prefix('doctor')->group(function () {
 
         Route::get('/create', [App\Http\Controllers\Doctor\SecretaryController::class, 'create'])->name('doctor.secretary.create');
         Route::post('/store', [App\Http\Controllers\Doctor\SecretaryController::class, 'store'])->name('doctor.secretary.store');
+
+        Route::get('/secretary/{secretary}/edit', [App\Http\Controllers\Doctor\SecretaryController::class, 'edit'])->name('doctor.secretary.edit');
+        Route::put('/secretary/{secretary}', [App\Http\Controllers\Doctor\SecretaryController::class, 'update'])->name('doctor.secretary.update');
+
 
         Route::delete('/{secretary}/delete', [App\Http\Controllers\Doctor\SecretaryController::class, 'destroy'])->name('doctor.secretary.delete');
     });
@@ -170,6 +173,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/edit-doctor/{doctor}', [App\Http\Controllers\Admin\DoctorController::class, 'edit'])->name('admin.editDoctor');
         Route::put('/update-doctor/{doctor}', [App\Http\Controllers\Admin\DoctorController::class, 'update'])->name('admin.updateDoctor');
         Route::delete('/delete-doctor/{doctor}', [App\Http\Controllers\Admin\DoctorController::class, 'destroy'])->name('admin.deleteDoctor');
+        Route::get('/admin/doctors/search', [DoctorController::class, 'ajaxSearch'])->name('admin.doctors.search');
 
         /* Admin Manage Patients */
         Route::get('/manage-patients/{admin}', [App\Http\Controllers\Admin\PatientController::class, 'managePatients'])->name('admin.managePatients');
