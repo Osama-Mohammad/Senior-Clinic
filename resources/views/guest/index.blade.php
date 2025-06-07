@@ -1,16 +1,5 @@
 <x-layout>
-    {{-- ─── Top-level header for guests ─────────────────────────────────── --}}
-    {{-- @guest
-        <div class="absolute top-4 right-4 flex space-x-4 z-50">
-            <a href="{{ route('auth.loginPage') }}" class="text-sm font-medium text-gray-700 hover:text-gray-900">
-                Log In
-            </a>
-            <a href="{{ route('patient.create') }}"
-                class="text-sm font-semibold bg-teal-500 hover:bg-teal-600 text-white px-4 py-1 rounded-md transition">
-                Sign Up
-            </a>
-        </div>
-    @endguest --}}
+
     <x-navbar />
 
     <!-- ✅ Hero Section With Image Carousel Background -->
@@ -183,6 +172,76 @@
             </div>
         </div>
     </section>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Utility to wire up an AJAX live‐search
+            function liveSearch(inputId, listId, urlBase, renderItem) {
+                const input = document.getElementById(inputId);
+                const list = document.getElementById(listId);
+                let timer;
 
+                input.addEventListener('keyup', () => {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        const q = encodeURIComponent(input.value.trim());
+                        fetch(`${urlBase}?query=${q}`)
+                            .then(res => res.json())
+                            .then(json => {
+                                list.innerHTML = '';
+                                (json[Object.keys(json)[0]] || []).forEach(item => {
+                                    // renderItem should return an Element or HTML string
+                                    const el = renderItem(item);
+                                    if (typeof el === 'string') {
+                                        const wrapper = document.createElement('div');
+                                        wrapper.innerHTML = el;
+                                        list.appendChild(wrapper.firstElementChild);
+                                    } else {
+                                        list.appendChild(el);
+                                    }
+                                });
+                            })
+                            .catch(console.error);
+                    }, 300); // 300 ms debounce
+                });
+            }
+
+            // Clinics live‐search
+            liveSearch(
+                'clinic-search',
+                'clinics-list',
+                '{{ route('search.clinics') }}',
+                clinic => `
+      <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
+        ${clinic.image ? `<img src="/storage/${clinic.image}" class="w-full h-48 object-cover rounded-md mb-4">` : ''}
+        <h3 class="text-xl font-semibold text-gray-800">${clinic.name}</h3>
+        <p class="text-sm text-gray-600 mt-1">${clinic.description.slice(0, 100)}</p>
+        <a href="/clinics/${clinic.id}"
+           class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition">
+          View Doctors
+        </a>
+      </div>
+    `
+            );
+
+            // Doctors live‐search
+            liveSearch(
+                'doctor-search',
+                'doctors-list',
+                '{{ route('search.doctors') }}',
+                doc => `
+      <div class="bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
+        ${doc.image ? `<img src="/storage/${doc.image}" class="w-full h-48 object-cover rounded-md mb-4">` : ''}
+        <h3 class="text-xl font-semibold text-gray-800">Dr. ${doc.first_name} ${doc.last_name}</h3>
+        <p class="text-sm text-teal-600 mt-1">${doc.specialization}</p>
+        <a href="/doctors/${doc.id}/book"
+           class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition">
+          Book Appointment
+        </a>
+      </div>
+    `
+            );
+        });
+    </script>
     <x-footer />
 </x-layout>

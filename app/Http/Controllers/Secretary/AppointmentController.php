@@ -78,6 +78,15 @@ class AppointmentController extends Controller
             ])->withInput();
         }
 
+        $PatientAlreadyBooked = Appointment::where('patient_id', $patient->id)
+            ->whereDate('appointment_datetime', $appointment->toDateString())->count();
+
+        if ($PatientAlreadyBooked > 0) {
+            return back()->withErrors([
+                'appointment_time' => "You Already Have An Appointment on " . $appointment->toFormattedDateString()
+            ])->withInput();
+        }
+
         $appointment = Appointment::create([
             'doctor_id' => $doctor->id,
             'clinic_id' => $validated['clinic_id'],
@@ -89,7 +98,7 @@ class AppointmentController extends Controller
         $patient = $appointment->patient;
         $patient->notify(new AppointmentBookedNotification($appointment));
 
-        return redirect()->route('secretary.dashboard')->with('success', 'Appointment booked successfully.');
+        return redirect()->route('secretary.dashboard', Auth::guard('secretary')->user())->with('success', 'Appointment booked successfully.');
     }
 
     public function search(Request $request)
@@ -101,7 +110,7 @@ class AppointmentController extends Controller
             ->where('doctor_id', $doctorId)->latest(); // Always filter by doctor
 
         // Only filter by status if it's not empty/null
-        
+
         if (!empty($request->status)) {
             $query->where('status', $request->status);
         }

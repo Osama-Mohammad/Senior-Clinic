@@ -103,7 +103,7 @@
                                         <p class="text-sm text-white inline-block bg-teal-500 px-3 py-1 rounded-full w-fit">
                                             ${p.specialization || 'General'}
                                         </p>
-                                        <a href="/secretary/patient/${p.id}/appointments/create"
+                                        <a href="/secretary/patient/${p.id}/bookAppointment"
                                            class="mt-5 inline-block text-center bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold text-sm px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all">
                                            📅 Book Now
                                         </a>
