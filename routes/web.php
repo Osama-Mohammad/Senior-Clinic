@@ -208,8 +208,11 @@ Route::prefix('secretary')->middleware('auth:secretary')->group(function () {
     Route::get('/patient/create', [App\Http\Controllers\Secretary\PatientController::class, 'create'])->name('secretary.patient.create');
     Route::post('/patient/store', [App\Http\Controllers\Secretary\PatientController::class, 'store'])->name('secretary.patient.store');
 
+    Route::get('/patient/{patient}/show', [App\Http\Controllers\Secretary\PatientController::class, 'show'])->name('secretary.patient.show');
+
     Route::get('/patient/{patient}/bookAppointment', [App\Http\Controllers\Secretary\AppointmentController::class, 'create'])->name('secretary.patient.createAppointment');
     Route::post('/patient/{patient}/bookAppointment', [App\Http\Controllers\Secretary\AppointmentController::class, 'store'])->name('secretary.patient.storeAppointment');
+
 
     Route::prefix('appointment')->group(function () {
         Route::get('/index', [App\Http\Controllers\Secretary\AppointmentController::class, 'index'])->name('secretary.appointments.index');

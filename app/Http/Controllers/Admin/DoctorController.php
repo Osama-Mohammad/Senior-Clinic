@@ -112,17 +112,19 @@ class DoctorController extends Controller
      */
     public function update(Request $request, Doctor $doctor)
     {
+
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:doctors,email,' . $doctor->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'phone_number' => 'required|string|max:20',
+            'phone_number' => 'nullable|string|max:20',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,gif',
-            'price' => 'required|numeric|min:0',
-            'max_daily_appointments' => 'required|integer|min:1',
-            'available_days' => 'required|array',
-            'available_hours' => 'required|array',
+            'price' => 'nullable|numeric|min:0',
+            'max_daily_appointments' => 'nullable|integer|min:1',
+            'available_days' => 'nullable|array',
+            'available_hours' => 'nullable|array',
+            'description' => 'nullable|string'
         ]);
 
         $imagePath = null;
@@ -138,9 +140,10 @@ class DoctorController extends Controller
             // stores to storage/app/public/images and returns the relative path
         }
 
-        $validated['available_days'] = json_encode($validated['available_days']);
-        $validated['available_hours'] = json_encode($validated['available_hours']);
-
+        if ($request->has('available_days') &&$request->has('available_hours')) {
+            $validated['available_days'] = json_encode($validated['available_days']);
+            $validated['available_hours'] = json_encode($validated['available_hours']);
+        }
         $doctor->update($validated);
 
         return redirect()->route('admin.manageDoctors', Auth::guard('admin')->user())->with('success', 'Doctor updated successfully');

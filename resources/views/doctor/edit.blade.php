@@ -59,6 +59,16 @@
                         @enderror
                     </div>
 
+                    <!-- Description -->
+                    <div class="md:col-span-2">
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea name="description" id="description" rows="4"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm">{{ old('description', $doctor->description) }}</textarea>
+                        @error('description')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Profile Image -->
                     <div class="md:col-span-2">
                         <label for="image" class="block text-sm font-medium text-gray-700">Profile Image</label>
@@ -134,7 +144,8 @@
                                                 <label class="text-sm">Max Appointments for <span
                                                         x-text="day"></span>:</label>
                                                 <input type="number" :name="`availability_schedule[${day}][max]`"
-                                                    x-model="schedule[day].max" min="1" @change="alertIfTooHigh(day)"
+                                                    x-model="schedule[day].max" min="1"
+                                                    @change="alertIfTooHigh(day)"
                                                     class="rounded-md border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500" />
 
                                             </div>

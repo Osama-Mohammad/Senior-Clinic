@@ -19,8 +19,7 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white shadow-xl rounded-2xl overflow-hidden md:flex">
                 @if ($clinic->image)
-                    <img src="{{ asset('storage/' . $clinic->image) }}"
-                        alt="{{ $clinic->name }}"
+                    <img src="{{ asset('storage/' . $clinic->image) }}" alt="{{ $clinic->name }}"
                         class="w-full md:w-1/2 h-80 object-cover">
                 @endif
 
@@ -44,14 +43,16 @@
             @else
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                     @foreach ($clinic->doctors as $doctor)
-                        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 text-center space-y-3">
+                        <div
+                            class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 text-center space-y-3">
 
                             <!-- Doctor Image -->
                             @if ($doctor->image)
                                 <img src="{{ asset('storage/' . $doctor->image) }}"
                                     class="w-28 h-28 object-cover rounded-full mx-auto border-4 border-teal-500 shadow-sm">
                             @else
-                                <div class="w-28 h-28 bg-gray-200 rounded-full flex items-center justify-center mx-auto">
+                                <div
+                                    class="w-28 h-28 bg-gray-200 rounded-full flex items-center justify-center mx-auto">
                                     <i class="fas fa-user-md text-3xl text-gray-500"></i>
                                 </div>
                             @endif
@@ -63,7 +64,11 @@
                             <div class="text-sm text-gray-600">
                                 {{ $doctor->specialization }}
                             </div>
-
+                            @if ($doctor->description)
+                                <p class="text-sm text-teal-600 mt-1">Description : {{ $doctor->description }}</p>
+                            @else
+                                <p class="text-sm text-teal-600 mt-1">No Description </p>
+                            @endif
                             <div class="flex justify-center gap-3 text-sm text-gray-500">
                                 <div><i class="fas fa-phone text-teal-500 mr-1"></i>{{ $doctor->phone_number }}</div>
                                 <div><i class="fas fa-dollar-sign text-teal-500 mr-1"></i>${{ $doctor->price }}</div>

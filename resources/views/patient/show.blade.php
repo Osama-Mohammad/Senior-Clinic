@@ -121,7 +121,11 @@
                         @endif
                         <h3 class="text-xl font-semibold text-gray-800">Dr. {{ $doctor->first_name }}
                             {{ $doctor->last_name }}</h3>
-                        <p class="text-sm text-teal-600 mt-1">{{ $doctor->specialization }}</p>
+                        @if ($doctor->description)
+                            <p class="text-sm text-teal-600 mt-1">{{ $doctor->description }}</p>
+                        @else
+                            <p class="text-sm text-teal-600 mt-1">{{ $doctor->description }}</p>
+                        @endif
                         <a href="{{ route('patient.appointment.create', $doctor) }}"
                             class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition text-center">Book
                             Appointment</a>
@@ -176,7 +180,7 @@
         ${clinic.image ? `<img src="/storage/${clinic.image}" class="w-full h-48 object-cover rounded-md mb-4">` : ''}
         <h3 class="text-xl font-semibold text-gray-800">${clinic.name}</h3>
         <p class="text-sm text-gray-600 mt-1">${clinic.description.slice(0, 100)}</p>
-        <a href="/clinics/${clinic.id}"
+        <a href="/clinic/show/${clinic.id}"
            class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition">
           View Doctors
         </a>
@@ -184,22 +188,35 @@
     `
             );
 
-            // Doctors live‐search
+            // Doctors live‐search (identical card style)
             liveSearch(
                 'doctor-search',
                 'doctors-list',
                 '{{ route('search.doctors') }}',
                 doc => `
-      <div class="bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
-        ${doc.image ? `<img src="/storage/${doc.image}" class="w-full h-48 object-cover rounded-md mb-4">` : ''}
-        <h3 class="text-xl font-semibold text-gray-800">Dr. ${doc.first_name} ${doc.last_name}</h3>
-        <p class="text-sm text-teal-600 mt-1">${doc.specialization}</p>
-        <a href="/doctors/${doc.id}/book"
-           class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition">
-          Book Appointment
-        </a>
-      </div>
-    `
+    <div class="bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
+      ${doc.image
+        ? `<img src="/storage/${doc.image}"
+                        class="w-full h-48 object-cover rounded-md mb-4">`
+        : ''}
+      <h3 class="text-xl font-semibold text-gray-800">
+        Dr. ${doc.first_name} ${doc.last_name}
+      </h3>
+
+      ${doc.description
+        ? `<p class="text-sm text-teal-600 mt-1">
+                     ${doc.description.length > 100
+                       ? doc.description.slice(0, 100) + '…'
+                       : doc.description}
+                   </p>`
+        : ''}
+      <a href="/patient/appointment/create/${doc.id}"
+         class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white
+                font-semibold text-sm px-5 py-2 rounded-full transition text-center">
+        Book Appointment
+      </a>
+    </div>
+  `
             );
         });
     </script>

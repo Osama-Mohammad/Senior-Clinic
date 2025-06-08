@@ -76,4 +76,10 @@ class PatientController extends Controller
 
         return response()->json(['patients' => $patients]);
     }
+
+    public function show(Patient $patient)
+    {
+        $patient->load('logs.doctor', 'logs.appointment');
+        return view('Secretary.patient.show', compact('patient'));
+    }
 }
