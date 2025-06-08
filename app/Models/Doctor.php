@@ -20,6 +20,7 @@ class Doctor extends Authenticatable
         'price',
         'availability_schedule', // only the JSON column now
         'image',
+        'description',
     ];
 
     protected $hidden = [

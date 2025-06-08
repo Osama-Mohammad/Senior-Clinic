@@ -53,7 +53,7 @@ class DoctorController extends Controller
     public function update(Request $request, Doctor $doctor)
     {
         // ✅ Step 1: Clean availability_schedule input
-        $rawSchedule = $request->input('availability_schedule', []);
+        $rawSchedule    = $request->input('availability_schedule', []);
         $cleanedSchedule = [];
 
         foreach ($rawSchedule as $day => $data) {
@@ -69,9 +69,10 @@ class DoctorController extends Controller
             }
         }
 
+        // Merge back so validator sees the cleaned version
         $request->merge(['availability_schedule' => $cleanedSchedule]);
 
-        // ✅ Step 2: Validate using Validator
+        // ✅ Step 2: Validate all inputs
         $validator = Validator::make($request->all(), [
             'first_name'            => 'required|string|max:255',
             'last_name'             => 'required|string|max:255',
@@ -80,31 +81,38 @@ class DoctorController extends Controller
             'image'                 => 'nullable|image|mimes:png,jpg,jpeg,gif',
             'price'                 => 'required|numeric|min:0',
             'availability_schedule' => 'nullable|array',
+            'description'           => 'nullable|string',
         ]);
 
+        // ✅ Step 3: Add custom schedule errors
         foreach ($cleanedSchedule as $day => $entry) {
             $from = Carbon::createFromFormat('H:i', $entry['from']);
-            $to = Carbon::createFromFormat('H:i', $entry['to']);
+            $to   = Carbon::createFromFormat('H:i', $entry['to']);
 
             if ($from->gte($to)) {
-                $validator->errors()->add("availability_schedule.$day.to", "The end time must be after the start time.");
+                $validator->errors()->add(
+                    "availability_schedule.$day.to",
+                    "The end time must be after the start time for $day."
+                );
             }
 
             $availableMinutes = $to->diffInMinutes($from);
-            $maxPossible = intdiv($availableMinutes, 30);
+            $maxPossible      = intdiv($availableMinutes, 30);
 
             if ($entry['max'] > $maxPossible) {
-                $validator->errors()->add("availability_schedule.$day.max", "Max appointments for $day exceeds available time. Max allowed: $maxPossible.");
+                $validator->errors()->add(
+                    "availability_schedule.$day.max",
+                    "Max appointments for $day exceeds available time. Max allowed: $maxPossible."
+                );
             }
         }
 
-        // ✅ Fix: ensure manually added errors are respected
-        // 🧠 After looping through each day's logic:
-      if ($validator->fails() || count($validator->errors()->all()) > 0) {
-    return back()->withErrors($validator)->withInput();
-}
+        // ✅ Step 4: Fail early if any validation errors
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
-        // ✅ Step 3: Handle image upload
+        // ✅ Step 5: Handle image upload
         if ($request->hasFile('image')) {
             if ($doctor->image && Storage::disk('public')->exists($doctor->image)) {
                 Storage::disk('public')->delete($doctor->image);
@@ -112,15 +120,19 @@ class DoctorController extends Controller
             $imagePath = $request->file('image')->store('images', 'public');
         }
 
-        // ✅ Step 4: Save the doctor update
+        // 🎯 Grab the validated data array
+        $validatedData = $validator->validated();
+
+        // ✅ Step 6: Persist updates
         $doctor->update([
-            'first_name'            => $request->first_name,
-            'last_name'             => $request->last_name,
-            'email'                 => $request->email,
-            'phone_number'          => $request->phone_number,
+            'first_name'            => $validatedData['first_name'],
+            'last_name'             => $validatedData['last_name'],
+            'email'                 => $validatedData['email'],
+            'phone_number'          => $validatedData['phone_number'],
             'image'                 => $imagePath ?? $doctor->image,
-            'price'                 => $request->price,
+            'price'                 => $validatedData['price'],
             'availability_schedule' => $cleanedSchedule,
+            'description'           => $validatedData['description'] ?? null,
         ]);
 
         return redirect()

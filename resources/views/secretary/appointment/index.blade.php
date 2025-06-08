@@ -59,7 +59,7 @@
                             <tr class="hover:bg-blue-50 transition">
                                 <td class="px-6 py-4" x-text="appointment.id"></td>
                                 <td class="px-6 py-4">
-                                    <a :href="`/doctor/patient/${appointment.patient_id}/show`"
+                                    <a :href="`/secretary/patient/${appointment.patient_id}/show`"
                                         class="text-blue-600 hover:underline" x-text="appointment.patient_name">
                                     </a>
                                 </td>
