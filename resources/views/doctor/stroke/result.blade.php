@@ -1,25 +1,39 @@
-    @extends('layouts.doctor-layout')
+@extends('layouts.doctor-layout')
 
-    @section('content')
-        <div class="max-w-3xl mx-auto py-10">
-            <h2 class="text-2xl font-bold mb-6 text-teal-700">🧠 Stroke Prediction Result</h2>
+@section('content')
+    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-teal-100 py-12 px-4">
+        <div class="bg-white max-w-xl w-full p-8 rounded-2xl shadow-xl space-y-6 animate-fade-in">
 
-            <div class="bg-white p-6 shadow rounded">
-                <p><strong>Patient:</strong> {{ $record->patient->first_name }} {{ $record->patient->last_name }}</p>
-                <p><strong>Doctor:</strong> Dr. {{ $record->doctor->first_name }} {{ $record->doctor->last_name }}</p>
-                <p><strong>Model:</strong> {{ $record->aiModel->name }}</p>
-                <p><strong>Prediction:</strong> <span
-                        class="{{ $record->result == 'Positive' ? 'text-red-600' : 'text-green-600' }}">{{ $record->result }}</span>
+            <h2 class="text-2xl font-bold text-teal-700 text-center">🧠 Stroke Prediction Result</h2>
+
+            <p><strong>Patient:</strong> {{ $record->patient->first_name }} {{ $record->patient->last_name }}</p>
+            <p><strong>Doctor:</strong> Dr. {{ $record->doctor->first_name }} {{ $record->doctor->last_name }}</p>
+            <p><strong>Model Used:</strong> {{ $record->aiModel->name }}</p>
+
+            <div class="bg-gray-100 p-4 rounded">
+                <p><strong>Result:</strong>
+                    <span class="{{ $record->result === 'Stroke' ? 'text-red-600' : 'text-green-600' }}">
+                        {{ $record->result }}
+                    </span>
                 </p>
                 <p><strong>Probability:</strong> {{ $record->percentage_probability }}%</p>
-                <p class="mt-4"><strong>Inputs:</strong></p>
-                <ul class="ml-4 list-disc">
-                    @foreach (json_decode($record->submitted_attributes, true) as $key => $value)
-                        <li><strong>{{ ucfirst(str_replace('_', ' ', $key)) }}:</strong> {{ $value }}</li>
-                    @endforeach
-                </ul>
+            </div>
 
+            {{-- 🔢 Raw (original) submitted data --}}
+            <div>
+                <h4 class="font-semibold mt-4 text-gray-800">Submitted Data (Original Inputs):</h4>
+                <pre class="bg-gray-50 p-3 rounded text-sm overflow-x-auto">{{ json_encode($raw, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+            </div>
 
+            {{-- 🧪 Normalized data used for prediction --}}
+            <div>
+                <h4 class="font-semibold mt-4 text-gray-800">Normalized Data (Sent to AI Model):</h4>
+                <pre class="bg-gray-50 p-3 rounded text-sm overflow-x-auto">{{ json_encode($features, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+            </div>
+
+            <div class="text-center pt-4">
+                <a href="{{ route('doctor.dashboard') }}" class="text-blue-600 hover:underline">← Back to Dashboard</a>
             </div>
         </div>
-    @endsection
+    </div>
+@endsection
