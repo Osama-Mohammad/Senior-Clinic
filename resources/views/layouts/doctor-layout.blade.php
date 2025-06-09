@@ -54,13 +54,22 @@
                         📅 View Appointments
                     </a>
 
-                    @if (Auth::guard('doctor')->user()->clinic->name == 'SmileCare Dental')
+                    @php
+                        $clinicName = Auth::guard('doctor')->user()->clinic->name ?? '';
+                    @endphp
+
+                    @if ($clinicName === 'SmileCare Dental')
                         <a href="{{ route('doctor.ai.test.form') }}"
                             class="transition duration-300 bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg text-center shadow">
-                            🧠 Run AI Test
+                            🫀 Run Heart Failure AI Test
                         </a>
-                        @else
-                        <p>Not Allowed</p>
+                    @elseif ($clinicName === 'NeuroLife Brain Clinic')
+                        <a href="{{ route('doctor.stroke.test.form') }}"
+                            class="transition duration-300 bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-center shadow">
+                            🧠 Run Stroke AI Test
+                        </a>
+                    @else
+                        <p class="text-center text-sm text-red-400 mt-2">AI Test not allowed for your clinic.</p>
                     @endif
                 </nav>
             </div>

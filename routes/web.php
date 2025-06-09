@@ -17,6 +17,8 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\SecretaryController;
 use App\Http\Controllers\PatientLogController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\Doctor\StrokePredictionController;
+
 use App\Http\Controllers\Admin\ClinicController as AdminClinicController;
 // Public routes
 Route::get('/', function () {
@@ -128,6 +130,10 @@ Route::prefix('doctor')->group(function () {
         Route::get('/ai-test', [AiController::class, 'showForm'])->name('doctor.ai.test.form');
         Route::post('/ai-test', [AiController::class, 'submitForm'])->name('doctor.ai.test.submit'); // ✅ MISSING LINE FIXED
         Route::get('/ai-result/{id}', [AiController::class, 'showResult'])->name('doctor.ai.test.result');
+        // Stroke Prediction Routes
+        Route::get('/stroke-test', [App\Http\Controllers\Doctor\StrokePredictionController::class, 'showForm'])->name('doctor.stroke.test.form');
+        Route::post('/stroke-test', [App\Http\Controllers\Doctor\StrokePredictionController::class, 'submitForm'])->name('doctor.stroke.test.submit');
+        Route::get('/stroke-result/{id}', [App\Http\Controllers\Doctor\StrokePredictionController::class, 'showResult'])->name('doctor.stroke.test.result');
 
         Route::prefix('appointment')->group(function () {
             Route::get('/index', [App\Http\Controllers\Doctor\AppointmentController::class, 'index'])->name('doctor.appointments.index');
