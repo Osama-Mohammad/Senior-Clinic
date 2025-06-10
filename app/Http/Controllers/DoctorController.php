@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Validator;
-use Carbon\Carbon;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class DoctorController extends Controller
 {
@@ -82,6 +83,7 @@ class DoctorController extends Controller
             'price'                 => 'required|numeric|min:0',
             'availability_schedule' => 'nullable|array',
             'description'           => 'nullable|string',
+            'password'              => 'nullable|confirmed|min:8'
         ]);
 
         // ✅ Step 3: Add custom schedule errors
@@ -118,6 +120,10 @@ class DoctorController extends Controller
                 Storage::disk('public')->delete($doctor->image);
             }
             $imagePath = $request->file('image')->store('images', 'public');
+        }
+
+        if ($request->filled('password')) {
+            $doctor->password = Hash::make($request['password']);
         }
 
         // 🎯 Grab the validated data array

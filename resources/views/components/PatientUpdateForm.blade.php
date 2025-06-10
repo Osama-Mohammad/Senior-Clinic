@@ -7,10 +7,10 @@
                 <div class="relative w-32 h-32">
                     @if ($patient->image)
                         <img src="{{ asset('storage/' . $patient->image) }}"
-                             class="w-32 h-32 object-cover rounded-full border-4 border-teal-500" alt="Profile Image">
+                            class="w-32 h-32 object-cover rounded-full border-4 border-teal-500" alt="Profile Image">
                     @else
                         <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
-                             class="w-32 h-32 object-cover rounded-full border-4 border-teal-500" alt="Default Avatar">
+                            class="w-32 h-32 object-cover rounded-full border-4 border-teal-500" alt="Default Avatar">
                     @endif
                 </div>
                 <h2 class="text-2xl font-bold mt-4 text-gray-700">
@@ -36,35 +36,45 @@
                         <label class="block text-sm font-medium text-gray-700">First Name</label>
                         <input type="text" name="first_name" value="{{ $patient->first_name }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                        @error('first_name') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                        @error('first_name')
+                            <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Last Name</label>
                         <input type="text" name="last_name" value="{{ $patient->last_name }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                        @error('last_name') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                        @error('last_name')
+                            <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Email</label>
                         <input type="email" name="email" value="{{ $patient->email }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                        @error('email') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                        @error('email')
+                            <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Phone Number</label>
                         <input type="text" name="phone_number" value="{{ $patient->phone_number }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                        @error('phone_number') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                        @error('phone_number')
+                            <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
                         <input type="date" name="date_of_birth" value="{{ $patient->date_of_birth }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                        @error('date_of_birth') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                        @error('date_of_birth')
+                            <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
@@ -74,7 +84,9 @@
                             <option value="M" {{ $patient->gender == 'M' ? 'selected' : '' }}>Male</option>
                             <option value="F" {{ $patient->gender == 'F' ? 'selected' : '' }}>Female</option>
                         </select>
-                        @error('gender') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                        @error('gender')
+                            <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
@@ -82,14 +94,18 @@
                         <select name="address"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
                             @foreach ($cities as $city)
-                                <option value="{{ $city }}" {{ $patient->address == $city ? 'selected' : '' }}>{{ $city }}</option>
+                                <option value="{{ $city }}"
+                                    {{ $patient->address == $city ? 'selected' : '' }}>{{ $city }}</option>
                             @endforeach
                         </select>
-                        @error('address') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                        @error('address')
+                            <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mt-4">
-                        <label for="image" class="block text-sm font-medium text-gray-700">Change Profile Image</label>
+                        <label for="image" class="block text-sm font-medium text-gray-700">Change Profile
+                            Image</label>
 
                         <input type="file" name="image" id="image"
                             class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
@@ -100,7 +116,30 @@
                         @enderror
                     </div>
                 </div>
+                <!-- Change Password Section -->
+                <div class="col-span-2 border-t mt-6 pt-6">
+                    <h3 class="text-lg font-semibold text-teal-700 mb-2">🔐 Change Password</h3>
+                    <p class="text-sm text-gray-500 mb-4">Leave the fields blank if you do not wish to change your
+                        password.</p>
 
+                    <!-- New Password -->
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-700">New Password</label>
+                        <input type="password" name="password" id="password"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                        @error('password')
+                            <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Confirm New Password -->
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm New
+                            Password</label>
+                        <input type="password" name="password_confirmation" id="password_confirmation"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    </div>
+                </div>
                 <!-- Submit -->
                 <div class="text-center pt-4">
                     <button type="submit"

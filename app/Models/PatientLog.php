@@ -12,11 +12,15 @@ class PatientLog extends Model
         'appointment_id',
         'description',
         'attachments',
+        'recocmendation',
+        'treatment'
     ];
 
     protected $casts = [
         'attachments' => 'array',
     ];
+
+    protected $attributes = [];
 
     public function patient()
     {

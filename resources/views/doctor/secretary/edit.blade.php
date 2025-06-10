@@ -32,6 +32,29 @@
                 <input type="text" name="phone_number" value="{{ old('phone_number', $secretary->phone_number) }}"
                     class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500">
             </div>
+            <!-- Change Password Section -->
+            <div class="border-t pt-6">
+                <h3 class="text-lg font-semibold text-teal-700 mb-2">🔐 Change Password</h3>
+                <p class="text-sm text-gray-500 mb-4">Leave this blank if you don’t want to change the password.</p>
+
+                <!-- New Password -->
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">New Password</label>
+                    <input type="password" name="password" id="password"
+                        class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500">
+                    @error('password')
+                        <span class="text-sm text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm New
+                        Password</label>
+                    <input type="password" name="password_confirmation" id="password_confirmation"
+                        class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500">
+                </div>
+            </div>
 
             <div class="flex justify-end space-x-4">
                 <a href="{{ route('doctor.secretary.index') }}"

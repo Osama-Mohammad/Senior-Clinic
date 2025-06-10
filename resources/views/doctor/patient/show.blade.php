@@ -37,15 +37,42 @@
 
         @foreach ($patient->logs as $log)
             <div class="border rounded p-4 mb-4">
+                <!-- Log timestamp and doctor -->
                 <p class="text-sm text-gray-500">
                     {{ $log->created_at->format('d M Y – H:i') }}
                     by Dr. {{ $log->doctor->first_name }}
                 </p>
 
-                <p class="mt-2">{{ $log->description }}</p>
+                <!-- Clinic -->
+                <p class="mt-2">
+                    <span class="font-semibold text-gray-700">🏥 Clinic Name:</span> {{ $log->doctor->clinic->name }}
+                </p>
 
+                <!-- Appointment Date -->
+                <p class="mt-1">
+                    <span class="font-semibold text-gray-700">📅 Appointment Date:</span>
+                    {{ $log->appointment->created_at->format('d M Y – H:i') }}
+                </p>
+
+                <!-- Description -->
+                <p class="mt-4 font-semibold text-blue-800">📝 Description</p>
+                <p class="mt-1">{{ $log->description }}</p>
+
+                <!-- Recommendation -->
+                <p class="mt-4 font-semibold text-green-700">✅ Doctor's Recommendation</p>
+                <p class="mt-1">
+                    {{ $log->recommendation ? $log->recommendation : 'No recommendation provided.' }}
+                </p>
+
+                <!-- Treatment -->
+                <p class="mt-4 font-semibold text-purple-700">💊 Treatment Plan</p>
+                <p class="mt-1">
+                    {{ $log->treatment ? $log->treatment : 'No treatment plan provided.' }}
+                </p>
+
+                <!-- Attachments -->
                 @if ($log->attachments)
-                    <p class="mt-2 font-semibold">Attachments:</p>
+                    <p class="mt-4 font-semibold text-gray-800">📎 Attachments:</p>
                     <ul class="list-disc ml-5">
                         @foreach ($log->attachments as $path)
                             <li><a href="{{ Storage::url($path) }}" target="_blank">{{ basename($path) }}</a></li>
@@ -54,6 +81,7 @@
                 @endif
             </div>
         @endforeach
+
 
 
         <!-- Back Button -->

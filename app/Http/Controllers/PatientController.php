@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\StorePatientRequest;
-use App\Http\Requests\UpdatePatientRequest;
 use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Patient;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StorePatientRequest;
+use App\Http\Requests\UpdatePatientRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PatientController extends Controller
@@ -95,6 +96,7 @@ class PatientController extends Controller
             'date_of_birth' => 'required|date',
             'gender' => 'required|string|in:M,F',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Include in validation
+            'password' => 'nullable|confirmed|min:8'
         ]);
 
         // Handle image if uploaded
@@ -102,7 +104,12 @@ class PatientController extends Controller
             $validated['image'] = $request->file('image')->store('patient_images', 'public');
         }
 
-        $patient->update($validated);
+        if (isset($validated['password'])) {
+            $patient->password = Hash::make($validated['password']);
+            $patient->save();
+        }
+
+        $patient->update(Arr::except($validated, ['password']));
         Auth::guard('patient')->login($patient);
 
         return redirect()->route('patient.show', $patient->id)->with('success', 'Patient updated successfully.');

@@ -61,7 +61,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('patient')->group(function () {
-    Route::get('/create', [PatientController::class, 'create'])->name('patient.create');
+    Route::get('/create', [PatientController::class, 'create'])->name('patient.create')->middleware('throttle:10,1');
     Route::post('/store', [PatientController::class, 'store'])->name('patient.store');
 
     Route::middleware(['auth:patient'])->group(function () {

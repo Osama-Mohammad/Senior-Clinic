@@ -66,7 +66,10 @@
                                 <td class="px-6 py-4" x-text="formatDate(appointment.appointment_datetime)"></td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2">
-                                        <select x-model="appointment.status" @change="updateStatus(appointment)"
+                                        <select
+                                            @focus="appointment._previousStatus = appointment.status"
+                                            @change="handleStatusChange(appointment)"
+                                            x-model="appointment.status"
                                             :disabled="appointment.status === 'Completed'"
                                             class="border border-gray-300 text-sm rounded px-2 py-1 focus:ring focus:ring-blue-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                             <option value="Booked">Booked</option>
@@ -96,13 +99,13 @@
         </div>
     </div>
 
-    <!-- ✅ Libraries -->
+    <!-- ✅ Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs/dayjs.min.js"></script>
 
-    <!-- ✅ Alpine Component -->
+    <!-- ✅ Alpine Component Logic -->
     <script>
         function appointmentFilter() {
             return {
@@ -116,7 +119,8 @@
 
                 get filteredAppointments() {
                     return this.appointments.filter(a =>
-                        (!this.searchQuery || a.patient_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+                        (!this.searchQuery || a.patient_name.toLowerCase().includes(this.searchQuery.toLowerCase())) &&
+                        (!this.selectedStatus || a.status === this.selectedStatus)
                     );
                 },
 
@@ -137,15 +141,29 @@
                     });
                 },
 
-                updateStatus(appointment) {
-                    const previousStatus = appointment.status;
-                    if (appointment.status === 'Canceled') {
+                handleStatusChange(appointment) {
+                    const newStatus = appointment.status;
+                    const oldStatus = appointment._previousStatus;
+
+                    // Confirmation logic
+                    if (newStatus === 'Canceled') {
                         if (!confirm("Are you sure you want to cancel this appointment?")) {
-                            appointment.status = previousStatus;
+                            appointment.status = oldStatus;
                             return;
                         }
                     }
 
+                    if (newStatus === 'Completed') {
+                        if (!confirm("Mark this appointment as completed?")) {
+                            appointment.status = oldStatus;
+                            return;
+                        }
+                    }
+
+                    this.updateStatus(appointment);
+                },
+
+                updateStatus(appointment) {
                     axios.patch(`/secretary/appointment/${appointment.id}/update-status`, {
                         status: appointment.status
                     }).then(response => {
@@ -153,7 +171,7 @@
                         this.toastMessage = `Status updated to "${response.data.status}"`;
                         this.showToastMessage();
                     }).catch(error => {
-                        appointment.status = previousStatus;
+                        appointment.status = appointment._previousStatus;
                         this.toastType = 'error';
                         this.toastMessage = error.response?.data?.error || 'Failed to update status.';
                         this.showToastMessage();

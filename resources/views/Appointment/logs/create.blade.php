@@ -15,6 +15,14 @@
                         <textarea id="description" name="description" required class="form-control w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">{{ old('description', $appointment->log->description ?? '') }}</textarea>
                     </div>
                     <div>
+                        <label for="treatment" class="block text-gray-700 font-semibold mb-2">Treatment</label>
+                        <textarea id="treatment" name="treatment"   class="form-control w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">{{ old('treatment', $appointment->log->treatment ?? '') }}</textarea>
+                    </div>
+                    <div>
+                        <label for="recocmendation" class="block text-gray-700 font-semibold mb-2">Recocmendation</label>
+                        <textarea id="recocmendation" name="recocmendation"   class="form-control w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">{{ old('recocmendation', $appointment->log->recocmendation ?? '') }}</textarea>
+                    </div>
+                    <div>
                         <label for="attachments" class="block text-gray-700 font-semibold mb-2">Attachments</label>
                         <input type="file" id="attachments" name="attachments[]" multiple class="form-control file-input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
                     </div>

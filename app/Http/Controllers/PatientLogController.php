@@ -19,6 +19,8 @@ class PatientLogController extends Controller
         $data = $request->validate([
             'description'       => 'required|string',
             'attachments.*'     => 'file|mimes:pdf,jpg,png,docx|max:2048',
+            'treatment'         => 'nullable|string',
+            'recocmendation'    => 'nullable|string'
         ]);
 
         $files = [];
@@ -35,6 +37,9 @@ class PatientLogController extends Controller
                 'doctor_id'   => $appointment->doctor_id,
                 'description' => $data['description'],
                 'attachments' => $files,
+                'treatment'         => $data['treatment'],
+                'recocmendation'    => $data['recocmendation']
+
             ]
         );
 

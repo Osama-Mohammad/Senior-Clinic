@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Models\Secretary;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -70,9 +71,15 @@ class SecretaryController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:secretaries,email,' . $secretary->id,
             'phone_number' => 'nullable|string|max:20',
+            'password' => 'confirmed|nullable|min:8'
         ]);
 
-        $secretary->update($validated);
+        if (isset($validated['passwprd'])) {
+            $secretary->password = Hash::make($validated['password']);
+            $secretary->save();
+        }
+
+        $secretary->update(Arr::except($validated, ['password']));
 
         return redirect()->route('doctor.secretary.index')->with('success', 'Secretary updated successfully.');
     }
