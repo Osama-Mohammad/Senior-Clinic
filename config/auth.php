@@ -3,6 +3,7 @@
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Secretary;
+use App\Models\SuperAdmin;
 
 return [
 
@@ -60,6 +61,10 @@ return [
             'driver' => 'session',
             'provider' => 'secretaries',
         ],
+        'superadmin' => [
+            'driver' => 'session',
+            'provider' => 'superadmins',
+        ],
     ],
 
     /*
@@ -100,8 +105,12 @@ return [
             'driver' => 'eloquent',
             'model' =>  env('AUTH_MODEL',  Secretary::class),
         ],
+        'superadmins' => [
+            'driver' => 'eloquent',
+            'model' =>  env('AUTH_MODEL',  SuperAdmin::class),
+        ],
 
-        
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

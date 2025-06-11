@@ -20,6 +20,8 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Doctor\StrokePredictionController;
 
 use App\Http\Controllers\Admin\ClinicController as AdminClinicController;
+use App\Http\Controllers\SuperAdminController;
+
 // Public routes
 Route::get('/', function () {
 
@@ -58,6 +60,18 @@ Route::prefix('auth')->group(function () {
     // Complete profile after first‐time Google login
     Route::get('/google/complete', [AuthController::class, 'showGoogleCompleteForm'])->name('auth.google.complete');
     Route::post('/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('auth.google.complete.submit');
+});
+
+Route::middleware('auth:superadmin')->group(function () {
+    Route::prefix('superAdmin')->group(function () {
+        Route::get('/{superadmin}/dashboard', [SuperAdminController::class, 'show'])->name('superadmin.dashboard');
+        Route::get('/admins/index', [App\Http\Controllers\SuperAdmin\AdminConstroller::class, 'index'])->name('superadmin.admin.index');
+
+        Route::get('/admin/{admin}/edit', [App\Http\Controllers\SuperAdmin\AdminConstroller::class, 'edit'])->name('superadmin.admin.edit');
+        Route::put('/admin/{admin}/update', [App\Http\Controllers\SuperAdmin\AdminConstroller::class, 'update'])->name('superadmin.admin.update');
+
+        Route::delete('/admin/{admin}/delete', [App\Http\Controllers\SuperAdmin\AdminConstroller::class, 'destroy'])->name('superadmin.admin.delete');
+    });
 });
 
 Route::prefix('patient')->group(function () {
