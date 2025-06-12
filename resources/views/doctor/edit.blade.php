@@ -249,18 +249,12 @@
                 suggestedMax(day) {
                     const from = this.schedule[day]?.from;
                     const to = this.schedule[day]?.to;
-
                     if (!from || !to) return null;
-
-                    const [fromHour, fromMin] = from.split(':').map(Number);
-                    const [toHour, toMin] = to.split(':').map(Number);
-
-                    const fromMinutes = fromHour * 60 + fromMin;
-                    const toMinutes = toHour * 60 + toMin;
-
-                    if (toMinutes <= fromMinutes) return null;
-
-                    return Math.floor((toMinutes - fromMinutes) / 30);
+                    const [fh, fm] = from.split(':').map(Number);
+                    const [th, tm] = to.split(':').map(Number);
+                    const minutes = (h, m) => h * 60 + m;
+                    const diff = minutes(th, tm) - minutes(fh, fm);
+                    return diff > 0 ? Math.floor(diff / 30) : null;
                 },
 
                 alertIfTooHigh(day) {
@@ -268,12 +262,12 @@
                     const entered = parseInt(this.schedule[day]?.max);
                     if (suggested !== null && entered > suggested) {
                         alert(`⚠️ Suggested max for ${day} is ${suggested}. You've entered ${entered}.`);
+                        this.schedule[day].max = suggested;
                     }
                 }
             };
         }
     </script>
-
 
 
 

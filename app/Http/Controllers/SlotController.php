@@ -43,6 +43,7 @@ class SlotController extends Controller
 
         $bookedTimes = Appointment::where('doctor_id', $doctor->id)
             ->whereDate('appointment_datetime', $date)
+            ->where('status', 'Booked')
             ->pluck('appointment_datetime')
             ->map(fn($dt) => Carbon::parse($dt)->format('H:i'))
             ->toArray();
@@ -61,33 +62,32 @@ class SlotController extends Controller
         ]);
     }
     public function getFullyBookedDates(Request $request)
-{
-    $doctor = Doctor::findOrFail($request->doctor_id);
-    $dates = [];
+    {
+        $doctor = Doctor::findOrFail($request->doctor_id);
+        $dates = [];
 
-    // Check next 30 days
-    for ($i = 0; $i < 30; $i++) {
-        $date = now()->addDays($i)->format('Y-m-d');
-        $dayName = ucfirst(Carbon::parse($date)->format('l'));
-        $schedule = $doctor->availability_schedule[$dayName] ?? null;
+        // Check next 30 days
+        for ($i = 0; $i < 30; $i++) {
+            $date = now()->addDays($i)->format('Y-m-d');
+            $dayName = ucfirst(Carbon::parse($date)->format('l'));
+            $schedule = $doctor->availability_schedule[$dayName] ?? null;
 
-        if (!$schedule || empty($schedule['from']) || empty($schedule['to'])) {
-            continue; // skip days with no schedule
+            if (!$schedule || empty($schedule['from']) || empty($schedule['to'])) {
+                continue; // skip days with no schedule
+            }
+
+            $max = (!empty($schedule['max']) && is_numeric($schedule['max'])) ? (int)$schedule['max'] : 0;
+
+            $bookedCount = Appointment::where('doctor_id', $doctor->id)
+                ->whereDate('appointment_datetime', $date)
+                ->where('status', 'Booked')
+                ->count();
+
+            if ($max > 0 && $bookedCount >= $max) {
+                $dates[] = $date;
+            }
         }
 
-        $max = (!empty($schedule['max']) && is_numeric($schedule['max'])) ? (int)$schedule['max'] : 0;
-
-        $bookedCount = Appointment::where('doctor_id', $doctor->id)
-            ->whereDate('appointment_datetime', $date)
-            ->where('status', 'Booked')
-            ->count();
-
-        if ($max > 0 && $bookedCount >= $max) {
-            $dates[] = $date;
-        }
+        return response()->json($dates);
     }
-
-    return response()->json($dates);
-}
-
 }
