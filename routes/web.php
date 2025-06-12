@@ -67,6 +67,9 @@ Route::middleware('auth:superadmin')->group(function () {
         Route::get('/{superadmin}/dashboard', [SuperAdminController::class, 'show'])->name('superadmin.dashboard');
         Route::get('/admins/index', [App\Http\Controllers\SuperAdmin\AdminConstroller::class, 'index'])->name('superadmin.admin.index');
 
+        Route::get('/admin/create',[App\Http\Controllers\SuperAdmin\AdminConstroller::class, 'create'])->name('superadmin.admin.create');
+        Route::post('/admin/store',[App\Http\Controllers\SuperAdmin\AdminConstroller::class, 'store'])->name('superadmin.admin.store');
+
         Route::get('/admin/{admin}/edit', [App\Http\Controllers\SuperAdmin\AdminConstroller::class, 'edit'])->name('superadmin.admin.edit');
         Route::put('/admin/{admin}/update', [App\Http\Controllers\SuperAdmin\AdminConstroller::class, 'update'])->name('superadmin.admin.update');
 

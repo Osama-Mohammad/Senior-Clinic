@@ -24,7 +24,7 @@ class AdminConstroller extends Controller
      */
     public function create()
     {
-        //
+        return view('superAdmin.admin.create');
     }
 
     /**
@@ -32,7 +32,21 @@ class AdminConstroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:admins,email|unique:patients,email|unique:doctors,email',
+            'password' => 'required|confirmed|min:8|string'
+        ]);
+        $validated['password'] = Hash::make($validated['password']);
+        $admin = new Admin();
+        $admin->first_name = $validated['first_name'];
+        $admin->last_name = $validated['last_name'];
+        $admin->email = $validated['email'];
+        $admin->password = $validated['password'];
+
+        $admin->save();
+        return redirect()->route('superadmin.admin.index')->with('success', 'Created Admin Successfully');
     }
 
     /**

@@ -18,7 +18,7 @@
 
     @auth
 
-    
+
     @endguest
     <!-- Logout -->
     <form action="{{ route('auth.logout') }}" method="POST" class="mt-auto">

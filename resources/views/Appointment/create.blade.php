@@ -1,4 +1,5 @@
 <x-layout>
+      <x-navbar />
     <div class="max-w-2xl mx-auto mt-12 bg-white shadow-md rounded-xl p-8 space-y-6" x-data="appointmentForm()" x-init="init()">
         <h2 class="text-3xl font-bold text-teal-700 text-center">Book Your Appointment</h2>
 

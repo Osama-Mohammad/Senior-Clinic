@@ -11,7 +11,12 @@
                 {{ session('success') }}
             </div>
         @endif
-
+        <div class="mb-6">
+            <a href="{{ route('superadmin.admin.create') }}"
+                class="inline-block px-5 py-2 bg-teal-600 text-white font-medium text-sm rounded-lg shadow hover:bg-teal-700 transition">
+                ➕ Create Admin
+            </a>
+        </div>
         <!-- Table -->
         <div class="overflow-x-auto bg-white shadow-2xl rounded-2xl">
             <table class="min-w-full divide-y divide-gray-200 text-sm text-gray-800">

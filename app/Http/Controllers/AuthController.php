@@ -80,6 +80,7 @@ class AuthController extends Controller
         Auth::guard('admin')->logout();
         Auth::guard('doctor')->logout();
         Auth::guard('secretary')->logout();
+        Auth::guard('superadmin')->logout();
 
         return redirect()->route('auth.loginPage')->with('success', 'Logout successful');
     }
