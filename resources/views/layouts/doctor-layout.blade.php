@@ -58,7 +58,7 @@
                         $clinicName = Auth::guard('doctor')->user()->clinic->name ?? '';
                     @endphp
 
-                    @if ($clinicName === 'SmileCare Dental')
+                    @if ($clinicName === 'HeartCare Cardiology Center')
                         <a href="{{ route('doctor.ai.test.form') }}"
                             class="transition duration-300 bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg text-center shadow">
                             🫀 Run Heart Failure AI Test

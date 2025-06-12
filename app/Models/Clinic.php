@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Clinic extends Model
 {
-    protected $fillable = ['name', 'address', 'phone_number', 'desorption', 'image'];
+    protected $fillable = ['name', 'address', 'phone_number', 'description', 'image'];
 
 
     public function doctors()
