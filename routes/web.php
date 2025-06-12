@@ -75,8 +75,8 @@ Route::middleware('auth:superadmin')->group(function () {
 });
 
 Route::prefix('patient')->group(function () {
-    Route::get('/create', [PatientController::class, 'create'])->name('patient.create')->middleware('throttle:10,1');
-    Route::post('/store', [PatientController::class, 'store'])->name('patient.store');
+    Route::get('/create', [PatientController::class, 'create'])->name('patient.create')->middleware('throttle:guest');
+    Route::post('/store', [PatientController::class, 'store'])->name('patient.store')->middleware('throttle:guest');
 
     Route::middleware(['auth:patient'])->group(function () {
         Route::get('/show/{patient}', [PatientController::class, 'show'])->name('patient.show');
