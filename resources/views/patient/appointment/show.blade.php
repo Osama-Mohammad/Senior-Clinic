@@ -50,6 +50,18 @@
           {{ $appointment->log->description }}
         </p>
 
+        {{-- Treatment --}}
+        <h4 class="font-semibold text-purple-700 mt-4">💊 Treatment Plan</h4>
+        <p class="text-gray-700">
+          {{ $appointment->log->treatment ? $appointment->log->treatment : 'No treatment plan provided.' }}
+        </p>
+
+        {{-- Doctor's Recommendation --}}
+        <h4 class="font-semibold text-green-700 mt-4">✅ Doctor’s Recommendation</h4>
+        <p class="text-gray-700">
+          {{ $appointment->log->recommendation ? $appointment->log->recommendation : 'No recommendation provided.' }}
+        </p>
+
         {{-- Attachments --}}
         @if(!empty($appointment->log->attachments))
           <div class="mt-6">
