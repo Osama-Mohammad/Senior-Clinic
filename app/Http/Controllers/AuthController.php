@@ -67,7 +67,6 @@ class AuthController extends Controller
             return redirect()->route('secretary.dashboard', Auth::guard('secretary')->user())->with('success', 'Login successful');
         } else if (Auth::guard('superadmin')->attempt($validated)) {
             Auth::login(Auth::guard('superadmin')->user());
-            // dd(Auth::guard('superadmin')->user());
             return redirect()->route('superadmin.dashboard', Auth::guard('superadmin')->user())->with('success', "logged succefully");
         } else {
             return back()->with('error', 'Invalid Credentials');

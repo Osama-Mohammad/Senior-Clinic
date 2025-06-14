@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Secretary;
-use Illuminate\Console\View\Components\Secret;
 use Illuminate\Http\Request;
 use Illuminate\Support\Composer;
+use App\Http\Controllers\Controller;
+use Illuminate\Console\View\Components\Secret;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SecretaryController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Admin $admin)
     {
+        $this->authorize('view', $admin);
         $secretaries = Secretary::all();
         return view('admin.secretaries.index', compact("secretaries"));
     }

@@ -141,7 +141,7 @@ Route::prefix('doctor')->group(function () {
         Route::put('/update/{doctor}', [DoctorController::class, 'update'])->name('doctor.update');
 
         Route::get('/index', [DoctorController::class, 'index'])->name('doctor.index');
-        Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
+        Route::get('/{doctor}/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
 
         // ✅ AI Test Form Route (only accessible by authenticated doctors)
         Route::get('/ai-test', [AiController::class, 'showForm'])->name('doctor.ai.test.form');

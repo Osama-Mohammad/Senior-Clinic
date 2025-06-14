@@ -147,9 +147,9 @@ class DoctorController extends Controller
     }
 
 
-    public function dashboard()
+    public function dashboard(Doctor $doctor)
     {
-        $doctor = auth('doctor')->user();
+        $this->authorize('view', $doctor);
         return view('doctor.dashboard', compact('doctor'));
     }
 }
