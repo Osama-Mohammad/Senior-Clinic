@@ -20,6 +20,7 @@ class DoctorController extends Controller
         $q = $request->get('query', '');
         $doctors = Doctor::where('first_name', 'like', "%{$q}%")
             ->orWhere('last_name', 'like', "%{$q}%")
+            ->with('clinic')
             ->get();
 
         return response()->json(['doctors' => $doctors]);

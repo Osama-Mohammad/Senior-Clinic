@@ -1,6 +1,6 @@
 <x-layout>
 
-    <x-navbar />
+    <x-guest-navbar />
 
     <!-- ✅ Hero Section With Image Carousel Background -->
     <section id="top" x-data="{
@@ -101,7 +101,7 @@
                         <p class="text-sm text-gray-600 mt-1 flex-grow">{{ Str::limit($clinic->description, 100) }}</p>
 
                         {{-- Authenticated users see the real “View Doctors” link --}}
-                        @auth
+                        @auth('patient')
                             <a href="{{ route('clinic.show', $clinic) }}"
                                 class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition text-center">
                                 View Doctors
@@ -109,7 +109,7 @@
                         @endauth
 
                         {{-- Guests see a button that prompts them to sign up --}}
-                        @guest
+                        @guest('patient')
                             <button
                                 onclick="if (confirm('You need to sign up or log in to view this clinic. Proceed to Sign Up?')) { window.location='{{ route('patient.create') }}'; }"
                                 class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition">
@@ -146,10 +146,12 @@
                         <h3 class="text-xl font-semibold text-gray-800">
                             Dr. {{ $doctor->first_name }} {{ $doctor->last_name }}
                         </h3>
-                        <p class="text-sm text-teal-600 mt-1">{{ $doctor->specialization }}</p>
+                        <p class="text-sm text-teal-600 mt-1">{{ $doctor->description }}</p>
+                        <p class="text-sm text-teal-600 mt-1">Clinic : {{ $doctor->clinic->name }}</p>
+
 
                         {{-- Authenticated users see the real “Book Appointment” link --}}
-                        @auth
+                        @auth('patient')
                             <a href="{{ route('patient.appointment.create', $doctor) }}"
                                 class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition text-center">
                                 Book Appointment
@@ -157,7 +159,7 @@
                         @endauth
 
                         {{-- Guests see a button that prompts them to sign up --}}
-                        @guest
+                        @guest('patient')
                             <button
                                 onclick="if (confirm('You need to sign up or log in to book an appointment. Proceed to Sign Up?')) { window.location='{{ route('patient.create') }}'; }"
                                 class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition">
@@ -172,7 +174,7 @@
             </div>
         </div>
     </section>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Utility to wire up an AJAX live‐search
@@ -231,11 +233,20 @@
                 '{{ route('search.doctors') }}',
                 doc => `
       <div class="bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
-        ${doc.image ? `<img src="/storage/${doc.image}" class="w-full h-48 object-cover rounded-md mb-4">` : ''}
+        ${doc.image
+          ? `<img src="/storage/${doc.image}" class="w-full h-48 object-cover rounded-md mb-4">`
+          : ''}
         <h3 class="text-xl font-semibold text-gray-800">Dr. ${doc.first_name} ${doc.last_name}</h3>
-        <p class="text-sm text-teal-600 mt-1">${doc.specialization}</p>
-        <a href="/doctors/${doc.id}/book"
-           class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition">
+        ${doc.description
+          ? `<p class="text-sm text-teal-600 mt-1">
+                          ${doc.description.length > 100 ? doc.description.slice(0, 100) + '…' : doc.description}
+                         </p>`
+          : ''}
+          ${doc.clinic && doc.clinic.name
+        ? `<p class="text-sm text-teal-600 mt-1">Clinic : ${doc.clinic.name}</p>`
+        : ''}
+        <a href="/patient/appointment/create/${doc.id}"
+           class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-full transition text-center">
           Book Appointment
         </a>
       </div>
