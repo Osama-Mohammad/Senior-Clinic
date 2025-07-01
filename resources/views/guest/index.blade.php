@@ -187,6 +187,12 @@
                     clearTimeout(timer);
                     timer = setTimeout(() => {
                         const q = encodeURIComponent(input.value.trim());
+
+                        if (!q) {
+                            window.location.reload();
+                            return;
+                        }
+
                         fetch(`${urlBase}?query=${q}`)
                             .then(res => res.json())
                             .then(json => {
@@ -239,8 +245,8 @@
         <h3 class="text-xl font-semibold text-gray-800">Dr. ${doc.first_name} ${doc.last_name}</h3>
         ${doc.description
           ? `<p class="text-sm text-teal-600 mt-1">
-                          ${doc.description.length > 100 ? doc.description.slice(0, 100) + '…' : doc.description}
-                         </p>`
+                              ${doc.description.length > 100 ? doc.description.slice(0, 100) + '…' : doc.description}
+                             </p>`
           : ''}
           ${doc.clinic && doc.clinic.name
         ? `<p class="text-sm text-teal-600 mt-1">Clinic : ${doc.clinic.name}</p>`
