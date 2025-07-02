@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <div class="w-full px-4 md:px-8">
-        @auth
+        @auth('patient')
             @php $patient = Auth::guard('patient')->user(); @endphp
             <div class="flex items-center justify-between h-16">
                 <!-- Left: Avatar + Name -->
@@ -103,7 +103,7 @@
             </div>
         @endauth
 
-        @guest
+        {{-- @guest
             <div class="flex items-center justify-between h-16">
                 <!-- Left: Branding -->
                 <a href="/" class="flex items-center space-x-2">
@@ -167,6 +167,6 @@
                     <i class="fas fa-user-plus"></i> Sign Up
                 </a>
             </div>
-        @endguest
+        @endguest --}}
     </div>
 </header>

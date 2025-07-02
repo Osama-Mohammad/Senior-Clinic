@@ -95,7 +95,8 @@
                         class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
                         @if ($clinic->image)
                             <img src="{{ asset('storage/' . $clinic->image) }}"
-                                class="w-full h-48 object-cover rounded-md mb-4">
+                                class="w-full h-48 sm:h-56 md:h-64 object-cover object-center rounded-md mb-4"
+>
                         @endif
                         <h3 class="text-xl font-semibold text-gray-800">{{ $clinic->name }}</h3>
                         <p class="text-sm text-gray-600 mt-1 flex-grow">{{ Str::limit($clinic->description, 100) }}</p>
@@ -140,7 +141,7 @@
                         class="bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
                         @if ($doctor->image)
                             <img src="{{ asset('storage/' . $doctor->image) }}"
-                                class="w-full h-48 object-cover rounded-md mb-4">
+                                class="w-full h-48 sm:h-56 md:h-64 object-cover object-center rounded-md mb-4">
                         @endif
 
                         <h3 class="text-xl font-semibold text-gray-800">
