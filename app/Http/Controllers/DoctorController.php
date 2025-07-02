@@ -143,7 +143,7 @@ class DoctorController extends Controller
         ]);
 
         return redirect()
-            ->route('doctor.dashboard')
+            ->route('doctor.dashboard',Auth::guard('doctor')->user())
             ->with('success', 'Doctor updated successfully');
     }
 

@@ -149,6 +149,12 @@
                     clearTimeout(timer);
                     timer = setTimeout(() => {
                         const q = encodeURIComponent(input.value.trim());
+
+                        if (!q) {
+                            window.location.reload(); // fallback to paginated Laravel view
+                            return;
+                        }
+
                         fetch(`${urlBase}?query=${q}`)
                             .then(res => res.json())
                             .then(json => {
@@ -197,7 +203,7 @@
     <div class="bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
       ${doc.image
         ? `<img src="/storage/${doc.image}"
-                        class="w-full h-48 object-cover rounded-md mb-4">`
+                                class="w-full h-48 object-cover rounded-md mb-4">`
         : ''}
       <h3 class="text-xl font-semibold text-gray-800">
         Dr. ${doc.first_name} ${doc.last_name}
@@ -205,10 +211,10 @@
 
       ${doc.description
         ? `<p class="text-sm text-teal-600 mt-1">
-                     ${doc.description.length > 100
-                       ? doc.description.slice(0, 100) + '…'
-                       : doc.description}
-                   </p>`
+                             ${doc.description.length > 100
+                               ? doc.description.slice(0, 100) + '…'
+                               : doc.description}
+                           </p>`
         : ''}
       <a href="/patient/appointment/create/${doc.id}"
          class="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white
