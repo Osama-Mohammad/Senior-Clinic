@@ -32,7 +32,8 @@
             </div>
 
             <div class="text-center pt-4">
-                <a href="{{ route('doctor.dashboard') }}" class="text-blue-600 hover:underline">← Back to Dashboard</a>
+                <a href="{{ route('doctor.dashboard', Auth::guard('doctor')->user()) }}"
+                    class="text-blue-600 hover:underline">← Back to Dashboard</a>
             </div>
         </div>
     </div>

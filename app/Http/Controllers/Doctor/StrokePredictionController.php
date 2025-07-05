@@ -49,10 +49,13 @@ class StrokePredictionController extends Controller
                 'Residence_type' => $validated['Residence_type'],
                 'work_type' => $validated['work_type'],
                 'smoking_status' => $validated['smoking_status'],
-                'age' => $validated['age'],  // ⛔ no normalization
-                'avg_glucose_level' => $validated['avg_glucose_level'],
-                'bmi' => $validated['bmi'],
+
+                // ✅ Normalize numeric values between 0 and 1
+                'age' => round($validated['age'] / self::MAX_AGE, 4),
+                'avg_glucose_level' => round($validated['avg_glucose_level'] / self::MAX_GLUCOSE, 4),
+                'bmi' => round($validated['bmi'] / self::MAX_BMI, 4),
             ];
+
             Log::info('📤 Sending to Stroke Flask API', $features);
 
             $response = Http::timeout(5)->post('http://127.0.0.1:5000/predict-stroke', $features);
@@ -107,6 +110,7 @@ class StrokePredictionController extends Controller
             'Residence_type' => $features['Residence_type'],
             'smoking_status' => $features['smoking_status'],
         ];
+
 
         return view('doctor.stroke.result', compact('record', 'features', 'raw'));
     }
